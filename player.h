@@ -3,8 +3,8 @@
 #define PLAYER_H
 
 #include <stdlib.h>
+#include <netdb.h>
 
-#include "networking.h"
 #include "settings.h"
 #include "errors.h"
 

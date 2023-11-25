@@ -1,6 +1,10 @@
 
-CC=gcc
-CC_FLAGS=-std=c99 -pedantic -Werror -Wextra -Wall -static
+# info
+# https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+
+COMPILER=gcc
+COMPILER_FLAGS=-std=c99 -pedantic -Werror -Wextra -Wall -static
+CC=${COMPILER} ${COMPILER_FLAGS}
 
 .PHONY: build
 build: hots3
@@ -9,5 +13,9 @@ build: hots3
 run: hots3
 	./hots3
 
-hots3: hots3.c networking.c player.c screen.c map.c
-	${CC} ${CC_FLAGS} $^ -o hots3
+.PHONY: clean
+clean:
+	rm hots3
+
+hots3: makefile hots3.c networking.c networking.h player.c player.h screen.c screen.h map.c map.h
+	${CC} ${CC_FLAGS} $(filter-out $<,$^) -o hots3
