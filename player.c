@@ -4,6 +4,7 @@
 #include "settings.h"
 
 #include "player.h"
+#include "map.h"
 
 #define PLAYER_MODEL_ERROR '0'
 
@@ -81,26 +82,15 @@ void player_process_action(struct player *player, char action, struct player pla
             break;
     }
 
-    if(x_desired < 0){
-        x_desired = 0;
-    }
-    if(x_desired >= MAP_X){
-        x_desired = MAP_X - 1;
-    }
-    if(y_desired < 0){
-        y_desired = 0;
-    }
-    if(y_desired >= MAP_Y){
-        y_desired = MAP_Y - 1;
-    }
+    if(map_is_tile_empty(y_desired, x_desired)){
+        if((x_desired != player->x) || (y_desired != player->y)){
+            screen_cur_set_all(players, player->y, player->x);
+            char empty_tile = MAP_TILE_EMPTY;
+            net_send_all(players, &empty_tile, sizeof(empty_tile));
 
-    if((x_desired != player->x) || (y_desired != player->y)){
-        screen_cur_set_all(players, player->y, player->x);
-        char empty_tile = MAP_TILE_EMPTY;
-        net_send_all(players, &empty_tile, sizeof(empty_tile));
-
-        player->x = x_desired;
-        player->y = y_desired;
-        player_draw(player, players);
+            player->x = x_desired;
+            player->y = y_desired;
+            player_draw(player, players);
+        }
     }
 }
