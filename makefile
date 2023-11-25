@@ -9,5 +9,5 @@ build: hots3
 run: hots3
 	./hots3
 
-hots3: hots3.c networking.c player.c screen.c
+hots3: hots3.c networking.c player.c screen.c map.c
 	${CC} ${CC_FLAGS} $^ -o hots3
