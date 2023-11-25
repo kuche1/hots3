@@ -82,7 +82,7 @@ void player_process_action(struct player *player, char action, struct player pla
             break;
     }
 
-    if(map_is_tile_empty(y_desired, x_desired)){
+    if(map_is_tile_empty(players, y_desired, x_desired)){
         if((x_desired != player->x) || (y_desired != player->y)){
             screen_cur_set_all(players, player->y, player->x);
             char empty_tile = MAP_TILE_EMPTY;
