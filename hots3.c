@@ -16,9 +16,9 @@
 //     screen_clear(connfd);
 
 //     for(int idx_y=0; idx_y<MAP_Y; ++idx_y){
-//         screen_cur_set(connfd, idx_y, 0);
-//         net_send(connfd, map[idx_y], MAP_X);
-//         net_send(connfd, "\n", 1);
+//         screen_cur_set_single(connfd, idx_y, 0);
+//         net_send_single(connfd, map[idx_y], MAP_X);
+//         net_send_single(connfd, "\n", 1);
 //     }
 // }
 

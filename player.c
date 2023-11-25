@@ -18,7 +18,7 @@ void player_init_mem(struct player *player){
 void player_init_telnet(struct player *player){
     // tell telnet client to not send on line but rather on character
     char telnet_mode_character[] = "\377\375\042\377\373\001";
-    net_send(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
+    net_send_single(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
 }
 
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]){
@@ -52,8 +52,8 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
         struct player *player_receiver = &players[player_idx];
 
-        screen_cur_set(player_receiver->connfd, player->y, player->x);
-        net_send(player_receiver->connfd, &player->model, sizeof(player->model));
+        screen_cur_set_single(player_receiver->connfd, player->y, player->x);
+        net_send_single(player_receiver->connfd, &player->model, sizeof(player->model));
     }
 }
 
@@ -83,14 +83,12 @@ void player_process_action(struct player *player, char action, struct player pla
     }
 
     if(map_is_tile_empty(players, y_desired, x_desired)){
-        if((x_desired != player->x) || (y_desired != player->y)){
-            screen_cur_set_all(players, player->y, player->x);
-            char empty_tile = MAP_TILE_EMPTY;
-            net_send_all(players, &empty_tile, sizeof(empty_tile));
+        screen_cur_set(players, player->y, player->x);
+        char empty_tile = MAP_TILE_EMPTY;
+        net_send(players, &empty_tile, sizeof(empty_tile));
 
-            player->x = x_desired;
-            player->y = y_desired;
-            player_draw(player, players);
-        }
+        player->x = x_desired;
+        player->y = y_desired;
+        player_draw(player, players);
     }
 }

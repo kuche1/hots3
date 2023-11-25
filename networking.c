@@ -40,15 +40,15 @@ int create_server(int *sockfd, struct sockaddr_in *servaddr, int port, int liste
 
 // sending
 
-void net_send(int connfd, char *data, int data_len){
+void net_send_single(int connfd, char *data, int data_len){
     write(connfd, data, data_len); // TODO check how much bytes were sent
 }
 
-void net_send_all(struct player players[PLAYERS_REQUIRED], char *data, int data_len){
+void net_send(struct player players[PLAYERS_REQUIRED], char *data, int data_len){
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
         struct player *player = &players[player_idx];
 
-        net_send(player->connfd, data, data_len);
+        net_send_single(player->connfd, data, data_len);
     }
 }
 
