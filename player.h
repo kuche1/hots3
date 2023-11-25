@@ -32,6 +32,9 @@ struct player {
     int health_color_len;
     int alive;
 
+    // bot data
+    int bot;
+
     // character stats
     int basic_attack_distance;
     int basic_attack_damage;
@@ -40,8 +43,10 @@ struct player {
 
 void player_init_mem(struct player *player);
 void player_init_telnet(struct player *player);
+void player_init_bot(struct player *player);
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]);
 void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]);
+int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action);
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]);
 void player_basic_attack(struct player *player, struct player players[PLAYERS_REQUIRED]);
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]);

@@ -4,13 +4,22 @@
 
 // #define DEBUG
 
+// networking
+
 #define PORT 6969
 #define LISTEN 5
 
-#define PLAYERS_REQUIRED 2
+// game parameters
+
+#define NUMBER_OF_BOT_PLAYERS 1
+#define PLAYERS_REQUIRED 3
+
+// map parameters
 
 #define MAP_Y 12
 #define MAP_X 24
+
+// keybinds
 
 // keybind movement
 #define KEY_MOVE_LEFT 'a'

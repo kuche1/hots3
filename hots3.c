@@ -29,17 +29,27 @@ int main(void){
         struct player *player = &players[player_count];
         player_init_mem(player);
 
-        printf("waiting for connection\n");
+        printf("waiting for connection %d of %d\n", player_count+1, PLAYERS_REQUIRED);
     
-        player->connfd = accept(sockfd, (struct sockaddr *) &player->sock, &player->sock_len);
-        if(player->connfd < 0){
-            printf("player could not connect\n");
-            continue;
+        if(player_count < NUMBER_OF_BOT_PLAYERS){
+
+            player_init_bot(player);
+
+            printf("bot connected\n");
+
+        }else{
+
+            player->connfd = accept(sockfd, (struct sockaddr *) &player->sock, &player->sock_len);
+            if(player->connfd < 0){
+                printf("player could not connect\n");
+                continue;
+            }
+
+            player_init_telnet(player);
+
+            printf("player connected\n");
+        
         }
-
-        player_init_telnet(player);
-
-        printf("player connected\n");
 
         player_count += 1;
     }
@@ -78,12 +88,19 @@ int main(void){
             struct player *player = &players[player_idx];
             
             char action;
-            int bytes = net_recv_1B(player->connfd, &action);
-            if(bytes <= 0){
-                continue;
-            }
 
-            // printf("received from `%d`: `%c` (%d)\n", player->connfd, action, (int)action);
+            if(player->bot){
+                int skip = player_bot_select_action(player, players, &action);
+                if(skip){
+                    continue;
+                }
+            }else{
+                int bytes = net_recv_1B(player->connfd, &action);
+                if(bytes <= 0){
+                    continue;
+                }
+                // printf("received from `%d`: `%c` (%d)\n", player->connfd, action, (int)action);
+            }
 
             player_process_action(player, action, players);
         }

@@ -23,6 +23,7 @@ void player_init_mem(struct player *player){
     player->basic_attack_distance = 1;
     player->basic_attack_damage = 1;
     player->alive = 1;
+    player->bot = 0;
 }
 
 void player_init_telnet(struct player *player){
@@ -39,6 +40,10 @@ void player_init_telnet(struct player *player){
     if(fcntl(player->connfd, F_SETFL, flags) == -1){
         exit(ERR_CANT_SET_FCNTL_FOR_CLIENT_SOCKET);
     }
+}
+
+void player_init_bot(struct player *player){
+    player->bot = 1;
 }
 
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]){
@@ -69,7 +74,6 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
                 if(map_is_tile_empty(players, pos_y, pos_x)){
                     player->y = pos_y;
                     player->x = pos_x;
-                    printf("set spawn at %d %d\n", pos_y, pos_x);
                     done = 1;
                     break;
                 }
@@ -99,6 +103,42 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
         net_send_single(player_receiver->connfd, player->health_color, player->health_color_len);
         net_send_single(player_receiver->connfd, &player->model, sizeof(player->model));
     }
+}
+
+int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action){
+    int lowest_dist = INT_MAX;
+    struct player *target = NULL;
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *other_player = &players[player_idx];
+
+        if(player == other_player){
+            continue;
+        }
+
+        int dist = abs(player->y - other_player->y) + abs(player->x - other_player->x);
+
+        if(dist < lowest_dist){
+            lowest_dist = dist;
+            target = other_player;
+        }
+    }
+
+    if(abs(player->y - target->y) > abs(player->x - target->x)){
+        if(player->y < target->y){
+            *action = KEY_MOVE_DOWN;
+        }else{
+            *action = KEY_MOVE_UP;
+        }
+    }else{
+        if(player->x < target->x){
+            *action = KEY_MOVE_RIGHT;
+        }else{
+            *action = KEY_MOVE_LEFT;
+        }
+    }
+
+    return 0;
 }
 
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]){
