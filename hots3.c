@@ -85,6 +85,20 @@ int main(void){
 
             player_process_action(player, action, players);
         }
+
+        // check if everyone but 1 is dead
+
+        int players_alive = 0;
+
+        for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+            struct player *player = &players[player_idx];
+
+            players_alive += player->alive;
+        }
+
+        if(players_alive <= 1){
+            break;
+        }
     }
 
     return 0;

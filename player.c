@@ -171,6 +171,11 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
 }
 
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]){
+
+#ifdef DEBUG
+    amount *= 30;
+#endif
+
     player->hp -= amount;
     // printf("hp of %p is now %d\n", (void*)player, player->hp);
 

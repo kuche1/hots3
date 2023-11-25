@@ -2,6 +2,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+// #define DEBUG
+
 #define PORT 6969
 #define LISTEN 5
 
