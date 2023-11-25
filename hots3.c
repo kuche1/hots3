@@ -55,7 +55,7 @@ int main(void){
 
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
         struct player *player = &players[player_idx];
-        screen_clear(player->connfd);
+        screen_clear_single(player->connfd);
     }
 
     // print players
@@ -67,6 +67,8 @@ int main(void){
     }
 
     // game loop
+
+    struct player *winner = NULL;
 
     while(1){
 
@@ -89,17 +91,33 @@ int main(void){
         // check if everyone but 1 is dead
 
         int players_alive = 0;
+        struct player *last_player_alive = NULL;
 
         for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
             struct player *player = &players[player_idx];
 
-            players_alive += player->alive;
+            if(player->alive){
+                players_alive += player->alive;
+                last_player_alive = player;
+            }
         }
 
         if(players_alive <= 1){
+            winner = last_player_alive;
             break;
         }
     }
+
+    {
+        screen_clear(players);
+        screen_cur_set(players, 0, 0);
+        char msg_winner[] = "Winner: ";
+        net_send(players, msg_winner, sizeof(msg_winner)-1);
+        net_send(players, &winner->model, sizeof(winner->model));
+    }
+
+    // I don't do any uninitialisations cuz I'm nasty like that
+    // (the auto restart script will take care)
 
     return 0;
 }

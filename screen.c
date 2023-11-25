@@ -5,9 +5,17 @@
 
 #include "networking.h"
 
-void screen_clear(int connfd){
+void screen_clear_single(int connfd){
     char clear_cmd[] = "\033[H\033[J";
     net_send_single(connfd, clear_cmd, sizeof(clear_cmd)-1); // ommit \0
+}
+
+void screen_clear(struct player players[PLAYERS_REQUIRED]){
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *player = &players[player_idx];
+
+        screen_clear_single(player->connfd);
+    }
 }
 
 void screen_cur_set_single(int connfd, int pos_y, int pos_x){
