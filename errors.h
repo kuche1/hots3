@@ -1,0 +1,14 @@
+
+#ifndef ERRORS_H
+#define ERRORS_H
+
+enum {
+    ERR_NONE = 0,
+    ERR_CANT_CREATE_SOCKET = 1,
+    ERR_CANT_BIND_SOCET = 2,
+    ERR_CANT_LISTEN = 3,
+    ERR_CANT_SET_REUSEADDR = 4,
+    ERR_NOT_ENOUGH_TILES_TO_SPAWN_ALL_PLAYERS = 5,
+};
+
+#endif
