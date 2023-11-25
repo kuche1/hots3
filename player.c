@@ -3,6 +3,7 @@
 
 #include <fcntl.h>
 #include <stdio.h>
+#include <limits.h>
 
 #include "networking.h"
 #include "screen.h"
@@ -11,9 +12,12 @@
 
 void player_init_mem(struct player *player){
     player->sock_len = sizeof(player->sock);
+    player->model = '0';
     player->x = 0;
     player->y = 0;
-    player->model = '0';
+    player->hp = 100;
+    player->basic_attack_distance = 1;
+    player->basic_attack_damage = 1;
 }
 
 void player_init_telnet(struct player *player){
@@ -98,15 +102,12 @@ void player_process_action(struct player *player, char action, struct player pla
         case KEY_MOVE_LEFT:
             x_desired -= 1;
             break;
-
         case KEY_MOVE_RIGHT:
             x_desired += 1;
             break;
-
         case KEY_MOVE_UP:
             y_desired -= 1;
             break;
-
         case KEY_MOVE_DOWN:
             y_desired += 1;
             break;
@@ -121,4 +122,43 @@ void player_process_action(struct player *player, char action, struct player pla
         player->y = y_desired;
         player_draw(player, players);
     }
+
+    // attack
+
+    if(action == KEY_BASIC_ATTACK){
+        player_basic_attack(player, players);
+    }
+}
+
+void player_basic_attack(struct player *player, struct player players[PLAYERS_REQUIRED]){
+    struct player *closest_player = NULL;
+    int closest_distance = INT_MAX;
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *other_player = &players[player_idx];
+
+        if(other_player == player){
+            continue;
+        }
+
+        int distance = abs(player->x - other_player->x) + abs(player->y - other_player->y);
+        if(distance < closest_distance){
+            closest_distance = distance;
+            closest_player = other_player;
+        }
+    }
+
+    if(!closest_player){
+        return;
+    }
+
+    if(closest_distance <= player->basic_attack_distance){
+        player_receive_damage(closest_player, player->basic_attack_damage);
+    }
+}
+
+void player_receive_damage(struct player *player, int amount){
+    player->hp -= amount;
+    // TODO do something if less than 0
+    printf("hp of %p is now %d\n", (void*)player, player->hp);
 }

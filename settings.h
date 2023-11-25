@@ -8,9 +8,12 @@
 #define MAP_X 24
 #define MAP_TILE_EMPTY ' '
 
+// keybind movement
 #define KEY_MOVE_LEFT 'a'
 #define KEY_MOVE_RIGHT 'd'
 #define KEY_MOVE_UP 'w'
 #define KEY_MOVE_DOWN 's'
+// keybind attack
+#define KEY_BASIC_ATTACK 'j'
 
 #endif
