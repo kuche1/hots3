@@ -8,6 +8,10 @@
 #include "settings.h"
 #include "errors.h"
 
+static char STATIC_col_green[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
+static char STATIC_col_yellow[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
+static char STATIC_col_red[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
+
 struct player {
     // networking
     int connfd;
@@ -21,10 +25,14 @@ struct player {
     int x;
     int y;
     int hp;
+    int health_state;
+    char *health_color;
+    int health_color_len;
 
     // character stats
     int basic_attack_distance;
     int basic_attack_damage;
+    int hp_max;
 };
 
 void player_init_mem(struct player *player);
@@ -33,6 +41,6 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
 void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]);
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]);
 void player_basic_attack(struct player *player, struct player players[PLAYERS_REQUIRED]);
-void player_receive_damage(struct player *player, int amount);
+void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]);
 
 #endif

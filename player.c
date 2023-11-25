@@ -16,6 +16,10 @@ void player_init_mem(struct player *player){
     player->x = 0;
     player->y = 0;
     player->hp = 100;
+    player->hp_max = player->hp;
+    player->health_state = 0;
+    player->health_color = STATIC_col_green;
+    player->health_color_len = sizeof(STATIC_col_green);
     player->basic_attack_distance = 1;
     player->basic_attack_damage = 1;
 }
@@ -87,6 +91,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
         struct player *player_receiver = &players[player_idx];
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
+        net_send_single(player_receiver->connfd, player->health_color, player->health_color_len);
         net_send_single(player_receiver->connfd, &player->model, sizeof(player->model));
     }
 }
@@ -153,12 +158,39 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
     }
 
     if(closest_distance <= player->basic_attack_distance){
-        player_receive_damage(closest_player, player->basic_attack_damage);
+        player_receive_damage(closest_player, player->basic_attack_damage, players);
     }
 }
 
-void player_receive_damage(struct player *player, int amount){
+void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]){
     player->hp -= amount;
     // TODO do something if less than 0
     printf("hp of %p is now %d\n", (void*)player, player->hp);
+
+    int health_state = (2*player->hp_max) / player->hp;
+    // 2 = 2/2 hp = 100%
+    // 3 = 2/3 hp =  66%
+    // 4 = 2/4 hp =  50%
+    // 5 = 2/5 hp =  40%
+    // 6 = 2/6 hp =  33%
+
+    if(health_state != player->health_state){
+        player->health_state = health_state;
+
+        if(player->health_state < 3){
+            // [100:66]
+            player->health_color = STATIC_col_green;
+            player->health_color_len = sizeof(STATIC_col_green);
+        }else if(player->health_state < 6){
+            // (66:33]
+            player->health_color = STATIC_col_yellow;
+            player->health_color_len = sizeof(STATIC_col_yellow);
+        }else{
+            // (33/0]
+            player->health_color = STATIC_col_red;
+            player->health_color_len = sizeof(STATIC_col_red);
+        }
+
+        player_draw(player, players);
+    }
 }
