@@ -8,17 +8,6 @@
 #include "settings.h"
 #include "screen.h"
 
-// void print_map(char map[MAP_Y][MAP_X], int connfd){
-
-//     screen_clear(connfd);
-
-//     for(int idx_y=0; idx_y<MAP_Y; ++idx_y){
-//         screen_cur_set_single(connfd, idx_y, 0);
-//         net_send_single(connfd, map[idx_y], MAP_X);
-//         net_send_single(connfd, "\n", 1);
-//     }
-// }
-
 int main(void){
     int err;
 
@@ -54,18 +43,6 @@ int main(void){
 
         player_count += 1;
     }
-
-    // // map init
-
-    // char map[MAP_Y][MAP_X];
-    // memset(map, '0', sizeof(map));
-
-    // // send initial map state
-
-    // for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
-    //     struct player *player = &players[player_idx];
-    //     print_map(map, player->connfd);
-    // }
 
     // spawn players
 

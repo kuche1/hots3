@@ -22,6 +22,7 @@ void player_init_mem(struct player *player){
     player->health_color_len = sizeof(STATIC_col_green);
     player->basic_attack_distance = 1;
     player->basic_attack_damage = 1;
+    player->alive = 1;
 }
 
 void player_init_telnet(struct player *player){
@@ -87,6 +88,10 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
 }
 
 void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]){
+    if(!player->alive){
+        return;
+    }
+
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
         struct player *player_receiver = &players[player_idx];
 
@@ -97,6 +102,10 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
 }
 
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]){
+
+    if(!player->alive){
+        return;
+    }
 
     // movement
 
@@ -120,8 +129,7 @@ void player_process_action(struct player *player, char action, struct player pla
 
     if(map_is_tile_empty(players, y_desired, x_desired)){
         screen_cur_set(players, player->y, player->x);
-        char empty_tile = MAP_TILE_EMPTY;
-        net_send(players, &empty_tile, sizeof(empty_tile));
+        net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
 
         player->x = x_desired;
         player->y = y_desired;
@@ -164,8 +172,15 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
 
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]){
     player->hp -= amount;
-    // TODO do something if less than 0
-    printf("hp of %p is now %d\n", (void*)player, player->hp);
+    // printf("hp of %p is now %d\n", (void*)player, player->hp);
+
+    if(player->hp <= 0){
+        player->alive = 0;
+        screen_cur_set(players, player->y, player->x);
+        net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
+        player->x = -1;
+        player->y = -1;
+    }
 
     int health_state = (2*player->hp_max) / player->hp;
     // 2 = 2/2 hp = 100%

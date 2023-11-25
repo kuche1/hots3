@@ -12,6 +12,8 @@ static char STATIC_col_green[]  __attribute__((unused)) = {'\033', '[', '9', '2'
 static char STATIC_col_yellow[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
 static char STATIC_col_red[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
 
+static char STATIC_map_tile_empty[] __attribute__((unused)) = {' '};
+
 struct player {
     // networking
     int connfd;
@@ -28,6 +30,7 @@ struct player {
     int health_state;
     char *health_color;
     int health_color_len;
+    int alive;
 
     // character stats
     int basic_attack_distance;
