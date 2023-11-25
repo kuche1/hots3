@@ -1,9 +1,9 @@
 
+#include "player.h"
+
 #include "networking.h"
 #include "screen.h"
 #include "settings.h"
-
-#include "player.h"
 #include "map.h"
 
 #define PLAYER_MODEL_ERROR '0'

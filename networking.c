@@ -1,4 +1,6 @@
 
+#include "networking.h"
+
 #include <string.h>
 #include <netdb.h> 
 #include <netinet/in.h> 
@@ -8,8 +10,6 @@
 #include <unistd.h> // read(), write(), close()
 
 #include "errors.h"
-
-#include "networking.h"
 
 int create_server(int *sockfd, struct sockaddr_in *servaddr, int port, int listen_max){
     *sockfd = socket(AF_INET, SOCK_STREAM, 0); 

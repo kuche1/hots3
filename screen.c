@@ -1,4 +1,6 @@
 
+#include "screen.h"
+
 #include <stdio.h>
 
 #include "networking.h"

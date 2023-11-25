@@ -1,7 +1,7 @@
 
-#include "settings.h"
-
 #include "map.h"
+
+#include "settings.h"
 
 int map_is_tile_empty(struct player players[PLAYERS_REQUIRED], int pos_y, int pos_x){
 
