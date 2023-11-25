@@ -2,6 +2,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+// debug
+
 // #define DEBUG
 
 // networking

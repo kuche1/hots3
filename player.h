@@ -32,13 +32,13 @@ struct player {
     int health_color_len;
     int alive;
 
-    // bot data
-    int bot;
-
     // character stats
     int basic_attack_distance;
     int basic_attack_damage;
     int hp_max;
+
+    // bot data
+    int bot;
 };
 
 void player_init_mem(struct player *player);

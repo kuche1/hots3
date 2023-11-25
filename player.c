@@ -124,6 +124,11 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
     }
 
+    if(lowest_dist <= player->basic_attack_distance){
+        *action = KEY_BASIC_ATTACK;
+        return 0;
+    }
+
     if(abs(player->y - target->y) > abs(player->x - target->x)){
         if(player->y < target->y){
             *action = KEY_MOVE_DOWN;
@@ -225,6 +230,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
         net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
         player->x = -1;
         player->y = -1;
+        return;
     }
 
     int health_state = (2*player->hp_max) / player->hp;
