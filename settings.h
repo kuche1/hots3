@@ -2,6 +2,9 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#define PORT 6969
+#define LISTEN 5
+
 #define PLAYERS_REQUIRED 2
 
 #define MAP_Y 12

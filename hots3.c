@@ -8,9 +8,6 @@
 #include "settings.h"
 #include "screen.h"
 
-#define PORT 6969
-#define LISTEN 5
-
 // void print_map(char map[MAP_Y][MAP_X], int connfd){
 
 //     screen_clear(connfd);
