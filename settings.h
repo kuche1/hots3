@@ -11,7 +11,6 @@
 
 #define MAP_Y 12
 #define MAP_X 24
-#define MAP_TILE_EMPTY ' '
 
 // keybind movement
 #define KEY_MOVE_LEFT 'a'
