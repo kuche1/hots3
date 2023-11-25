@@ -12,7 +12,7 @@ void screen_clear(int connfd){
 
 void screen_cur_set_single(int connfd, int pos_y, int pos_x){
     char msg_buf[20]; // TODO fat fingered
-    int written = snprintf(msg_buf, sizeof(msg_buf), "\033[%d;%dH", pos_y, pos_x); // the return values excludes the final \0
+    int written = snprintf(msg_buf, sizeof(msg_buf), "\033[%d;%dH", pos_y+1, pos_x+1); // the return values excludes the final \0
     net_send_single(connfd, msg_buf, written);
 }
 

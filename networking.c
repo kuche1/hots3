@@ -54,6 +54,6 @@ void net_send(struct player players[PLAYERS_REQUIRED], char *data, int data_len)
 
 // receiving
 
-void net_recv_1B(int connfd, char *data){
-    read(connfd, data, 1);
+int net_recv_1B(int connfd, char *data){
+    return read(connfd, data, 1);
 }

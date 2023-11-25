@@ -102,9 +102,12 @@ int main(void){
             struct player *player = &players[player_idx];
             
             char action;
-            net_recv_1B(player->connfd, &action);
+            int bytes = net_recv_1B(player->connfd, &action);
+            if(bytes <= 0){
+                continue;
+            }
 
-            printf("received from `%d`: `%c` `%d`\n", player->connfd, action, (int)action);
+            // printf("received from `%d`: `%c` (%d)\n", player->connfd, action, (int)action);
 
             player_process_action(player, action, players);
         }

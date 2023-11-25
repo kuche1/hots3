@@ -2,7 +2,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#define PLAYERS_REQUIRED 1
+#define PLAYERS_REQUIRED 2
 
 #define MAP_Y 12
 #define MAP_X 24
