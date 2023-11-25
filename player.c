@@ -60,43 +60,47 @@ void player_process_action(struct player *player, char action, struct player pla
 
     // movement
 
-    int old_x = player->x;
-    int old_y = player->y;
+    int x_desired = player->x;
+    int y_desired = player->y;
 
     switch(action){
         case KEY_MOVE_LEFT:
-            player->x -= 1;
-            if(player->x < 0){
-                player->x = 0;
-            }
+            x_desired -= 1;
             break;
 
         case KEY_MOVE_RIGHT:
-            player->x += 1;
-            if(player->x >= MAP_X){
-                player->x = MAP_X - 1;
-            }
+            x_desired += 1;
             break;
 
         case KEY_MOVE_UP:
-            player->y -= 1;
-            if(player->y < 0){
-                player->y = 0;
-            }
+            y_desired -= 1;
             break;
 
         case KEY_MOVE_DOWN:
-            player->y += 1;
-            if(player->y >= MAP_Y){
-                player->y = MAP_Y - 1;
-            }
+            y_desired += 1;
             break;
     }
 
-    if((old_x != player->x) || (old_y != player->y)){
-        screen_cur_set_all(players, old_y, old_x);
+    if(x_desired < 0){
+        x_desired = 0;
+    }
+    if(x_desired >= MAP_X){
+        x_desired = MAP_X - 1;
+    }
+    if(y_desired < 0){
+        y_desired = 0;
+    }
+    if(y_desired >= MAP_Y){
+        y_desired = MAP_Y - 1;
+    }
+
+    if((x_desired != player->x) || (y_desired != player->y)){
+        screen_cur_set_all(players, player->y, player->x);
         char empty_tile = MAP_TILE_EMPTY;
         net_send_all(players, &empty_tile, sizeof(empty_tile));
+
+        player->x = x_desired;
+        player->y = y_desired;
         player_draw(player, players);
     }
 }
