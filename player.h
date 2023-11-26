@@ -31,6 +31,8 @@ struct player {
     char *health_color;
     int health_color_len;
     int alive;
+    // bot variable data
+    long long bot_last_action_at_ms;
 
     // character stats
     int basic_attack_distance;
@@ -39,6 +41,7 @@ struct player {
 
     // bot data
     int bot;
+    long long bot_action_delay_ms;
 };
 
 void player_init_mem(struct player *player);

@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <limits.h>
+#include <sys/time.h>
 
 #include "networking.h"
 #include "screen.h"
@@ -44,6 +45,8 @@ void player_init_telnet(struct player *player){
 
 void player_init_bot(struct player *player){
     player->bot = 1;
+    player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
+    player->bot_last_action_at_ms = 0;
 }
 
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]){
@@ -106,6 +109,19 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
 }
 
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action){
+
+    {
+        struct timeval te; 
+        gettimeofday(&te, NULL); // get current time
+        long long now_ms = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+
+        if((player->bot_last_action_at_ms + player->bot_action_delay_ms) < now_ms){
+            player->bot_last_action_at_ms = now_ms;
+        }else{
+            return 1;
+        }
+    }
+
     int lowest_dist = INT_MAX;
     struct player *target = NULL;
 
