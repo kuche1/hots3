@@ -65,6 +65,7 @@ void player_init_bot(struct player *player){
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]){
 
     player->hp = player->hero.hp_max;
+    player_recalculate_health_state(player, players);
 
     // set spawn
 
@@ -186,8 +187,11 @@ void player_receive_damage(struct player *player, int amount, struct player play
         return;
     }
 
+    player_recalculate_health_state(player, players);
+}
 
-    int health_state;
+void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_REQUIRED]){
+    int health_state; // TODO we can simply check the color and ignore this
 
     if(player->hp >= player->hero.hp_max){
         player->health_color = STATIC_col_green_bright;
