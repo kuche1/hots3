@@ -253,56 +253,37 @@ void player_receive_damage(struct player *player, int amount, struct player play
         return;
     }
 
-    // int health_state = (2*player->hp_max) / player->hp;
-    // 1 = 1/1 hp = 100%
-    // 2 = 1/2 hp =  50%
-    // 3 = 1/3 hp =  33%
 
-    int health_state = (2*player->hp_max) / player->hp;
-    //  2 = 2/ 2 hp = 100%
-    //  3 = 2/ 3 hp =  66%
-    //  4 = 2/ 4 hp =  50%
-    //  5 = 2/ 5 hp =  40%
-    //  6 = 2/ 6 hp =  33%
-    //  7 = 2/ 7 hp =  29%
-    //  8 = 2/ 8 hp =  25%
-    //  9 = 2/ 9 hp =  22%
-    // 10 = 2/10 hp =  20%
-    // 11 = 2/11 hp =  18%
+    int health_state;
+
+    if(player->hp >= player->hp_max){
+        player->health_color = STATIC_col_green_bright;
+        player->health_color_len = sizeof(STATIC_col_green_bright);
+        health_state = 0;
+    }else if(player->hp >= player->hp_max * 5 / 6){
+        player->health_color = STATIC_col_green_dark;
+        player->health_color_len = sizeof(STATIC_col_green_dark);
+        health_state = 1;
+    }else if(player->hp >= player->hp_max * 4 / 6){
+        player->health_color = STATIC_col_yellow_bright;
+        player->health_color_len = sizeof(STATIC_col_yellow_bright);
+        health_state = 2;
+    }else if(player->hp >= player->hp_max * 3 / 6){
+        player->health_color = STATIC_col_yellow_dark;
+        player->health_color_len = sizeof(STATIC_col_yellow_dark);
+        health_state = 3;
+    }else if(player->hp >= player->hp_max * 2 / 6){
+        player->health_color = STATIC_col_red_bright;
+        player->health_color_len = sizeof(STATIC_col_red_bright);
+        health_state = 4;
+    }else{
+        player->health_color = STATIC_col_red_dark;
+        player->health_color_len = sizeof(STATIC_col_red_dark);
+        health_state = 5;
+    }
 
     if(health_state != player->health_state){
         player->health_state = health_state;
-
-        switch(player->health_state){
-            case 0:
-            case 1:
-            case 2:
-            case 3: // [100:66]
-                player->health_color = STATIC_col_green_bright;
-                player->health_color_len = sizeof(STATIC_col_green_bright);
-                break;
-            case 4: // (66:50]
-                player->health_color = STATIC_col_green_dark;
-                player->health_color_len = sizeof(STATIC_col_green_dark);
-                break;
-            case 5:// (50:40]
-                player->health_color = STATIC_col_yellow_bright;
-                player->health_color_len = sizeof(STATIC_col_yellow_bright);
-                break;
-            case 6: // (40:33]
-                player->health_color = STATIC_col_yellow_dark;
-                player->health_color_len = sizeof(STATIC_col_yellow_dark);
-                break;
-            case 7: // (33:29]
-                player->health_color = STATIC_col_red_bright;
-                player->health_color_len = sizeof(STATIC_col_red_bright);
-                break;
-            case 8: // (29:0]
-                player->health_color = STATIC_col_red_dark;
-                player->health_color_len = sizeof(STATIC_col_red_dark);
-                break;
-        }
-
         player_draw(player, players);
     }
 }
