@@ -51,7 +51,7 @@ struct player {
     struct hero hero;
 
     // other
-    int team;
+    int team; // TODO make it impossible to attack players from your team
 
     // bot data
     int bot;

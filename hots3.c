@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include "errors.h"
 #include "networking.h"
@@ -94,7 +95,7 @@ int main(void){
 
     // game loop
 
-    struct player *winner = NULL;
+    char *winner = NULL;;
 
     while(1){
 
@@ -121,34 +122,43 @@ int main(void){
             player_process_action(player, action, players);
         }
 
-        // check if everyone but 1 is dead
+        // check if an entire team is dead
 
-        int players_alive = 0;
-        struct player *last_player_alive = NULL;
+        int players_alive[2] = {0};
 
         for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
             struct player *player = &players[player_idx];
 
             if(player->alive){
-                players_alive += player->alive;
-                last_player_alive = player;
+                players_alive[player->team] += 1;
             }
         }
 
-        if(players_alive <= 1){
-            winner = last_player_alive;
+        if(players_alive[0] <= 0){
+            winner = "team 1";
+            break;
+        }else if(players_alive[1] <= 0){
+            winner = "team 0";
             break;
         }
     }
 
+    assert(winner != NULL);
+
     {
         screen_clear(players);
         screen_cur_set(players, 0, 0);
+
         char msg_winner[] = "Winner: ";
         net_send(players, msg_winner, sizeof(msg_winner)-1);
-        winner->x = 0;
-        winner->y = 1;
-        player_draw(winner, players);
+        net_send(players, winner, strlen(winner));
+
+        // TODO print the team members
+
+        // winner->x = 0;
+        // winner->y = 1;
+        // player_draw(winner, players);
+
         screen_cur_set(players, 2, 0);
     }
 

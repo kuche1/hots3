@@ -22,14 +22,14 @@ void player_init_mem(struct player *player){
     player->sock_len = sizeof(player->sock);
     player->x = 0;
     player->y = 0;
-    player->health_color = STATIC_col_green_bright;
-    player->health_color_len = sizeof(STATIC_col_green_bright);
+    player->health_color = "";
+    player->health_color_len = 0;
     player->alive = 1;
     player->bot = 0;
     hero_init_mem(&player->hero);
     player->hp = player->hero.hp_max;
-    player->team_color = STATIC_col_bg_red_dark;
-    player->team_color_len = sizeof(STATIC_col_bg_red_dark);
+    player->team_color = "";
+    player->team_color_len = 0;
     player->team = 0;
 }
 
@@ -70,10 +70,10 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
     player_recalculate_health_state(player, players);
 
     if(player->team){
-        player->team_color = STATIC_col_bg_black_dark;
-        player->team_color_len = sizeof(STATIC_col_bg_black_dark);
+        player->team_color     = "";
+        player->team_color_len = 0;
     }else{
-        player->team_color = STATIC_effect_underline;
+        player->team_color     = STATIC_effect_underline;
         player->team_color_len = sizeof(STATIC_effect_underline);
     }
 
@@ -160,6 +160,10 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
         }
 
         if(!other_player->alive){
+            continue;
+        }
+
+        if(player->team == other_player->team){
             continue;
         }
 
@@ -260,6 +264,10 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
 
         if(!other_player->alive){
+            continue;
+        }
+
+        if(player->team == other_player->team){
             continue;
         }
 
