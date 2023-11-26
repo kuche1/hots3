@@ -259,16 +259,13 @@ void player_receive_damage(struct player *player, int amount, struct player play
     if(health_state != player->health_state){
         player->health_state = health_state;
 
-        if(player->health_state < 3){
-            // [100:66]
+        if(player->health_state < 3){ // [100:66]
             player->health_color = STATIC_col_green;
             player->health_color_len = sizeof(STATIC_col_green);
-        }else if(player->health_state < 6){
-            // (66:33]
+        }else if(player->health_state < 6){ // (66:33]
             player->health_color = STATIC_col_yellow;
             player->health_color_len = sizeof(STATIC_col_yellow);
-        }else{
-            // (33/0]
+        }else{ // (33/0]
             player->health_color = STATIC_col_red;
             player->health_color_len = sizeof(STATIC_col_red);
         }
