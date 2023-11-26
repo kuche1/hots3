@@ -65,29 +65,18 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
 
     // set spawn
 
-    for(;;){
-        int done = 0;
+    for(int loop_count=0; loop_count<50; loop_count++){
 
-        for(int pos_y=0; pos_y < MAP_Y; pos_y++){
-            for(int pos_x=0; pos_x < MAP_X; pos_x++){
-                if(map_is_tile_empty(players, pos_y, pos_x)){
-                    player->y = pos_y;
-                    player->x = pos_x;
-                    done = 1;
-                    break;
-                }
-            }
-            if(done){
-                break;
-            }
+        int pos_y = rand() % MAP_Y;
+        int pos_x = rand() % MAP_X;
+        if(map_is_tile_empty(players, pos_y, pos_x)){
+            player->y = pos_y;
+            player->x = pos_x;
+            return;
         }
-
-        if(done){
-            break;
-        }
-
-        exit(ERR_NOT_ENOUGH_TILES_TO_SPAWN_ALL_PLAYERS);
     }
+
+    exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
 }
 
 void player_select_hero(struct player *player){
@@ -136,80 +125,9 @@ back_to_the_start:
 }
 
 /////////////
-///////////// other stuff
+///////////// actions
 /////////////
 
-void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]){
-    if(!player->alive){
-        return;
-    }
-
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
-        struct player *player_receiver = &players[player_idx];
-
-        screen_cur_set_single(player_receiver->connfd, player->y, player->x);
-        screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
-        hero_draw_single(&player->hero, player_receiver->connfd);
-    }
-}
-
-int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action){
-
-    {
-        struct timeval te; 
-        gettimeofday(&te, NULL); // get current time
-        long long now_ms = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
-
-        if((player->bot_last_action_at_ms + player->bot_action_delay_ms) < now_ms){
-            player->bot_last_action_at_ms = now_ms;
-        }else{
-            return 1;
-        }
-    }
-
-    int lowest_dist = INT_MAX;
-    struct player *target = NULL;
-
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
-        struct player *other_player = &players[player_idx];
-
-        if(player == other_player){
-            continue;
-        }
-
-        if(!other_player->alive){
-            continue;
-        }
-
-        int dist = abs(player->y - other_player->y) + abs(player->x - other_player->x);
-
-        if(dist < lowest_dist){
-            lowest_dist = dist;
-            target = other_player;
-        }
-    }
-
-    if(lowest_dist <= player->hero.basic_attack_distance){
-        *action = KEY_BASIC_ATTACK;
-        return 0;
-    }
-
-    if(abs(player->y - target->y) > abs(player->x - target->x)){
-        if(player->y < target->y){
-            *action = KEY_MOVE_DOWN;
-        }else{
-            *action = KEY_MOVE_UP;
-        }
-    }else{
-        if(player->x < target->x){
-            *action = KEY_MOVE_RIGHT;
-        }else{
-            *action = KEY_MOVE_LEFT;
-        }
-    }
-
-    return 0;
-}
 
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]){
 
@@ -338,5 +256,85 @@ void player_receive_damage(struct player *player, int amount, struct player play
     if(health_state != player->health_state){
         player->health_state = health_state;
         player_draw(player, players);
+    }
+}
+
+/////////////
+///////////// bot stuff
+/////////////
+
+int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action){
+
+    {
+        struct timeval te; 
+        gettimeofday(&te, NULL); // get current time
+        long long now_ms = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+
+        if((player->bot_last_action_at_ms + player->bot_action_delay_ms) < now_ms){
+            player->bot_last_action_at_ms = now_ms;
+        }else{
+            return 1;
+        }
+    }
+
+    int lowest_dist = INT_MAX;
+    struct player *target = NULL;
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *other_player = &players[player_idx];
+
+        if(player == other_player){
+            continue;
+        }
+
+        if(!other_player->alive){
+            continue;
+        }
+
+        int dist = abs(player->y - other_player->y) + abs(player->x - other_player->x);
+
+        if(dist < lowest_dist){
+            lowest_dist = dist;
+            target = other_player;
+        }
+    }
+
+    if(lowest_dist <= player->hero.basic_attack_distance){
+        *action = KEY_BASIC_ATTACK;
+        return 0;
+    }
+
+    if(abs(player->y - target->y) > abs(player->x - target->x)){
+        if(player->y < target->y){
+            *action = KEY_MOVE_DOWN;
+        }else{
+            *action = KEY_MOVE_UP;
+        }
+    }else{
+        if(player->x < target->x){
+            *action = KEY_MOVE_RIGHT;
+        }else{
+            *action = KEY_MOVE_LEFT;
+        }
+    }
+
+    return 0;
+}
+
+/////////////
+///////////// other stuff
+/////////////
+
+void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]){
+    if(!player->alive){
+        return;
+    }
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *player_receiver = &players[player_idx];
+
+        screen_cur_set_single(player_receiver->connfd, player->y, player->x);
+        screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
+        hero_draw_single(&player->hero, player_receiver->connfd);
     }
 }

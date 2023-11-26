@@ -4,12 +4,14 @@
 #include "screen.h"
 
 /////////////
-///////////// memory
+///////////// initialisations
 /////////////
 
 void hero_init_mem(struct hero *hero){
     hero_init_regular_guy(hero);
 }
+
+// void hero_select_hero()
 
 /////////////
 ///////////// drawing

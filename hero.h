@@ -14,7 +14,7 @@ struct hero{
     // the change for the move action to work will be `legpower / weight`
 };
 
-// memory
+// initialisations
 void hero_init_mem(struct hero *hero);
 // drawing
 void hero_draw_single(struct hero *hero, int connfd);
