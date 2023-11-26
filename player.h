@@ -9,16 +9,25 @@
 #include "errors.h"
 #include "hero.h"
 
-// foreground colors
 // https://ss64.com/nt/syntax-ansi.html
+// foreground colors
 static char STATIC_col_green_bright[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
 static char STATIC_col_green_dark[]    __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
 static char STATIC_col_yellow_bright[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
 static char STATIC_col_yellow_dark[]   __attribute__((unused)) = {'\033', '[', '3', '3', 'm'};
 static char STATIC_col_red_bright[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
 static char STATIC_col_red_dark[]      __attribute__((unused)) = {'\033', '[', '3', '1', 'm'};
+// background colors
+static char STATIC_col_bg_red_dark[]      __attribute__((unused)) = {'\033', '[', '4', '1',      'm'};
+static char STATIC_col_bg_blue_dark[]     __attribute__((unused)) = {'\033', '[', '4', '4',      'm'};
+static char STATIC_col_bg_white_dark[]    __attribute__((unused)) = {'\033', '[', '4', '6',      'm'};
+static char STATIC_col_bg_white_bright[]  __attribute__((unused)) = {'\033', '[', '1', '0', '7', 'm'};
+static char STATIC_col_bg_magenta_dark[]  __attribute__((unused)) = {'\033', '[', '4', '5',      'm'};
+static char STATIC_col_bg_black_dark[]    __attribute__((unused)) = {'\033', '[', '4', '0',      'm'};
+// effects
+static char STATIC_effect_underline[] __attribute__((unused)) = {'\033', '[', '4', 'm'};
 
-static char STATIC_map_tile_empty[] __attribute__((unused)) = {' '};
+static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
 
 struct player {
     // networking
@@ -29,7 +38,8 @@ struct player {
     // graphics
     char *health_color;
     int health_color_len;
-    // TODO add team color (can be the background color)
+    char *team_color;
+    int team_color_len;
 
     // variable data
     int x;
@@ -39,6 +49,9 @@ struct player {
 
     // selected character stats
     struct hero hero;
+
+    // other
+    int team;
 
     // bot data
     int bot;

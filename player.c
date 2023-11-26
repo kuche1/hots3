@@ -28,6 +28,9 @@ void player_init_mem(struct player *player){
     player->bot = 0;
     hero_init_mem(&player->hero);
     player->hp = player->hero.hp_max;
+    player->team_color = STATIC_col_bg_red_dark;
+    player->team_color_len = sizeof(STATIC_col_bg_red_dark);
+    player->team = 0;
 }
 
 void player_init_telnet(struct player *player){
@@ -65,6 +68,14 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
 
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
+
+    if(player->team){
+        player->team_color = STATIC_col_bg_black_dark;
+        player->team_color_len = sizeof(STATIC_col_bg_black_dark);
+    }else{
+        player->team_color = STATIC_effect_underline;
+        player->team_color_len = sizeof(STATIC_effect_underline);
+    }
 
     // set spawn
 
@@ -296,6 +307,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
         screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
+        screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
         hero_draw_single(&player->hero, player_receiver->connfd);
     }
 }

@@ -13,10 +13,10 @@
 
 // game parameters
 
-#define PLAYERS_REQUIRED 3
+#define PLAYERS_REQUIRED 4
 
-#define NUMBER_OF_BOT_PLAYERS 1
-#define BOT_REACTION_TIME_MS 500 // 1e3 is 1 second
+#define NUMBER_OF_BOT_PLAYERS 2
+#define BOT_REACTION_TIME_MS 400 // 1e3 is 1 second
 
 // map parameters
 

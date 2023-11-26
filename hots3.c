@@ -24,6 +24,7 @@ int main(void){
 
     int player_count = 0;
     struct player players[PLAYERS_REQUIRED];
+    int team = 0;
 
     while(player_count < PLAYERS_REQUIRED){
         struct player *player = &players[player_count];
@@ -48,6 +49,9 @@ int main(void){
             printf("player connected\n");
         
         }
+
+        player->team = team;
+        team = !team;
 
         player_count += 1;
     }
