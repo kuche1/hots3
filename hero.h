@@ -16,6 +16,7 @@ struct hero{
 
 // initialisations
 void hero_init_mem(struct hero *hero);
+void hero_select_player_hero(struct hero *hero, int connfd, int is_bot);
 // drawing
 void hero_draw_single(struct hero *hero, int connfd);
 // other stuff

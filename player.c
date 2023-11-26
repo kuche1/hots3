@@ -11,6 +11,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "map.h"
+#include "hero.h"
 
 /////////////
 ///////////// initialising
@@ -80,48 +81,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
 }
 
 void player_select_hero(struct player *player){
-
-    if(player->bot){
-        hero_init_regular_guy(&player->hero);
-        return;
-    }
-
-    char msg_select_hero[] = "Select hero:\n";
-
-back_to_the_start:
-    screen_print_single(player->connfd, msg_select_hero, sizeof(msg_select_hero)-1);
-
-    char *choices[] = {
-        "0: regular guy\n",
-        "1: slower harder hitting guy\n",
-        "2: guy with more range but less HP\n",
-    };
-
-    for(long unsigned int choice_idx=0; choice_idx < sizeof(choices) / sizeof(*choices); choice_idx++){
-        char *choice = choices[choice_idx];
-
-        screen_print_single(player->connfd, choice, strlen(choice));
-    }
-
-    char choice;
-    int received = net_recv_1B(player->connfd, &choice);
-    if(!received){
-        choice = '0';
-    }
-
-    switch(choice){
-        case '0':
-            hero_init_regular_guy(&player->hero);
-            break;
-        case '1':
-            hero_init_slower_harder_hitting_guy(&player->hero);
-            break;
-        case '2':
-            hero_init_guy_with_more_range_but_less_hp(&player->hero);
-            break;
-        default:
-            goto back_to_the_start;
-    }
+    hero_select_player_hero(&player->hero, player->connfd, player->bot);
 }
 
 /////////////

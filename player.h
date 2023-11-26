@@ -9,10 +9,6 @@
 #include "errors.h"
 #include "hero.h"
 
-// static char STATIC_col_green[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
-// static char STATIC_col_yellow[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
-// static char STATIC_col_red[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
-
 // foreground colors
 // https://ss64.com/nt/syntax-ansi.html
 static char STATIC_col_green_bright[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
