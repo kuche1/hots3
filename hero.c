@@ -25,3 +25,6 @@ void hero_init_gut_with_more_range_but_less_hp(struct hero *hero){
     hero->hp_max = 60;
     hero->basic_attack_distance = 2;
 }
+
+// TODO fast an annoying
+// also it would be best if we move the character selection screen here
