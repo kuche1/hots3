@@ -249,6 +249,11 @@ void player_receive_damage(struct player *player, int amount, struct player play
         return;
     }
 
+    // int health_state = (2*player->hp_max) / player->hp;
+    // 1 = 1/1 hp = 100%
+    // 2 = 1/2 hp =  50%
+    // 3 = 1/3 hp =  33%
+
     int health_state = (2*player->hp_max) / player->hp;
     // 2 = 2/2 hp = 100%
     // 3 = 2/3 hp =  66%
