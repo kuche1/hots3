@@ -40,6 +40,11 @@ void player_init_telnet(struct player *player){
     char telnet_mode_character[] = "\377\375\042\377\373\001";
     net_send_single(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
 
+    // use ansi escape code to hide the cursor
+    // https://notes.burke.libbey.me/ansi-escape-codes/
+    char hide_cur_code[] = "\x1b[?25l";
+    net_send_single(player->connfd, hide_cur_code, sizeof(hide_cur_code));
+
     // also make the socket nonblocking
     int flags = fcntl(player->connfd, F_GETFL, 0);
     if(flags == -1){
@@ -231,31 +236,35 @@ void player_process_action(struct player *player, char action, struct player pla
 
     // movement
 
-    int x_desired = player->x;
-    int y_desired = player->y;
+    if(rand() % player->hero.weight < player->hero.legpower){
 
-    switch(action){
-        case KEY_MOVE_LEFT:
-            x_desired -= 1;
-            break;
-        case KEY_MOVE_RIGHT:
-            x_desired += 1;
-            break;
-        case KEY_MOVE_UP:
-            y_desired -= 1;
-            break;
-        case KEY_MOVE_DOWN:
-            y_desired += 1;
-            break;
-    }
+        int x_desired = player->x;
+        int y_desired = player->y;
 
-    if(map_is_tile_empty(players, y_desired, x_desired)){
-        screen_cur_set(players, player->y, player->x);
-        net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
+        switch(action){
+            case KEY_MOVE_LEFT:
+                x_desired -= 1;
+                break;
+            case KEY_MOVE_RIGHT:
+                x_desired += 1;
+                break;
+            case KEY_MOVE_UP:
+                y_desired -= 1;
+                break;
+            case KEY_MOVE_DOWN:
+                y_desired += 1;
+                break;
+        }
 
-        player->x = x_desired;
-        player->y = y_desired;
-        player_draw(player, players);
+        if(map_is_tile_empty(players, y_desired, x_desired)){
+            screen_cur_set(players, player->y, player->x);
+            net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
+
+            player->x = x_desired;
+            player->y = y_desired;
+            player_draw(player, players);
+        }
+
     }
 
     // attack

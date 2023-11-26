@@ -6,7 +6,10 @@ struct hero{
     int basic_attack_distance;
     int basic_attack_damage;
     int hp_max;
-    int weight; // TODO use this to determine how many times you have to press a button to move to a direction
+
+    int legpower;
+    int weight;
+    // the change for the move action to work will be `legpower / weight`
 };
 
 void hero_init_mem(struct hero *hero);
