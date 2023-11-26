@@ -31,7 +31,6 @@ struct player {
     unsigned int sock_len;
 
     // graphics
-    char model;
     char *health_color;
     int health_color_len;
     // TODO add team color (can be the background color)

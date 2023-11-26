@@ -19,7 +19,6 @@
 void player_init_mem(struct player *player){
     player->connfd = -1;
     player->sock_len = sizeof(player->sock);
-    player->model = '0';
     player->x = 0;
     player->y = 0;
     player->health_state = 0;
@@ -63,22 +62,6 @@ void player_init_bot(struct player *player){
 }
 
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]){
-
-    // set model
-
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){ // TODO this is giga shit
-        struct player *other_player = &players[player_idx];
-        
-        if(other_player == player){
-            continue;
-        }
-
-        if(player->model == other_player->model){
-            player->model += 1;
-            player_spawn(player, players);
-            return;
-        }
-    }
 
     // set spawn
 
@@ -145,7 +128,7 @@ back_to_the_start:
             hero_init_slower_harder_hitting_guy(&player->hero);
             break;
         case '2':
-            hero_init_gut_with_more_range_but_less_hp(&player->hero);
+            hero_init_guy_with_more_range_but_less_hp(&player->hero);
             break;
         default:
             goto back_to_the_start;
@@ -166,7 +149,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
         net_send_single(player_receiver->connfd, player->health_color, player->health_color_len);
-        net_send_single(player_receiver->connfd, &player->model, sizeof(player->model));
+        hero_draw_single(&player->hero, player_receiver->connfd);
     }
 }
 
