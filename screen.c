@@ -7,7 +7,7 @@
 
 void screen_clear_single(int connfd){
     char clear_cmd[] = "\033[H\033[J";
-    net_send_single(connfd, clear_cmd, sizeof(clear_cmd)-1); // ommit \0
+    screen_print_single(connfd, clear_cmd, sizeof(clear_cmd)-1); // ommit \0
 }
 
 void screen_clear(struct player players[PLAYERS_REQUIRED]){
@@ -21,7 +21,7 @@ void screen_clear(struct player players[PLAYERS_REQUIRED]){
 void screen_cur_set_single(int connfd, int pos_y, int pos_x){
     char msg_buf[20]; // TODO fat fingered
     int written = snprintf(msg_buf, sizeof(msg_buf), "\033[%d;%dH", pos_y+1, pos_x+1); // the return values excludes the final \0
-    net_send_single(connfd, msg_buf, written);
+    screen_print_single(connfd, msg_buf, written);
 }
 
 void screen_cur_set(struct player players[PLAYERS_REQUIRED], int pos_y, int pos_x){
@@ -30,4 +30,8 @@ void screen_cur_set(struct player players[PLAYERS_REQUIRED], int pos_y, int pos_
 
         screen_cur_set_single(player->connfd, pos_y, pos_x);
     }
+}
+
+void screen_print_single(int connfd, char *msg, int msg_len){
+    net_send_single(connfd, msg, msg_len);
 }

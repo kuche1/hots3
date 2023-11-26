@@ -1,7 +1,7 @@
 
 #include "hero.h"
 
-#include "networking.h"
+#include "screen.h"
 
 /////////////
 ///////////// memory
@@ -16,7 +16,7 @@ void hero_init_mem(struct hero *hero){
 /////////////
 
 void hero_draw_single(struct hero *hero, int connfd){
-    net_send_single(connfd, &hero->model, sizeof(hero->model));
+    screen_print_single(connfd, &hero->model, sizeof(hero->model));
 }
 
 /////////////

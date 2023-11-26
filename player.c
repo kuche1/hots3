@@ -37,12 +37,12 @@ void player_init_telnet(struct player *player){
 
     // tell telnet client to not send on line but rather on character
     char telnet_mode_character[] = "\377\375\042\377\373\001";
-    net_send_single(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
+    screen_print_single(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
 
     // use ansi escape code to hide the cursor
     // https://notes.burke.libbey.me/ansi-escape-codes/
     char hide_cur_code[] = "\x1b[?25l";
-    net_send_single(player->connfd, hide_cur_code, sizeof(hide_cur_code));
+    screen_print_single(player->connfd, hide_cur_code, sizeof(hide_cur_code));
 
     // also make the socket nonblocking
     int flags = fcntl(player->connfd, F_GETFL, 0);
@@ -100,7 +100,7 @@ void player_select_hero(struct player *player){
     char msg_select_hero[] = "Select hero:\n";
 
 back_to_the_start:
-    net_send_single(player->connfd, msg_select_hero, sizeof(msg_select_hero)-1);
+    screen_print_single(player->connfd, msg_select_hero, sizeof(msg_select_hero)-1);
 
     char *choices[] = {
         "0: regular guy\n",
@@ -111,7 +111,7 @@ back_to_the_start:
     for(long unsigned int choice_idx=0; choice_idx < sizeof(choices) / sizeof(*choices); choice_idx++){
         char *choice = choices[choice_idx];
 
-        net_send_single(player->connfd, choice, strlen(choice));
+        screen_print_single(player->connfd, choice, strlen(choice));
     }
 
     char choice;
@@ -148,7 +148,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED])
         struct player *player_receiver = &players[player_idx];
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
-        net_send_single(player_receiver->connfd, player->health_color, player->health_color_len);
+        screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
         hero_draw_single(&player->hero, player_receiver->connfd);
     }
 }
