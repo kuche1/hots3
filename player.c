@@ -225,6 +225,8 @@ void player_receive_damage(struct player *player, int amount, struct player play
 
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action){
 
+    // TODO make the bot do random things sometimes
+
     {
         struct timeval te; 
         gettimeofday(&te, NULL); // get current time

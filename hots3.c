@@ -142,7 +142,10 @@ int main(void){
         screen_cur_set(players, 0, 0);
         char msg_winner[] = "Winner: ";
         net_send(players, msg_winner, sizeof(msg_winner)-1);
-        net_send(players, &winner->hero.model, sizeof(winner->hero.model));
+        winner->x = 0;
+        winner->y = 1;
+        player_draw(winner, players);
+        screen_cur_set(players, 2, 0);
     }
 
     // I don't do any uninitialisations cuz I'm nasty like that
