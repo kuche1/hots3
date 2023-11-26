@@ -7,7 +7,7 @@
 #include "screen.h"
 #include "networking.h"
 
-#define NUMBER_OF_HEROES 3
+#define NUMBER_OF_HEROES 4
 
 /////////////
 ///////////// initialisations
@@ -20,15 +20,17 @@ void hero_init_mem(struct hero *hero){
 void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
 
     char *choices_str[NUMBER_OF_HEROES] = {
-        "0: regular guy\n",
-        "1: slower harder hitting guy\n",
-        "2: guy with more range but less HP\n",
+        "basic bitch\n",
+        "varian  -           ; slower ; higher dmg ;             \n",
+        "valla   - lower  hp ;        ;            ; higher range\n",
+        "stiches - higher hp ; slower ;            ;             \n",
     };
 
     void (*choices_fnc[NUMBER_OF_HEROES])(struct hero *) = {
-        &hero_init_regular_guy,
-        &hero_init_slower_harder_hitting_guy,
-        &hero_init_guy_with_more_range_but_less_hp,
+        hero_init_regular_guy,
+        hero_init_varian,
+        hero_init_valla,
+        hero_init_stiches,
     };
 
     if(is_bot){
@@ -46,6 +48,9 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         for(long unsigned int choice_idx=0; choice_idx < NUMBER_OF_HEROES; choice_idx++){
             char *choice = choices_str[choice_idx];
 
+            char choice_num_as_char = choice_idx + '0';
+            screen_print_single(connfd, &choice_num_as_char, sizeof(choice_num_as_char));
+            screen_print_single(connfd, ": ", 2);
             screen_print_single(connfd, choice, strlen(choice));
         }
 
@@ -83,34 +88,43 @@ void hero_draw_single(struct hero *hero, int connfd){
 }
 
 /////////////
-///////////// other stuff
+///////////// heroes
 /////////////
 
 void hero_init_regular_guy(struct hero *hero){
     hero->model = 'B';
 
-    hero->hp_max = 100;
+    hero->hp_max = 200;
     hero->basic_attack_distance = 1;
-    hero->basic_attack_damage = 1;
+    hero->basic_attack_damage = 2;
 
     hero->legpower = 1;
     hero->weight   = 1;
 }
 
-void hero_init_slower_harder_hitting_guy(struct hero *hero){
-    hero->model = 'F';
+void hero_init_varian(struct hero *hero){
+    hero->model = 'V';
 
-    hero->basic_attack_damage = 2;
+    hero->basic_attack_damage = 3;
 
-    hero->legpower = 4;
+    hero->legpower = 5;
     hero->weight   = 7;
 }
 
-void hero_init_guy_with_more_range_but_less_hp(struct hero *hero){
-    hero->model = 'R';
+void hero_init_valla(struct hero *hero){
+    hero->model = 'v';
 
-    hero->hp_max = 60;
+    hero->hp_max = 120;
     hero->basic_attack_distance = 2;
+}
+
+void hero_init_stiches(struct hero *hero){
+    hero->model = 'S';
+
+    hero->hp_max = 310;
+
+    hero->legpower = 3;
+    hero->weight   = 7;
 }
 
 // TODO fast an annoying
