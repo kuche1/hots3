@@ -7,6 +7,8 @@
 #include "screen.h"
 #include "networking.h"
 
+#define NUMBER_OF_HEROES 3
+
 /////////////
 ///////////// initialisations
 /////////////
@@ -17,54 +19,55 @@ void hero_init_mem(struct hero *hero){
 
 void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
 
-    char *choices[] = {
+    char *choices_str[NUMBER_OF_HEROES] = {
         "0: regular guy\n",
         "1: slower harder hitting guy\n",
         "2: guy with more range but less HP\n",
     };
-    long unsigned int choices_len = sizeof(choices) / sizeof(*choices);
 
-    char choice;
-
+    void (*choices_fnc[NUMBER_OF_HEROES])(struct hero *) = {
+        &hero_init_regular_guy,
+        &hero_init_slower_harder_hitting_guy,
+        &hero_init_guy_with_more_range_but_less_hp,
+    };
 
     if(is_bot){
-        choice = rand() % choices_len;
-        goto hero_selection_switch;
+        void (*choice)(struct hero *) = choices_fnc[rand() % NUMBER_OF_HEROES];
+        choice(hero);
+        return;
     }
 
-    char msg_select_hero[] = "Select hero:\n";
+    char msg_select_hero[] = "\nSelect hero:\n";
 
-back_to_the_start:
-    assert(!is_bot);
+    while(1){
 
-    screen_print_single(connfd, msg_select_hero, sizeof(msg_select_hero)-1);
+        screen_print_single(connfd, msg_select_hero, sizeof(msg_select_hero)-1);
 
-    for(long unsigned int choice_idx=0; choice_idx < choices_len; choice_idx++){
-        char *choice = choices[choice_idx];
+        for(long unsigned int choice_idx=0; choice_idx < NUMBER_OF_HEROES; choice_idx++){
+            char *choice = choices_str[choice_idx];
 
-        screen_print_single(connfd, choice, strlen(choice));
-    }
+            screen_print_single(connfd, choice, strlen(choice));
+        }
 
-    int received = net_recv_1B(connfd, &choice);
-    if(!received){
-        choice = '0';
-    }
-    choice = choice - '0';
+        char choice;
+        int received = net_recv_1B(connfd, &choice);
+        if(!received){
+            choice = '0';
+        }
+        choice = choice - '0';
 
-hero_selection_switch:
+        if((choice < 0) || (choice >= NUMBER_OF_HEROES)){
+            char msg_bad_choice[] = "invalid choice\n";
+            screen_print_single(connfd, msg_bad_choice, sizeof(msg_bad_choice)-1);
+            continue;
+        }
 
-    switch(choice){
-        case 0:
-            hero_init_regular_guy(hero);
-            break;
-        case 1:
-            hero_init_slower_harder_hitting_guy(hero);
-            break;
-        case 2:
-            hero_init_guy_with_more_range_but_less_hp(hero);
-            break;
-        default:
-            goto back_to_the_start;
+        int choice_int = choice;
+
+        void (*hero_init)(struct hero *) = choices_fnc[choice_int];
+        hero_init(hero);   
+
+        break;
     }
 
     char msg_done[] = "hero selected\n";
