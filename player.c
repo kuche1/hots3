@@ -64,6 +64,8 @@ void player_init_bot(struct player *player){
 
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]){
 
+    player->hp = player->hero.hp_max;
+
     // set spawn
 
     for(int loop_count=0; loop_count<50; loop_count++){

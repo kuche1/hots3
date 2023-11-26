@@ -19,9 +19,10 @@ void hero_init_mem(struct hero *hero);
 void hero_select_player_hero(struct hero *hero, int connfd, int is_bot);
 // drawing
 void hero_draw_single(struct hero *hero, int connfd);
-// other stuff
+// heroes
 void hero_init_regular_guy(struct hero *hero);
-void hero_init_slower_harder_hitting_guy(struct hero *hero);
-void hero_init_guy_with_more_range_but_less_hp(struct hero *hero);
+void hero_init_varian(struct hero *hero);
+void hero_init_valla(struct hero *hero);
+void hero_init_stiches(struct hero *hero);
 
 #endif
