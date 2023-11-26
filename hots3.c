@@ -95,7 +95,7 @@ int main(void){
 
     // game loop
 
-    char *winner = NULL;;
+    int winning_team = -1;
 
     while(1){
 
@@ -135,29 +135,45 @@ int main(void){
         }
 
         if(players_alive[0] <= 0){
-            winner = "team 1";
+            winning_team = 1;
             break;
         }else if(players_alive[1] <= 0){
-            winner = "team 0";
+            winning_team = 0;
             break;
         }
     }
 
-    assert(winner != NULL);
+    assert(winning_team != -1);
 
     {
         screen_clear(players);
         screen_cur_set(players, 0, 0);
 
-        char msg_winner[] = "Winner: ";
-        net_send(players, msg_winner, sizeof(msg_winner)-1);
-        net_send(players, winner, strlen(winner));
+        char msg_winner[] = "Winning team: ";
+        screen_print(players, msg_winner, sizeof(msg_winner)-1);
 
-        // TODO print the team members
+        char winning_team_as_char = winning_team+'0';
+        screen_print(players, &winning_team_as_char, sizeof(winning_team_as_char));
 
-        // winner->x = 0;
-        // winner->y = 1;
-        // player_draw(winner, players);
+        screen_cur_set(players, 1, 0);
+
+        char msg_team_members[] = "Team members: ";
+        screen_print(players, msg_team_members, sizeof(msg_team_members)-1);
+
+        int cur_x = sizeof(msg_team_members)-1;
+
+        for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+            struct player *player = &players[player_idx];
+
+            if(player->team == winning_team){
+                player->alive = 1;
+                player->x = cur_x;
+                cur_x += 1;
+                player->y = 1;
+
+                player_draw(player, players);
+            }
+        }
 
         screen_cur_set(players, 2, 0);
     }

@@ -35,3 +35,11 @@ void screen_cur_set(struct player players[PLAYERS_REQUIRED], int pos_y, int pos_
 void screen_print_single(int connfd, char *msg, int msg_len){
     net_send_single(connfd, msg, msg_len);
 }
+
+void screen_print(struct player players[PLAYERS_REQUIRED], char *msg, int msg_len){
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *player = &players[player_idx];
+
+        net_send_single(player->connfd, msg, msg_len);
+    }
+}
