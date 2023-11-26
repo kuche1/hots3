@@ -29,7 +29,7 @@ int main(void){
         struct player *player = &players[player_count];
         player_init_mem(player);
 
-        printf("waiting for connection %d of %d\n", player_count+1, PLAYERS_REQUIRED);
+        printf("established connections %d of %d\n", player_count, PLAYERS_REQUIRED);
     
         if(player_count < NUMBER_OF_BOT_PLAYERS){
 
@@ -45,13 +45,25 @@ int main(void){
                 continue;
             }
 
-            player_init_telnet(player);
-
             printf("player connected\n");
         
         }
 
         player_count += 1;
+    }
+
+    // hero selection
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *player = &players[player_idx];
+        player_select_hero(player);
+    }
+
+    // change to draw mode
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *player = &players[player_idx];
+        player_init_telnet(player);
     }
 
     // spawn players

@@ -11,23 +11,30 @@
 #include "settings.h"
 #include "map.h"
 
+/////////////
+///////////// initialising
+/////////////
+
 void player_init_mem(struct player *player){
+    player->connfd = -1;
     player->sock_len = sizeof(player->sock);
     player->model = '0';
     player->x = 0;
     player->y = 0;
-    player->hp = 100;
-    player->hp_max = player->hp;
     player->health_state = 0;
     player->health_color = STATIC_col_green_bright;
     player->health_color_len = sizeof(STATIC_col_green_bright);
-    player->basic_attack_distance = 1;
-    player->basic_attack_damage = 1;
     player->alive = 1;
     player->bot = 0;
+    hero_init_mem(&player->hero);
+    player->hp = player->hero.hp_max;
 }
 
 void player_init_telnet(struct player *player){
+    if(player->bot){
+        return;
+    }
+
     // tell telnet client to not send on line but rather on character
     char telnet_mode_character[] = "\377\375\042\377\373\001";
     net_send_single(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
@@ -94,6 +101,18 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
     }
 }
 
+void player_select_hero(struct player *player){
+    // TODO implement
+    {
+        char msg_select_hero[] = "Select hero:\n";
+        net_send_single(player->connfd, msg_select_hero, sizeof(msg_select_hero)-1);
+    }
+}
+
+/////////////
+///////////// other stuff
+/////////////
+
 void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]){
     if(!player->alive){
         return;
@@ -132,7 +151,7 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
             continue;
         }
 
-        if(!player->alive){
+        if(!other_player->alive){
             continue;
         }
 
@@ -144,7 +163,7 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
     }
 
-    if(lowest_dist <= player->basic_attack_distance){
+    if(lowest_dist <= player->hero.basic_attack_distance){
         *action = KEY_BASIC_ATTACK;
         return 0;
     }
@@ -219,6 +238,10 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
             continue;
         }
 
+        if(!other_player->alive){
+            continue;
+        }
+
         int distance = abs(player->x - other_player->x) + abs(player->y - other_player->y);
         if(distance < closest_distance){
             closest_distance = distance;
@@ -230,8 +253,8 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
         return;
     }
 
-    if(closest_distance <= player->basic_attack_distance){
-        player_receive_damage(closest_player, player->basic_attack_damage, players);
+    if(closest_distance <= player->hero.basic_attack_distance){
+        player_receive_damage(closest_player, player->hero.basic_attack_damage, players);
     }
 }
 
@@ -256,23 +279,23 @@ void player_receive_damage(struct player *player, int amount, struct player play
 
     int health_state;
 
-    if(player->hp >= player->hp_max){
+    if(player->hp >= player->hero.hp_max){
         player->health_color = STATIC_col_green_bright;
         player->health_color_len = sizeof(STATIC_col_green_bright);
         health_state = 0;
-    }else if(player->hp >= player->hp_max * 5 / 6){
+    }else if(player->hp >= player->hero.hp_max * 5 / 6){
         player->health_color = STATIC_col_green_dark;
         player->health_color_len = sizeof(STATIC_col_green_dark);
         health_state = 1;
-    }else if(player->hp >= player->hp_max * 4 / 6){
+    }else if(player->hp >= player->hero.hp_max * 4 / 6){
         player->health_color = STATIC_col_yellow_bright;
         player->health_color_len = sizeof(STATIC_col_yellow_bright);
         health_state = 2;
-    }else if(player->hp >= player->hp_max * 3 / 6){
+    }else if(player->hp >= player->hero.hp_max * 3 / 6){
         player->health_color = STATIC_col_yellow_dark;
         player->health_color_len = sizeof(STATIC_col_yellow_dark);
         health_state = 3;
-    }else if(player->hp >= player->hp_max * 2 / 6){
+    }else if(player->hp >= player->hero.hp_max * 2 / 6){
         player->health_color = STATIC_col_red_bright;
         player->health_color_len = sizeof(STATIC_col_red_bright);
         health_state = 4;

@@ -7,12 +7,14 @@
 
 #include "settings.h"
 #include "errors.h"
+#include "hero.h"
 
 // static char STATIC_col_green[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
 // static char STATIC_col_yellow[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
 // static char STATIC_col_red[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
 
 // foreground colors
+// https://ss64.com/nt/syntax-ansi.html
 static char STATIC_col_green_bright[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
 static char STATIC_col_green_dark[]    __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
 static char STATIC_col_yellow_bright[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
@@ -30,32 +32,35 @@ struct player {
 
     // graphics
     char model;
+    char *health_color;
+    int health_color_len;
+    // TODO add team color (can be the background color)
 
     // variable data
     int x;
     int y;
     int hp;
     int health_state;
-    char *health_color;
-    int health_color_len;
     int alive;
-    // bot variable data
-    long long bot_last_action_at_ms;
 
-    // character stats
-    int basic_attack_distance;
-    int basic_attack_damage;
-    int hp_max;
+    // selected character stats
+    struct hero hero;
 
     // bot data
     int bot;
     long long bot_action_delay_ms;
+
+    // bot variable data
+    long long bot_last_action_at_ms;
 };
 
+// initialising
 void player_init_mem(struct player *player);
 void player_init_telnet(struct player *player);
 void player_init_bot(struct player *player);
 void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]);
+void player_select_hero(struct player *player);
+// other stuff
 void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]);
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action);
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]);

@@ -17,5 +17,5 @@ run: hots3
 clean:
 	rm hots3
 
-hots3: makefile hots3.c networking.c networking.h player.c player.h screen.c screen.h map.c map.h
+hots3: makefile hots3.c networking.c networking.h player.c player.h screen.c screen.h map.c map.h hero.c hero.h
 	${CC} ${CC_FLAGS} $(filter-out $<,$^) -o hots3
