@@ -8,9 +8,17 @@
 #include "settings.h"
 #include "errors.h"
 
-static char STATIC_col_green[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
-static char STATIC_col_yellow[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
-static char STATIC_col_red[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
+// static char STATIC_col_green[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
+// static char STATIC_col_yellow[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
+// static char STATIC_col_red[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
+
+// foreground colors
+static char STATIC_col_green_bright[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
+static char STATIC_col_green_dark[]    __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
+static char STATIC_col_yellow_bright[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
+static char STATIC_col_yellow_dark[]   __attribute__((unused)) = {'\033', '[', '3', '3', 'm'};
+static char STATIC_col_red_bright[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
+static char STATIC_col_red_dark[]      __attribute__((unused)) = {'\033', '[', '3', '1', 'm'};
 
 static char STATIC_map_tile_empty[] __attribute__((unused)) = {' '};
 
