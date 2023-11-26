@@ -35,7 +35,6 @@ struct player {
     int x;
     int y;
     int hp;
-    int health_state;
     int alive;
 
     // selected character stats

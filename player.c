@@ -22,7 +22,6 @@ void player_init_mem(struct player *player){
     player->sock_len = sizeof(player->sock);
     player->x = 0;
     player->y = 0;
-    player->health_state = 0;
     player->health_color = STATIC_col_green_bright;
     player->health_color_len = sizeof(STATIC_col_green_bright);
     player->alive = 1;
@@ -191,36 +190,30 @@ void player_receive_damage(struct player *player, int amount, struct player play
 }
 
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_REQUIRED]){
-    int health_state; // TODO we can simply check the color and ignore this
+
+    char *old_color = player->health_color;
 
     if(player->hp >= player->hero.hp_max){
         player->health_color = STATIC_col_green_bright;
         player->health_color_len = sizeof(STATIC_col_green_bright);
-        health_state = 0;
     }else if(player->hp >= player->hero.hp_max * 5 / 6){
         player->health_color = STATIC_col_green_dark;
         player->health_color_len = sizeof(STATIC_col_green_dark);
-        health_state = 1;
     }else if(player->hp >= player->hero.hp_max * 4 / 6){
         player->health_color = STATIC_col_yellow_bright;
         player->health_color_len = sizeof(STATIC_col_yellow_bright);
-        health_state = 2;
     }else if(player->hp >= player->hero.hp_max * 3 / 6){
         player->health_color = STATIC_col_yellow_dark;
         player->health_color_len = sizeof(STATIC_col_yellow_dark);
-        health_state = 3;
     }else if(player->hp >= player->hero.hp_max * 2 / 6){
         player->health_color = STATIC_col_red_bright;
         player->health_color_len = sizeof(STATIC_col_red_bright);
-        health_state = 4;
     }else{
         player->health_color = STATIC_col_red_dark;
         player->health_color_len = sizeof(STATIC_col_red_dark);
-        health_state = 5;
     }
 
-    if(health_state != player->health_state){
-        player->health_state = health_state;
+    if(old_color != player->health_color){
         player_draw(player, players);
     }
 }
