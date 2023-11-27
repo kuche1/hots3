@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <sys/time.h>
 #include <string.h>
+#include <assert.h>
 
 #include "networking.h"
 #include "screen.h"
@@ -88,8 +89,8 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
             pos_y = rand() % SPAWN_AREA_Y;
             pos_x = rand() % SPAWN_AREA_X;
         }else{
-            pos_y = rand() % SPAWN_AREA_Y + SPAWN_AREA_Y;
-            pos_x = rand() % SPAWN_AREA_X + SPAWN_AREA_X;
+            pos_y = rand() % SPAWN_AREA_Y + (MAP_Y - SPAWN_AREA_Y);
+            pos_x = rand() % SPAWN_AREA_X + (MAP_X - SPAWN_AREA_X);
         }
 
         if(map_is_tile_empty(players, pos_y, pos_x)){
@@ -248,7 +249,7 @@ void player_recalculate_health_state(struct player *player, struct player player
 
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action){
 
-    // TODO make the bot do random things sometimes
+    // see if bot should wait and do nothing
 
     {
         struct timeval te; 
@@ -288,24 +289,67 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
     }
 
+    // attack if anyone is nearby
+
     if(lowest_dist <= player->hero.basic_attack_distance){
         *action = KEY_BASIC_ATTACK;
         return 0;
     }
 
-    if(abs(player->y - target->y) > abs(player->x - target->x)){
-        if(player->y < target->y){
-            *action = KEY_MOVE_DOWN;
+    // movement
+
+    if(rand() % BOT_SCHIZOPHRENIA < BOT_WILLPOWER){ // move to closest target if your schizophrenia is not trolling you
+
+        int human_wave = rand() % BOT_HUMAN_WAVE_DENOMINTOR < BOT_HUMAN_WAVE_NUMERATOR;
+        char encirclement_tactics[2];
+
+        if(abs(player->y - target->y) > abs(player->x - target->x)){
+            if(player->y < target->y){
+                *action = KEY_MOVE_DOWN;
+                encirclement_tactics[0] = KEY_MOVE_LEFT;
+                encirclement_tactics[1] = KEY_MOVE_RIGHT;
+            }else{
+                *action = KEY_MOVE_UP;
+                encirclement_tactics[0] = KEY_MOVE_LEFT;
+                encirclement_tactics[1] = KEY_MOVE_RIGHT;
+            }
         }else{
-            *action = KEY_MOVE_UP;
+            if(player->x < target->x){
+                *action = KEY_MOVE_RIGHT;
+                encirclement_tactics[0] = KEY_MOVE_UP;
+                encirclement_tactics[1] = KEY_MOVE_DOWN;
+            }else{
+                *action = KEY_MOVE_LEFT;
+                encirclement_tactics[0] = KEY_MOVE_UP;
+                encirclement_tactics[1] = KEY_MOVE_DOWN;
+            }
         }
-    }else{
-        if(player->x < target->x){
-            *action = KEY_MOVE_RIGHT;
-        }else{
-            *action = KEY_MOVE_LEFT;
+
+        if(!human_wave){
+            int tactic = rand() % sizeof(encirclement_tactics);
+            *action = encirclement_tactics[tactic];
         }
+    
+    }else{ // if your schizophrenia is trolling you move randomly
+        switch(rand() % 4){
+            case 0:
+                *action = KEY_MOVE_DOWN;
+                break;
+            case 1:
+                *action = KEY_MOVE_UP;
+                break;
+            case 2:
+                *action = KEY_MOVE_RIGHT;
+                break;
+            case 3:
+                *action = KEY_MOVE_LEFT;
+                break;
+            default:
+                assert(0);
+        }
+        return 0;
     }
+
 
     return 0;
 }

@@ -145,6 +145,8 @@ int main(void){
 
     assert(winning_team != -1);
 
+    printf("game ended; sending end screen\n");
+
     {
         screen_clear(players);
         screen_cur_set(players, 0, 0);

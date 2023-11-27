@@ -94,9 +94,10 @@ void hero_draw_single(struct hero *hero, int connfd){
 void hero_init_regular_guy(struct hero *hero){
     hero->model = 'B';
 
-    hero->hp_max = 200;
+    hero->hp_max = 280;
+
     hero->basic_attack_distance = 1;
-    hero->basic_attack_damage = 2;
+    hero->basic_attack_damage = 3;
 
     hero->legpower = 1;
     hero->weight   = 1;
@@ -105,27 +106,33 @@ void hero_init_regular_guy(struct hero *hero){
 void hero_init_varian(struct hero *hero){
     hero->model = 'V';
 
-    hero->basic_attack_damage = 3;
+    hero->basic_attack_damage += 1;
 
-    hero->legpower = 5;
+    hero->legpower = 6;
     hero->weight   = 7;
 }
 
 void hero_init_valla(struct hero *hero){
     hero->model = 'v';
 
-    hero->hp_max = 120;
-    hero->basic_attack_distance = 2;
+    hero->hp_max = (hero->hp_max * 4) / 10;
+
+    hero->basic_attack_distance += 1;
 }
 
 void hero_init_stiches(struct hero *hero){
     hero->model = 'S';
 
-    hero->hp_max = 310;
+    hero->hp_max = (hero->hp_max * 15) / 10;
 
     hero->legpower = 3;
     hero->weight   = 7;
 }
 
-// TODO fast an annoying
-// also it would be best if we move the character selection screen here
+void hero_init_lili(struct hero *hero){
+    // TODO implement
+
+    hero->model = 'l';
+
+    hero->hp_max = (hero->hp_max * 8) / 10;
+}
