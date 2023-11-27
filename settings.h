@@ -34,7 +34,7 @@
 
 #define PLAYERS_MAX 20 // includes minions
 
-#define MINION_SPAWN_INTERVAL_MS 2300 // 1e3 is 1 second
+#define MINION_SPAWN_INTERVAL_MS 2700 // 1e3 is 1 second
 
 // keybinds
 
