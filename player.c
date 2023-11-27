@@ -58,6 +58,13 @@ void player_init(struct player *player, int team, int is_bot, int connfd, struct
     player->sock_len = sock_len;
 
     player->team = team;
+    if(player->team){
+        player->team_color     = STATIC_effect_no_underline;
+        player->team_color_len = sizeof(STATIC_effect_no_underline);
+    }else{
+        player->team_color     = STATIC_effect_underline;
+        player->team_color_len = sizeof(STATIC_effect_underline);
+    }
 
     player->bot = is_bot;
     if(is_bot){
@@ -102,14 +109,6 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
 
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
-
-    if(player->team){
-        player->team_color     = STATIC_effect_no_underline;
-        player->team_color_len = sizeof(STATIC_effect_no_underline);
-    }else{
-        player->team_color     = STATIC_effect_underline;
-        player->team_color_len = sizeof(STATIC_effect_underline);
-    }
 
     // set spawn
 
