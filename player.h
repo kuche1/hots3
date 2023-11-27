@@ -11,12 +11,14 @@
 
 // https://ss64.com/nt/syntax-ansi.html
 // foreground colors
-static char STATIC_col_green_bright[]  __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
-static char STATIC_col_green_dark[]    __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
-static char STATIC_col_yellow_bright[] __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
-static char STATIC_col_yellow_dark[]   __attribute__((unused)) = {'\033', '[', '3', '3', 'm'};
-static char STATIC_col_red_bright[]    __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
-static char STATIC_col_red_dark[]      __attribute__((unused)) = {'\033', '[', '3', '1', 'm'};
+static char STATIC_col_green_bright[]   __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
+static char STATIC_col_green_dark[]     __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
+static char STATIC_col_yellow_bright[]  __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
+static char STATIC_col_yellow_dark[]    __attribute__((unused)) = {'\033', '[', '3', '3', 'm'};
+static char STATIC_col_magenta_bright[] __attribute__((unused)) = {'\033', '[', '9', '5', 'm'};
+static char STATIC_col_magenta_dark[]   __attribute__((unused)) = {'\033', '[', '3', '5', 'm'};
+static char STATIC_col_red_bright[]     __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
+static char STATIC_col_red_dark[]       __attribute__((unused)) = {'\033', '[', '3', '1', 'm'};
 // background colors
 static char STATIC_col_bg_red_dark[]      __attribute__((unused)) = {'\033', '[', '4', '1',      'm'};
 static char STATIC_col_bg_blue_dark[]     __attribute__((unused)) = {'\033', '[', '4', '4',      'm'};

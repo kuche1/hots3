@@ -271,16 +271,22 @@ void player_recalculate_health_state(struct player *player, struct player player
     if      (player->hp >= player->hero.hp_max){
         player->health_color = STATIC_col_green_bright;
         player->health_color_len = sizeof(STATIC_col_green_bright);
-    }else if(player->hp >= player->hero.hp_max * 5 / 6){
+    }else if(player->hp >= player->hero.hp_max * 6 / 7){
         player->health_color = STATIC_col_green_dark;
         player->health_color_len = sizeof(STATIC_col_green_dark);
-    }else if(player->hp >= player->hero.hp_max * 4 / 6){
+    }else if(player->hp >= player->hero.hp_max * 5 / 7){
         player->health_color = STATIC_col_yellow_bright;
         player->health_color_len = sizeof(STATIC_col_yellow_bright);
-    }else if(player->hp >= player->hero.hp_max * 3 / 6){
+    }else if(player->hp >= player->hero.hp_max * 4 / 7){
         player->health_color = STATIC_col_yellow_dark;
         player->health_color_len = sizeof(STATIC_col_yellow_dark);
-    }else if(player->hp >= player->hero.hp_max * 2 / 6){
+    }else if(player->hp >= player->hero.hp_max * 3 / 7){
+        player->health_color = STATIC_col_magenta_bright;
+        player->health_color_len = sizeof(STATIC_col_magenta_bright);
+    }else if(player->hp >= player->hero.hp_max * 2 / 7){
+        player->health_color = STATIC_col_magenta_dark;
+        player->health_color_len = sizeof(STATIC_col_magenta_dark);
+    }else if(player->hp >= player->hero.hp_max * 1 / 7){
         player->health_color = STATIC_col_red_bright;
         player->health_color_len = sizeof(STATIC_col_red_bright);
     }else{
@@ -381,23 +387,9 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
     
     }else{ // if your schizophrenia is trolling you move randomly
-        switch(rand() % 4){
-            case 0:
-                *action = KEY_MOVE_DOWN;
-                break;
-            case 1:
-                *action = KEY_MOVE_UP;
-                break;
-            case 2:
-                *action = KEY_MOVE_RIGHT;
-                break;
-            case 3:
-                *action = KEY_MOVE_LEFT;
-                break;
-            default:
-                assert(0);
-        }
-        return 0;
+        char directions[] = {KEY_MOVE_DOWN, KEY_MOVE_UP, KEY_MOVE_LEFT, KEY_MOVE_RIGHT};
+        char direction = directions[rand() % sizeof(directions)];
+        *action = direction;
     }
 
 

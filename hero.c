@@ -140,6 +140,6 @@ void hero_init_lili(struct hero *hero){
     hero->hp_max = (hero->hp_max * 8) / 10;
     hero->basic_attack_damage -= 1;
 
-    hero->heal_ability_range = 1;
+    hero->heal_ability_range = 2;
     hero->heal_ability_amount = 1;
 }
