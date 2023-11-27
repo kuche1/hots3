@@ -50,7 +50,7 @@ int main(void){
         }
 
         struct player *player = &players[players_len];
-        player_init_mem(player, team, is_bot, connfd, sock, sock_len);
+        player_init(player, team, is_bot, connfd, sock, sock_len);
 
         team = !team;
         players_len += 1;
