@@ -343,6 +343,14 @@ void player_recalculate_health_state(struct player *player, struct player player
 
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
 
+    // TODO add heal logic
+
+    // do nothing if dead
+
+    if(!player->alive){
+        return 1;
+    }
+
     // see if bot should wait and do nothing
 
     {
@@ -381,14 +389,18 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
     }
 
+    // if no enemy player can be found AFK
+
+    if(target == NULL){
+        return 1;
+    }
+
     // attack if anyone is nearby
 
     if(lowest_dist <= player->hero.basic_attack_distance){
         *action = KEY_BASIC_ATTACK;
         return 0;
     }
-
-    // TODO add heal logic
 
     // movement
 
