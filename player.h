@@ -10,6 +10,7 @@
 #include "hero.h"
 
 // https://ss64.com/nt/syntax-ansi.html
+// https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 // foreground colors
 static char STATIC_col_green_bright[]   __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
 static char STATIC_col_green_dark[]     __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
