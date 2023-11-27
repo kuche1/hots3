@@ -44,9 +44,13 @@ void net_send_single(int connfd, char *data, int data_len){
     write(connfd, data, data_len); // TODO check how much bytes were sent
 }
 
-void net_send(struct player players[PLAYERS_REQUIRED], char *data, int data_len){
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+void net_send(struct player players[PLAYERS_MAX], char *data, int data_len){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
+
+        if(player->bot){
+            continue;
+        }
 
         net_send_single(player->connfd, data, data_len);
     }

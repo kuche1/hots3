@@ -44,7 +44,7 @@ void player_init_mem(struct player *player){
 
     player->team = 0;
 
-    player->bot = 0;
+    player->bot = 1;
     player->bot_action_delay_ms = 1e3;
 
     player->bot_last_action_at_ms = 0;
@@ -105,7 +105,7 @@ static void player_init_bot(struct player *player){
     player->bot_last_action_at_ms = 0;
 }
 
-void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]){
+void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
@@ -144,7 +144,7 @@ void player_select_hero(struct player *player){
 /////////////
 
 
-void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]){
+void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]){
 
     if(!player->alive){
         return;
@@ -196,11 +196,11 @@ void player_process_action(struct player *player, char action, struct player pla
     }
 }
 
-void player_basic_attack(struct player *player, struct player players[PLAYERS_REQUIRED]){
+void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]){
     struct player *closest_player = NULL;
     int closest_distance = INT_MAX;
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *other_player = &players[player_idx];
 
         if(other_player == player){
@@ -231,10 +231,10 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
     }
 }
 
-void player_heal_ability(struct player *player, struct player players[PLAYERS_REQUIRED]){
+void player_heal_ability(struct player *player, struct player players[PLAYERS_MAX]){
     struct player *heal_target = NULL;
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *other_player = &players[player_idx];
 
         if(other_player == player){
@@ -268,7 +268,7 @@ void player_heal_ability(struct player *player, struct player players[PLAYERS_RE
     }
 }
 
-void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]){
+void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]){
 
 #ifdef DEBUG
     amount *= 30;
@@ -296,7 +296,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
     player_recalculate_health_state(player, players);
 }
 
-void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_REQUIRED]){
+void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]){
 
     player->alive = player->hp > 0;
 
@@ -337,7 +337,7 @@ void player_recalculate_health_state(struct player *player, struct player player
 ///////////// bot stuff
 /////////////
 
-int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action){
+int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
 
     // see if bot should wait and do nothing
 
@@ -354,7 +354,7 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
     int lowest_dist = INT_MAX;
     struct player *target = NULL;
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *other_player = &players[player_idx];
 
         if(player == other_player){
@@ -434,12 +434,12 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 ///////////// other stuff
 /////////////
 
-void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]){
+void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
     if(!player->alive){
         return;
     }
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player_receiver = &players[player_idx];
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);

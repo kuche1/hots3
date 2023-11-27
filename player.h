@@ -65,19 +65,20 @@ struct player {
 };
 
 // initialising
+void player_init_mem(struct player *player);
 void player_init(struct player *player, int team, int is_bot, int connfd, struct sockaddr_in sock, int sock_len);
 void player_init_telnet(struct player *player);
-void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]);
+void player_spawn(struct player *player, struct player players[PLAYERS_MAX]);
 void player_select_hero(struct player *player);
 // actions
-void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]);
-void player_basic_attack(struct player *player, struct player players[PLAYERS_REQUIRED]);
-void player_heal_ability(struct player *player, struct player players[PLAYERS_REQUIRED]);
-void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]);
-void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_REQUIRED]);
+void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]);
+void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]);
+void player_heal_ability(struct player *player, struct player players[PLAYERS_MAX]);
+void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]);
+void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]);
 // bot stuff
-int player_bot_select_action(struct player *player, struct player players[PLAYERS_REQUIRED], char *action);
+int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action);
 // other stuff
-void player_draw(struct player *player, struct player players[PLAYERS_REQUIRED]);
+void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
 
 #endif

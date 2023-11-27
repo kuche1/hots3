@@ -32,6 +32,8 @@
 #define SPAWN_AREA_Y 8
 #define SPAWN_AREA_X 16
 
+#define PLAYERS_MAX 20 // includes minions
+
 // keybinds
 
 // keybind movement

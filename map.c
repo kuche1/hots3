@@ -5,7 +5,7 @@
 
 #include "settings.h"
 
-int map_is_tile_empty(struct player players[PLAYERS_REQUIRED], int pos_y, int pos_x){
+int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
 
     if((pos_y < 0) || (pos_x < 0)){
         return 0;
@@ -15,9 +15,13 @@ int map_is_tile_empty(struct player players[PLAYERS_REQUIRED], int pos_y, int po
         return 0;
     }
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         
+        if(!player->alive){
+            continue;
+        }
+
         if((player->x == pos_x) && (player->y == pos_y)){
             return 0;
         }

@@ -23,11 +23,16 @@ int main(void){
 
     // lobby
 
-    struct player players[PLAYERS_REQUIRED];
+    struct player players[PLAYERS_MAX];
     int players_len = 0;
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+        struct player *player = &players[player_idx];
+        player_init_mem(player);
+    }
 
     int team = 0;
 
+    assert(PLAYERS_REQUIRED <= PLAYERS_MAX);
     while(players_len < PLAYERS_REQUIRED){
 
         int is_bot = 0;
@@ -99,13 +104,13 @@ int main(void){
 
         // process input
 
-        for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
             struct player *player = &players[player_idx];
             
             char action;
 
             if(player->bot){
-                int skip = player_bot_select_action(player, players, &action);
+                int skip = player_bot_select_action(player, players, &action); // TODO this can be replaced with `receive_action` or something like that
                 if(skip){
                     continue;
                 }
@@ -124,7 +129,7 @@ int main(void){
 
         int players_alive[2] = {0};
 
-        for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
             struct player *player = &players[player_idx];
 
             if(player->alive){
@@ -162,11 +167,11 @@ int main(void){
 
         int cur_x = sizeof(msg_team_members)-1;
 
-        for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
             struct player *player = &players[player_idx];
 
             if(player->team == winning_team){
-                player->alive = 1;
+                player->alive = 1; // TODO create `draw_raw` or something like that instead of this hack
                 player->x = cur_x;
                 cur_x += 1;
                 player->y = 1;
