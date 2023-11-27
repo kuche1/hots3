@@ -39,7 +39,9 @@
 #define KEY_MOVE_RIGHT 'd'
 #define KEY_MOVE_UP 'w'
 #define KEY_MOVE_DOWN 's'
-// keybind attack
+// basic attack
 #define KEY_BASIC_ATTACK 'j'
+// heal ability
+#define KEY_HEAL_ABILITY 'k'
 
 #endif

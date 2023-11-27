@@ -7,7 +7,7 @@
 #include "screen.h"
 #include "networking.h"
 
-#define NUMBER_OF_HEROES 4
+#define NUMBER_OF_HEROES 5
 
 /////////////
 ///////////// initialisations
@@ -20,10 +20,11 @@ void hero_init_mem(struct hero *hero){
 void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
 
     char *choices_str[NUMBER_OF_HEROES] = {
-        "basic bitch\n",
-        "varian  -           ; slower ; higher dmg ;             \n",
-        "valla   - lower  hp ;        ;            ; higher range\n",
-        "stiches - higher hp ; slower ;            ;             \n",
+        "basic bitch\n\tnothing special\n",
+        "varian\n\tslower\n\thigher dmg\n",
+        "valla\n\tlower hp\n\thigher range\n",
+        "stiches\n\thigher hp\n\tslower\n",
+        "lili\n\tlower hp\n\tlower damage\n\tcan heal\n"
     };
 
     void (*choices_fnc[NUMBER_OF_HEROES])(struct hero *) = {
@@ -31,6 +32,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         hero_init_varian,
         hero_init_valla,
         hero_init_stiches,
+        hero_init_lili,
     };
 
     if(is_bot){
@@ -39,7 +41,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         return;
     }
 
-    char msg_select_hero[] = "\nSelect hero and press enter:\n";
+    char msg_select_hero[] = "\nSelect a hero and press enter:\n";
 
     while(1){
 
@@ -101,6 +103,9 @@ void hero_init_regular_guy(struct hero *hero){
 
     hero->legpower = 1;
     hero->weight   = 1;
+
+    hero->heal_ability_range = 0;
+    hero->heal_ability_amount = 0;
 }
 
 void hero_init_varian(struct hero *hero){
@@ -130,9 +135,11 @@ void hero_init_stiches(struct hero *hero){
 }
 
 void hero_init_lili(struct hero *hero){
-    // TODO implement
-
     hero->model = 'l';
 
     hero->hp_max = (hero->hp_max * 8) / 10;
+    hero->basic_attack_damage -= 1;
+
+    hero->heal_ability_range = 1;
+    hero->heal_ability_amount = 1;
 }

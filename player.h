@@ -71,6 +71,7 @@ void player_select_hero(struct player *player);
 // actions
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_REQUIRED]);
 void player_basic_attack(struct player *player, struct player players[PLAYERS_REQUIRED]);
+void player_heal_ability(struct player *player, struct player players[PLAYERS_REQUIRED]);
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]);
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_REQUIRED]);
 // bot stuff

@@ -151,10 +151,16 @@ void player_process_action(struct player *player, char action, struct player pla
 
     }
 
-    // attack
+    // basic attack
 
     if(action == KEY_BASIC_ATTACK){
         player_basic_attack(player, players);
+    }
+
+    // heal ability
+
+    if(action == KEY_HEAL_ABILITY){
+        player_heal_ability(player, players);
     }
 }
 
@@ -193,14 +199,54 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_RE
     }
 }
 
+void player_heal_ability(struct player *player, struct player players[PLAYERS_REQUIRED]){
+    struct player *heal_target = NULL;
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *other_player = &players[player_idx];
+
+        if(other_player == player){
+            continue;
+        }
+
+        if(!other_player->alive){
+            continue;
+        }
+
+        if(player->team != other_player->team){
+            continue;
+        }
+
+        if(other_player->hp >= other_player->hero.hp_max){
+            continue;
+        }
+
+        int distance = abs(player->x - other_player->x) + abs(player->y - other_player->y);
+        if(distance > player->hero.heal_ability_range){
+            continue;
+        }
+
+        if((heal_target == NULL) || (heal_target->hp > other_player->hp)){
+            heal_target = other_player;
+        }
+    }
+
+    if(heal_target != NULL){
+        player_receive_damage(heal_target, -player->hero.heal_ability_amount, players);
+    }
+}
+
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_REQUIRED]){
 
 #ifdef DEBUG
     amount *= 30;
 #endif
 
+    if(!player->alive){
+        return;
+    }
+
     player->hp -= amount;
-    // printf("hp of %p is now %d\n", (void*)player, player->hp);
 
     if(player->hp <= 0){
         player->alive = 0;
@@ -211,6 +257,10 @@ void player_receive_damage(struct player *player, int amount, struct player play
         return;
     }
 
+    if(player->hp > player->hero.hp_max){ // if overhealed
+        player->hp = player->hero.hp_max;
+    }
+
     player_recalculate_health_state(player, players);
 }
 
@@ -218,7 +268,7 @@ void player_recalculate_health_state(struct player *player, struct player player
 
     char *old_color = player->health_color;
 
-    if(player->hp >= player->hero.hp_max){
+    if      (player->hp >= player->hero.hp_max){
         player->health_color = STATIC_col_green_bright;
         player->health_color_len = sizeof(STATIC_col_green_bright);
     }else if(player->hp >= player->hero.hp_max * 5 / 6){

@@ -3,15 +3,24 @@
 #define HERO_H
 
 struct hero{
+    // graphics
     char model;
 
+    // hp
+    int hp_max;
+    // TODO? health regen
+
+    // basic attacks
     int basic_attack_distance;
     int basic_attack_damage;
-    int hp_max;
 
+    // movement - the change for the move action to work will be `legpower / weight`
     int legpower;
     int weight;
-    // the change for the move action to work will be `legpower / weight`
+
+    // healing ability
+    int heal_ability_range;
+    int heal_ability_amount;
 };
 
 // initialisations
@@ -24,5 +33,6 @@ void hero_init_regular_guy(struct hero *hero);
 void hero_init_varian(struct hero *hero);
 void hero_init_valla(struct hero *hero);
 void hero_init_stiches(struct hero *hero);
+void hero_init_lili(struct hero *hero);
 
 #endif
