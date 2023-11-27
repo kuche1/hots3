@@ -133,7 +133,6 @@ int main(void){
         long long now = get_time_ms();
         if(now - MINION_SPAWN_INTERVAL_MS > last_minion_spawned_at){
             last_minion_spawned_at = now;
-            printf("minion spawn\n");
 
             // see if there is room to spawn
 
@@ -156,15 +155,11 @@ int main(void){
                 struct sockaddr_in sock = {0};
                 int sock_len = 0;
 
-                struct player minion;
-                player_init(&minion, team, is_bot, connfd, sock, sock_len);
-                player_select_hero(&minion, 1);
-                player_spawn(&minion, players);
-                player_draw(&minion, players);
-
-                players[dead_bot_idx] = minion;
-            }else{
-                printf("can't spawn minion; no room\n");
+                struct player *minion = &players[dead_bot_idx];
+                player_init(minion, team, is_bot, connfd, sock, sock_len);
+                player_select_hero(minion, 1);
+                player_spawn(minion, players);
+                player_draw(minion, players);
             }
         }
 

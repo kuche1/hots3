@@ -443,6 +443,10 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         return;
     }
 
+    if((player->x < 0) || (player->y < 0)){
+        return;
+    }
+
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player_receiver = &players[player_idx];
 
