@@ -76,18 +76,18 @@ int main(void){
         player_init_telnet(player);
     }
 
-    // spawn players
-
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
-        struct player *player = &players[player_idx];
-        player_spawn(player, players);
-    }
-
     // clear screen
 
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
         struct player *player = &players[player_idx];
         screen_clear_single(player->connfd);
+    }
+
+    // spawn players
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *player = &players[player_idx];
+        player_spawn(player, players);
     }
 
     // print players

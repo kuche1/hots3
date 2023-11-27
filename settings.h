@@ -13,9 +13,9 @@
 
 // game parameters
 
-#define PLAYERS_REQUIRED 6
+#define PLAYERS_REQUIRED 4
 
-#define NUMBER_OF_BOT_PLAYERS 5
+#define NUMBER_OF_BOT_PLAYERS 3
 #define BOT_REACTION_TIME_MS 400 // 1e3 is 1 second
 // schizophrenic movement
 #define BOT_WILLPOWER      9
