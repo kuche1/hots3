@@ -352,6 +352,8 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         return 0;
     }
 
+    // TODO add heal logic
+
     // movement
 
     if(rand() % BOT_SCHIZOPHRENIA < BOT_WILLPOWER){ // move to closest target if your schizophrenia is not trolling you
