@@ -131,17 +131,41 @@ int main(void){
         // spawn minions
 
         long long now = get_time_ms();
-        if(last_minion_spawned_at + MINION_SPAWN_INTERVAL_MS <= now){
+        if(now - MINION_SPAWN_INTERVAL_MS > last_minion_spawned_at){
+            last_minion_spawned_at = now;
+            printf("minion spawn\n");
 
-            int team = rand() % 2;
-            int is_bot = 1;
-            int connfd = -1;
-            struct sockaddr_in sock = {0};
-            int sock_len = 0;
+            // see if there is room to spawn
 
-            struct player minion;
-            player_init(&minion, team, is_bot, connfd, sock, sock_len);
-            player_select_hero(&minion, 1);
+            int dead_bot_idx = -1;
+
+            for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+                struct player *player = &players[player_idx];
+                if(!player->alive && player->bot){
+                    dead_bot_idx = player_idx;
+                    break;
+                }
+            }
+
+            // spawn
+
+            if(dead_bot_idx != -1){
+                int team = rand() % 2;
+                int is_bot = 1;
+                int connfd = -1;
+                struct sockaddr_in sock = {0};
+                int sock_len = 0;
+
+                struct player minion;
+                player_init(&minion, team, is_bot, connfd, sock, sock_len);
+                player_select_hero(&minion, 1);
+                player_spawn(&minion, players);
+                player_draw(&minion, players);
+
+                players[dead_bot_idx] = minion;
+            }else{
+                printf("can't spawn minion; no room\n");
+            }
         }
 
         // check if an entire team is dead
