@@ -25,23 +25,41 @@ static void player_init_bot(struct player *player);
 ///////////// initialising
 /////////////
 
+void player_init_mem(struct player *player){
+    player->connfd = -1;
+    memset(&player->sock, 0, sizeof(player->sock));
+    player->sock_len = 0;
+
+    player->health_color = "";
+    player->health_color_len = 0;
+    player->team_color = "";
+    player->team_color_len = 0;
+
+    player->x = -1;
+    player->y = -1;
+    player->hp = 0;
+    player->alive = 0;
+
+    hero_init_mem(&player->hero);
+
+    player->team = 0;
+
+    player->bot = 0;
+    player->bot_action_delay_ms = 1e3;
+
+    player->bot_last_action_at_ms = 0;
+}
+
 void player_init(struct player *player, int team, int is_bot, int connfd, struct sockaddr_in sock, int sock_len){
+    player_init_mem(player);
+
     player->connfd = connfd;
     player->sock = sock;
     player->sock_len = sock_len;
 
-    player->x = 0;
-    player->y = 0;
-    player->health_color = "";
-    player->health_color_len = 0;
-    player->alive = 1;
-    player->bot = is_bot;
-    hero_init_mem(&player->hero);
-    player->hp = player->hero.hp_max;
     player->team = team;
-    player->team_color = "";
-    player->team_color_len = 0;
 
+    player->bot = is_bot;
     if(is_bot){
         player_init_bot(player);
     }
@@ -280,6 +298,8 @@ void player_receive_damage(struct player *player, int amount, struct player play
 }
 
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_REQUIRED]){
+
+    player->alive = player->hp > 0;
 
     char *old_color = player->health_color;
 
