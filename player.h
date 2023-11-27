@@ -44,14 +44,16 @@ struct player {
     char *team_color;
     int team_color_len;
 
+    // selected character stats
+    struct hero hero;
+
     // variable data
     int x;
     int y;
     int hp;
     int alive;
 
-    // selected character stats
-    struct hero hero;
+    // TODO add levels
 
     // other
     int team;
