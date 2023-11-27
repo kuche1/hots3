@@ -13,6 +13,7 @@
 #include "settings.h"
 #include "map.h"
 #include "hero.h"
+#include "util.h"
 
 /////////////
 ///////////// initialising
@@ -308,9 +309,7 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
     // see if bot should wait and do nothing
 
     {
-        struct timeval te; 
-        gettimeofday(&te, NULL); // get current time
-        long long now_ms = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+        long long now_ms = get_time_ms();
 
         if((player->bot_last_action_at_ms + player->bot_action_delay_ms) < now_ms){
             player->bot_last_action_at_ms = now_ms;
