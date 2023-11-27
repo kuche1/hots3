@@ -70,8 +70,8 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
     player_recalculate_health_state(player, players);
 
     if(player->team){
-        player->team_color     = "";
-        player->team_color_len = 0;
+        player->team_color     = STATIC_effect_no_underline;
+        player->team_color_len = sizeof(STATIC_effect_no_underline);
     }else{
         player->team_color     = STATIC_effect_underline;
         player->team_color_len = sizeof(STATIC_effect_underline);
@@ -81,8 +81,17 @@ void player_spawn(struct player *player, struct player players[PLAYERS_REQUIRED]
 
     for(int loop_count=0; loop_count<50; loop_count++){
 
-        int pos_y = rand() % MAP_Y;
-        int pos_x = rand() % MAP_X;
+        int pos_y;
+        int pos_x;
+
+        if(player->team){
+            pos_y = rand() % SPAWN_AREA_Y;
+            pos_x = rand() % SPAWN_AREA_X;
+        }else{
+            pos_y = rand() % SPAWN_AREA_Y + SPAWN_AREA_Y;
+            pos_x = rand() % SPAWN_AREA_X + SPAWN_AREA_X;
+        }
+
         if(map_is_tile_empty(players, pos_y, pos_x)){
             player->y = pos_y;
             player->x = pos_x;

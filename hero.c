@@ -39,7 +39,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         return;
     }
 
-    char msg_select_hero[] = "\nSelect hero:\n";
+    char msg_select_hero[] = "\nSelect hero and press enter:\n";
 
     while(1){
 

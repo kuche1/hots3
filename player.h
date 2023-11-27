@@ -25,7 +25,8 @@ static char STATIC_col_bg_white_bright[]  __attribute__((unused)) = {'\033', '['
 static char STATIC_col_bg_magenta_dark[]  __attribute__((unused)) = {'\033', '[', '4', '5',      'm'};
 static char STATIC_col_bg_black_dark[]    __attribute__((unused)) = {'\033', '[', '4', '0',      'm'};
 // effects
-static char STATIC_effect_underline[] __attribute__((unused)) = {'\033', '[', '4', 'm'};
+static char STATIC_effect_underline[]    __attribute__((unused)) = {'\033', '[', '4', 'm'};
+static char STATIC_effect_no_underline[] __attribute__((unused)) = {'\033', '[', '2', '4', 'm'};
 
 static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
 
