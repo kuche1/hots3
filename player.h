@@ -11,6 +11,7 @@
 
 // https://ss64.com/nt/syntax-ansi.html
 // https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+// TODO? use rgb instead of this for higher resolution
 // foreground colors
 static char STATIC_col_green_bright[]   __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
 static char STATIC_col_green_dark[]     __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
