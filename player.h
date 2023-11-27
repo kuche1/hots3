@@ -69,7 +69,7 @@ void player_init_mem(struct player *player);
 void player_init(struct player *player, int team, int is_bot, int connfd, struct sockaddr_in sock, int sock_len);
 void player_init_telnet(struct player *player);
 void player_spawn(struct player *player, struct player players[PLAYERS_MAX]);
-void player_select_hero(struct player *player);
+void player_select_hero(struct player *player, int is_minion);
 // actions
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]);
 void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]);

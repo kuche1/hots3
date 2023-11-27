@@ -143,3 +143,18 @@ void hero_init_lili(struct hero *hero){
     hero->heal_ability_range = 2;
     hero->heal_ability_amount = 1;
 }
+
+/////////////
+///////////// minions
+/////////////
+
+void hero_init_minion(struct hero *hero){
+    hero->model = 'm';
+
+    hero->hp_max = hero->hp_max / 10;
+
+    hero->basic_attack_damage = 1;
+
+    hero->legpower = 1;
+    hero->weight   = 2;
+}

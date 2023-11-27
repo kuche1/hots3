@@ -34,5 +34,7 @@ void hero_init_varian(struct hero *hero);
 void hero_init_valla(struct hero *hero);
 void hero_init_stiches(struct hero *hero);
 void hero_init_lili(struct hero *hero);
+// minions
+void hero_init_minion(struct hero *hero);
 
 #endif

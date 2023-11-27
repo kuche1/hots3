@@ -135,8 +135,12 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
 }
 
-void player_select_hero(struct player *player){
-    hero_select_player_hero(&player->hero, player->connfd, player->bot);
+void player_select_hero(struct player *player, int is_minion){
+    if(is_minion){
+        hero_init_minion(&player->hero);
+    }else{
+        hero_select_player_hero(&player->hero, player->connfd, player->bot);
+    }
 }
 
 /////////////

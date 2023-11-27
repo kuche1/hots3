@@ -8,6 +8,7 @@
 #include "player.h"
 #include "settings.h"
 #include "screen.h"
+#include "util.h"
 
 int main(void){
     int err;
@@ -65,7 +66,7 @@ int main(void){
 
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
         struct player *player = &players[player_idx];
-        player_select_hero(player);
+        player_select_hero(player, 0);
     }
 
     // change to draw mode
@@ -100,6 +101,8 @@ int main(void){
 
     int winning_team = -1;
 
+    long long last_minion_spawned_at = 0;
+
     while(1){
 
         // process input
@@ -123,6 +126,22 @@ int main(void){
             }
 
             player_process_action(player, action, players);
+        }
+
+        // spawn minions
+
+        long long now = get_time_ms();
+        if(last_minion_spawned_at + MINION_SPAWN_INTERVAL_MS <= now){
+
+            int team = rand() % 2;
+            int is_bot = 1;
+            int connfd = -1;
+            struct sockaddr_in sock = {0};
+            int sock_len = 0;
+
+            struct player minion;
+            player_init(&minion, team, is_bot, connfd, sock, sock_len);
+            player_select_hero(&minion, 1);
         }
 
         // check if an entire team is dead
