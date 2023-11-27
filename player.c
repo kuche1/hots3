@@ -16,23 +16,35 @@
 #include "util.h"
 
 /////////////
+///////////// private
+/////////////
+
+static void player_init_bot(struct player *player);
+
+/////////////
 ///////////// initialising
 /////////////
 
-void player_init_mem(struct player *player){
-    player->connfd = -1;
-    player->sock_len = sizeof(player->sock);
+void player_init_mem(struct player *player, int team, int is_bot, int connfd, struct sockaddr_in sock, int sock_len){
+    player->connfd = connfd;
+    player->sock = sock;
+    player->sock_len = sock_len;
+
     player->x = 0;
     player->y = 0;
     player->health_color = "";
     player->health_color_len = 0;
     player->alive = 1;
-    player->bot = 0;
+    player->bot = is_bot;
     hero_init_mem(&player->hero);
     player->hp = player->hero.hp_max;
+    player->team = team;
     player->team_color = "";
     player->team_color_len = 0;
-    player->team = 0;
+
+    if(is_bot){
+        player_init_bot(player);
+    }
 }
 
 void player_init_telnet(struct player *player){
@@ -60,7 +72,9 @@ void player_init_telnet(struct player *player){
     }
 }
 
-void player_init_bot(struct player *player){
+static void player_init_bot(struct player *player){
+    player->connfd = -1;
+
     player->bot = 1;
     player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
     player->bot_last_action_at_ms = 0;

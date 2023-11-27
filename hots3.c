@@ -28,32 +28,30 @@ int main(void){
     int team = 0;
 
     while(player_count < PLAYERS_REQUIRED){
-        struct player *player = &players[player_count];
-        player_init_mem(player);
+
+        int is_bot = 0;
+        int connfd = -1;
+        struct sockaddr_in sock;
+        unsigned int sock_len = sizeof(sock);
 
         printf("established connections %d of %d\n", player_count, PLAYERS_REQUIRED);
     
         if(player_count < NUMBER_OF_BOT_PLAYERS){
-
-            player_init_bot(player);
-
+            is_bot = 1;
             printf("bot connected\n");
-
         }else{
-
-            player->connfd = accept(sockfd, (struct sockaddr *) &player->sock, &player->sock_len);
-            if(player->connfd < 0){
+            connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
+            if(connfd < 0){
                 printf("player could not connect\n");
                 continue;
             }
-
             printf("player connected\n");
-        
         }
 
-        player->team = team;
-        team = !team;
+        struct player *player = &players[player_count];
+        player_init_mem(player, team, is_bot, connfd, sock, sock_len);
 
+        team = !team;
         player_count += 1;
     }
 
