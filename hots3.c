@@ -23,20 +23,21 @@ int main(void){
 
     // lobby
 
-    int player_count = 0;
     struct player players[PLAYERS_REQUIRED];
+    int players_len = 0;
+
     int team = 0;
 
-    while(player_count < PLAYERS_REQUIRED){
+    while(players_len < PLAYERS_REQUIRED){
 
         int is_bot = 0;
         int connfd = -1;
         struct sockaddr_in sock;
         unsigned int sock_len = sizeof(sock);
 
-        printf("established connections %d of %d\n", player_count, PLAYERS_REQUIRED);
+        printf("established connections %d of %d\n", players_len, PLAYERS_REQUIRED);
     
-        if(player_count < NUMBER_OF_BOT_PLAYERS){
+        if(players_len < NUMBER_OF_BOT_PLAYERS){
             is_bot = 1;
             printf("bot connected\n");
         }else{
@@ -48,11 +49,11 @@ int main(void){
             printf("player connected\n");
         }
 
-        struct player *player = &players[player_count];
+        struct player *player = &players[players_len];
         player_init_mem(player, team, is_bot, connfd, sock, sock_len);
 
         team = !team;
-        player_count += 1;
+        players_len += 1;
     }
 
     // hero selection
