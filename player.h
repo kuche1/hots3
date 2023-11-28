@@ -33,12 +33,14 @@ static char STATIC_col_bg_white_bright[]  __attribute__((unused)) = {'\033', '['
 static char STATIC_col_bg_magenta_dark[]  __attribute__((unused)) = {'\033', '[', '4', '5',      'm'};
 static char STATIC_col_bg_black_dark[]    __attribute__((unused)) = {'\033', '[', '4', '0',      'm'};
 // effects
-static char STATIC_effect_underline[]        __attribute__((unused)) = {'\033', '[', '4', 'm'};
-static char STATIC_effect_no_underline[]     __attribute__((unused)) = {'\033', '[', '2', '4', 'm'};
-static char STATIC_effect_blink[]            __attribute__((unused)) = {'\033', '[', '5', 'm'};
-static char STATIC_effect_no_blink[]         __attribute__((unused)) = {'\033', '[', '2', '5', 'm'};
-static char STATIC_effect_strikethrough[]    __attribute__((unused)) = {'\033', '[', '9', 'm'};
-static char STATIC_effect_no_strikethrough[] __attribute__((unused)) = {'\033', '[', '2', '9', 'm'};
+static char STATIC_effect_underline[]          __attribute__((unused)) = {'\033', '[', '4', 'm'};
+static char STATIC_effect_no_underline[]       __attribute__((unused)) = {'\033', '[', '2', '4', 'm'};
+static char STATIC_effect_blink[]              __attribute__((unused)) = {'\033', '[', '5', 'm'};
+static char STATIC_effect_no_blink[]           __attribute__((unused)) = {'\033', '[', '2', '5', 'm'};
+static char STATIC_effect_strikethrough[]      __attribute__((unused)) = {'\033', '[', '9', 'm'};
+static char STATIC_effect_no_strikethrough[]   __attribute__((unused)) = {'\033', '[', '2', '9', 'm'};
+static char STATIC_effect_inverse_reverse[]    __attribute__((unused)) = {'\033', '[', '7', 'm'};
+static char STATIC_effect_no_inverse_reverse[] __attribute__((unused)) = {'\033', '[', '2', '7', 'm'};
 
 static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
 
@@ -53,6 +55,8 @@ struct player {
     int health_color_len;
     char *team_color;
     int team_color_len;
+    char *level_color;
+    int level_color_len;
 
     // selected character stats
     struct hero hero;
