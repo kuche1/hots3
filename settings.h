@@ -17,8 +17,8 @@
 
 #define NUMBER_OF_BOT_PLAYERS 3
 #define BOT_REACTION_TIME_MS 400 // 1e3 is 1 second
-// schizophrenic movement
-#define BOT_WILLPOWER      9
+// random movement chance
+#define BOT_WILLPOWER      8
 #define BOT_SCHIZOPHRENIA 10
 // tactic // TODO this sucks and need an improvement
 #define BOT_HUMAN_WAVE_NUMERATOR  4

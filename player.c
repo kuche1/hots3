@@ -386,6 +386,17 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
     }
 
+    // your schizophrenia is trolling you
+
+    if(!(rand() % BOT_SCHIZOPHRENIA < BOT_WILLPOWER)){
+        char directions[] = {KEY_MOVE_DOWN, KEY_MOVE_UP, KEY_MOVE_LEFT, KEY_MOVE_RIGHT};
+        char direction = directions[rand() % sizeof(directions)];
+        *action = direction;
+        return 0;
+    }
+
+    // detect closest enemy
+
     int lowest_dist = INT_MAX;
     struct player *target = NULL;
 
@@ -425,9 +436,9 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         return 0;
     }
 
-    // movement
+    // move to closest target
 
-    if(rand() % BOT_SCHIZOPHRENIA < BOT_WILLPOWER){ // move to closest target if your schizophrenia is not trolling you
+    {
 
         int human_wave = rand() % BOT_HUMAN_WAVE_DENOMINTOR < BOT_HUMAN_WAVE_NUMERATOR;
         char encirclement_tactics[2];
@@ -458,13 +469,10 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
             int tactic = rand() % sizeof(encirclement_tactics);
             *action = encirclement_tactics[tactic];
         }
+
+        return 0;
     
-    }else{ // if your schizophrenia is trolling you move randomly
-        char directions[] = {KEY_MOVE_DOWN, KEY_MOVE_UP, KEY_MOVE_LEFT, KEY_MOVE_RIGHT};
-        char direction = directions[rand() % sizeof(directions)];
-        *action = direction;
     }
 
-
-    return 0;
+    assert(0); // unreachable
 }
