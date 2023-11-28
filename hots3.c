@@ -160,6 +160,8 @@ int main(void){
                 player_select_hero(minion);
                 player_spawn(minion, players);
                 player_draw(minion, players);
+            }else{
+                printf("entiy limit reached, cannot spawn new minion\n");
             }
         }
 
