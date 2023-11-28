@@ -33,10 +33,12 @@ static char STATIC_col_bg_white_bright[]  __attribute__((unused)) = {'\033', '['
 static char STATIC_col_bg_magenta_dark[]  __attribute__((unused)) = {'\033', '[', '4', '5',      'm'};
 static char STATIC_col_bg_black_dark[]    __attribute__((unused)) = {'\033', '[', '4', '0',      'm'};
 // effects
-static char STATIC_effect_underline[]    __attribute__((unused)) = {'\033', '[', '4', 'm'};
-static char STATIC_effect_no_underline[] __attribute__((unused)) = {'\033', '[', '2', '4', 'm'};
-static char STATIC_effect_blink[]        __attribute__((unused)) = {'\033', '[', '5', 'm'};
-static char STATIC_effect_no_blink[]     __attribute__((unused)) = {'\033', '[', '2', '5', 'm'};
+static char STATIC_effect_underline[]        __attribute__((unused)) = {'\033', '[', '4', 'm'};
+static char STATIC_effect_no_underline[]     __attribute__((unused)) = {'\033', '[', '2', '4', 'm'};
+static char STATIC_effect_blink[]            __attribute__((unused)) = {'\033', '[', '5', 'm'};
+static char STATIC_effect_no_blink[]         __attribute__((unused)) = {'\033', '[', '2', '5', 'm'};
+static char STATIC_effect_strikethrough[]    __attribute__((unused)) = {'\033', '[', '9', 'm'};
+static char STATIC_effect_no_strikethrough[] __attribute__((unused)) = {'\033', '[', '2', '9', 'm'};
 
 static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
 
@@ -62,7 +64,7 @@ struct player {
     int alive;
     int level;
     int xp;
-    long long leveled_up_at_ms;
+    // long long leveled_up_at_ms;
 
     // other
     int team;

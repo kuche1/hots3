@@ -43,7 +43,7 @@ void player_init_mem(struct player *player){
     player->alive = 0;
     player->level = 0;
     player->xp = 0;
-    player->leveled_up_at_ms = 0;
+    // player->leveled_up_at_ms = 0;
 
     player->team = 0;
 
@@ -67,8 +67,8 @@ void player_init(struct player *player, int team, int is_bot, int connfd, struct
         player->team_color     = STATIC_effect_no_underline;
         player->team_color_len = sizeof(STATIC_effect_no_underline);
     }else{
-        player->team_color     = STATIC_effect_underline;
-        player->team_color_len = sizeof(STATIC_effect_underline);
+        player->team_color     = STATIC_effect_strikethrough;
+        player->team_color_len = sizeof(STATIC_effect_strikethrough);
     }
 
     player->bot = is_bot;
@@ -139,7 +139,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
 
-    player->leveled_up_at_ms = 0;
+    // player->leveled_up_at_ms = 0;
     player->level = LEVEL_ON_SPAWN;
     player->xp = XP_ON_SPAWN;
 
@@ -405,8 +405,12 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
     if(player->xp >= XP_FOR_LEVEL_UP){
         player->xp -= XP_FOR_LEVEL_UP;
         player->level += 1;
-        player->leveled_up_at_ms = get_time_ms();
-        player_draw(player, players);
+        // player->leveled_up_at_ms = get_time_ms();
+
+        int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
+        player_receive_damage(player, -health_restored, players);
+
+        // player_draw(player, players);
     }
 }
 
@@ -423,16 +427,16 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         return;
     }
 
-    int draw_level_up_effect = (player->leveled_up_at_ms + LEVEL_UP_EFFECT_DURATION_MS) >= get_time_ms();
+    // int draw_level_up_effect = (player->leveled_up_at_ms + LEVEL_UP_EFFECT_DURATION_MS) >= get_time_ms();
 
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player_receiver = &players[player_idx];
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
 
-        if(draw_level_up_effect){
-            screen_print_single(player_receiver->connfd, STATIC_effect_blink, sizeof(STATIC_effect_blink));
-        }
+        // if(draw_level_up_effect){
+        //     screen_print_single(player_receiver->connfd, STATIC_effect_blink, sizeof(STATIC_effect_blink));
+        // }
 
         screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
 
@@ -440,9 +444,9 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         hero_draw_single(&player->hero, player_receiver->connfd);
 
-        if(draw_level_up_effect){
-            screen_print_single(player_receiver->connfd, STATIC_effect_no_blink, sizeof(STATIC_effect_no_blink));
-        }
+        // if(draw_level_up_effect){
+        //     screen_print_single(player_receiver->connfd, STATIC_effect_no_blink, sizeof(STATIC_effect_no_blink));
+        // }
     }
 }
 
