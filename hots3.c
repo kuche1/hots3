@@ -90,13 +90,6 @@ int main(void){
         player_spawn(player, players);
     }
 
-    // print players
-
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
-        struct player *player = &players[player_idx];
-        player_draw(player, players);
-    }
-
     // game loop
 
     int winning_team = -1;
@@ -128,7 +121,7 @@ int main(void){
             player_process_action(player, action, players);
         }
 
-        // spawn players
+        // respawn players
 
         {
             long long now = get_time_ms();
@@ -136,9 +129,8 @@ int main(void){
                 struct player *player = &players[player_idx];
                 if((player->bot == HUMAN) || (player->bot == BOT)){
                     if(!player->alive){
-                        if(player->died_at_ms + RESPAWN_TIME_MS >= now){
+                        if(player->died_at_ms + RESPAWN_TIME_MS <= now){
                             player_spawn(player, players);
-                            player_draw(player, players); // TODO fucking stupid, make spawn call draw
                         }
                     }
                 }
@@ -178,7 +170,6 @@ int main(void){
                     player_init(minion, team, is_bot, connfd, sock, sock_len);
                     player_select_hero(minion);
                     player_spawn(minion, players);
-                    player_draw(minion, players);
                 }else{
                     printf("entiy limit reached, cannot spawn new minion\n");
                 }

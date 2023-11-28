@@ -9,8 +9,8 @@
 
 // game parameters
 
-#define PLAYERS_REQUIRED 1
-#define NUMBER_OF_BOT_PLAYERS 0
+#define PLAYERS_REQUIRED 2
+#define NUMBER_OF_BOT_PLAYERS 1
 
 #define LEVEL_ON_SPAWN 5
 #define XP_ON_SPAWN 1
@@ -18,7 +18,7 @@
 #define LEVEL_UP_HEALTH_RESTORED_NUMERATOR   1
 #define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 3
 
-#define RESPAWN_TIME_MS 15e3
+#define RESPAWN_TIME_MS 5e3
 
 // bot parameters
 

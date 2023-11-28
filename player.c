@@ -49,7 +49,7 @@ void player_init_mem(struct player *player){
 
     player->team = 0;
 
-    player->bot = BOT;
+    player->bot = MINION;
     player->bot_action_delay_ms = 1e3;
     player->bot_willpower = 1;
     player->bot_schizophrenia = 1;
@@ -141,7 +141,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     player->died_at_ms = 0;
 
     player->hp = player->hero.hp_max;
-    player_recalculate_health_state(player, players);
+    // health state recalc will be called later since it can cause a redraw
 
     player->level = 0;
     player->xp = 0;
@@ -158,7 +158,11 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         spawn_area_x = MINION_SPAWN_AREA_X;
     }
 
-    for(int loop_count=0; loop_count<50; loop_count++){
+    // try to spawn
+
+    int spawn_attempts_left = 50;
+
+    for(; spawn_attempts_left>0; spawn_attempts_left--){
 
         int pos_y;
         int pos_x;
@@ -174,11 +178,18 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         if(map_is_tile_empty(players, pos_y, pos_x)){
             player->y = pos_y;
             player->x = pos_x;
-            return;
+            break;
         }
     }
 
-    exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
+    if(spawn_attempts_left <= 0){
+        exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
+    }
+
+    // draw
+
+    player_recalculate_health_state(player, players);
+    player_draw(player, players);
 }
 
 void player_select_hero(struct player *player){
