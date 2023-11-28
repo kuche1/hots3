@@ -83,6 +83,18 @@ int main(void){
         screen_clear_single(player->connfd);
     }
 
+    // draw map borders
+
+    screen_cur_set(players, MAP_Y, 0);
+    for(int x=0; x<MAP_X; ++x){
+        screen_print(players, "-", 1);
+    }
+
+    for(int y=0; y<MAP_Y; ++y){
+        screen_cur_set(players, y, MAP_X);
+        screen_print(players, "|", 1);
+    }
+
     // spawn players
 
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
