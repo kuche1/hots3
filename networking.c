@@ -8,6 +8,8 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #include <unistd.h> // read(), write(), close()
+#include <assert.h>
+#include <stdio.h>
 
 #include "errors.h"
 
@@ -41,7 +43,11 @@ int create_server(int *sockfd, struct sockaddr_in *servaddr, int port, int liste
 // sending
 
 void net_send_single(int connfd, char *data, int data_len){
-    write(connfd, data, data_len); // TODO check how much bytes were sent
+    if(connfd < 0){
+        return;
+    }
+    int sent = write(connfd, data, data_len);
+    assert(sent == data_len); // could not send data
 }
 
 void net_send(struct player players[PLAYERS_MAX], char *data, int data_len){
