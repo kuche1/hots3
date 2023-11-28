@@ -488,7 +488,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
 
-    // TODO add heal logic
+    // TODO? make healers pussies
 
     // do nothing if dead
 
@@ -517,10 +517,10 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         return 0;
     }
 
-    // detect closest enemy
+    // find closest enemy
 
-    int lowest_dist = INT_MAX;
-    struct player *target = NULL;
+    struct player *attack_target = NULL;
+    int attack_target_dist = INT_MAX;
 
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *other_player = &players[player_idx];
@@ -539,26 +539,84 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
         int dist = abs(player->y - other_player->y) + abs(player->x - other_player->x);
 
-        if(dist < lowest_dist){
-            lowest_dist = dist;
-            target = other_player;
+        if(dist < attack_target_dist){
+            attack_target_dist = dist;
+            attack_target = other_player;
         }
     }
 
-    // if no enemy player can be found AFK
+    // find closest damaged ally
 
-    if(target == NULL){
-        return 1;
+    struct player *closest_damaged_ally = NULL;
+    int closest_damaged_ally_dist = INT_MAX;
+
+    if((player->hero.heal_ability_range > 0) && (player->hero.heal_ability_amount > 0)){
+        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+            struct player *other_player = &players[player_idx];
+
+            if(player == other_player){
+                continue;
+            }
+
+            if(!other_player->alive){
+                continue;
+            }
+
+            if(player->team != other_player->team){
+                continue;
+            }
+
+            if(other_player->hp >= other_player->hero.hp_max){
+                continue;
+            }
+
+            int dist = abs(player->y - other_player->y) + abs(player->x - other_player->x);
+
+            if((closest_damaged_ally == NULL) || (closest_damaged_ally_dist > dist)){
+                closest_damaged_ally = other_player;
+                closest_damaged_ally_dist = dist;
+            }
+        }
     }
 
-    // attack if anyone is nearby
+    // heal or attack if in range
 
-    if(lowest_dist <= player->hero.basic_attack_distance){
+    int heal_in_rage    = closest_damaged_ally_dist <= player->hero.heal_ability_range;
+    int attack_in_range = attack_target_dist        <= player->hero.basic_attack_distance;
+
+    if(heal_in_rage && attack_in_range){
+        if(player->hero.heal_ability_amount > player->hero.basic_attack_damage){
+            *action = KEY_HEAL_ABILITY;
+            return 0;
+        }else{
+            *action = KEY_BASIC_ATTACK;
+            return 0;
+        }
+    }else if(heal_in_rage){
+        *action = KEY_HEAL_ABILITY;
+        return 0;
+    }else if(attack_in_range){
         *action = KEY_BASIC_ATTACK;
         return 0;
     }
 
-    // move to closest target
+    // cannot heal nor attack, select target to move to, or quit if no targets
+
+    struct player *target = NULL;
+
+    if((attack_target == NULL) && (closest_damaged_ally == NULL)){
+        return 1;
+    }else if(attack_target == NULL){
+        target = closest_damaged_ally;
+    }else if(closest_damaged_ally == NULL){
+        target = attack_target;
+    }else{
+        target = closest_damaged_ally;
+    }
+
+    assert(target != NULL);
+
+    // move to closest target // TODO? check if we're moving there for heal and make a b-line to the target
 
     {
 
