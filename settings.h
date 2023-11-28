@@ -18,6 +18,8 @@
 #define LEVEL_UP_HEALTH_RESTORED_NUMERATOR   1
 #define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 3
 
+#define RESPAWN_TIME_MS 15e3
+
 // bot parameters
 
 // reactions

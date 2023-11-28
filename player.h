@@ -70,7 +70,7 @@ struct player {
     int alive;
     int level;
     int xp;
-    // long long leveled_up_at_ms;
+    long long died_at_ms;
 
     // other
     int team;

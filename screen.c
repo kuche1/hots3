@@ -27,6 +27,8 @@ void screen_cur_set_single(int connfd, int pos_y, int pos_x){
 }
 
 void screen_cur_set(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
+    assert(pos_y >= 0);
+    assert(pos_x >= 0);
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         screen_cur_set_single(player->connfd, pos_y, pos_x);

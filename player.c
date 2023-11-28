@@ -45,6 +45,7 @@ void player_init_mem(struct player *player){
     player->alive = 0;
     player->level = 0;
     player->xp = 0;
+    player->died_at_ms = 0;
 
     player->team = 0;
 
@@ -136,6 +137,8 @@ static void player_init_bot(struct player *player){
 }
 
 void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
+
+    player->died_at_ms = 0;
 
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
@@ -348,6 +351,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
         // deal with dying player
 
         player->alive = 0;
+        player->died_at_ms = get_time_ms();
         screen_cur_set(players, player->y, player->x);
         net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
         player->x = -1;
@@ -419,7 +423,7 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
         int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
         player_receive_damage(player, -health_restored, players);
 
-        player_draw(player, players);
+        player_draw(player, players); // TODO? draw too many times?
     }
 }
 

@@ -128,41 +128,62 @@ int main(void){
             player_process_action(player, action, players);
         }
 
-        // spawn minions
+        // spawn players
 
-        long long now = get_time_ms();
-        if(now - MINION_SPAWN_INTERVAL_MS > last_minion_spawned_at){
-            last_minion_spawned_at = now;
-
-            // see if there is room to spawn
-
-            int dead_bot_idx = -1;
-
+        {
+            long long now = get_time_ms();
             for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
                 struct player *player = &players[player_idx];
-                if(!player->alive && player->bot){
-                    dead_bot_idx = player_idx;
-                    break;
+                if((player->bot == HUMAN) || (player->bot == BOT)){
+                    if(!player->alive){
+                        if(player->died_at_ms + RESPAWN_TIME_MS >= now){
+                            player_spawn(player, players);
+                            player_draw(player, players); // TODO fucking stupid, make spawn call draw
+                        }
+                    }
+                }
+            }
+        }
+
+        // spawn minions
+
+        {
+
+            long long now = get_time_ms();
+            if(now - MINION_SPAWN_INTERVAL_MS > last_minion_spawned_at){
+                last_minion_spawned_at = now;
+
+                // see if there is room to spawn
+
+                int dead_bot_idx = -1;
+
+                for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+                    struct player *player = &players[player_idx];
+                    if(!player->alive && player->bot){
+                        dead_bot_idx = player_idx;
+                        break;
+                    }
+                }
+
+                // spawn
+
+                if(dead_bot_idx != -1){
+                    int team = rand() % 2;
+                    int is_bot = MINION;
+                    int connfd = -1;
+                    struct sockaddr_in sock = {0};
+                    int sock_len = 0;
+
+                    struct player *minion = &players[dead_bot_idx];
+                    player_init(minion, team, is_bot, connfd, sock, sock_len);
+                    player_select_hero(minion);
+                    player_spawn(minion, players);
+                    player_draw(minion, players);
+                }else{
+                    printf("entiy limit reached, cannot spawn new minion\n");
                 }
             }
 
-            // spawn
-
-            if(dead_bot_idx != -1){
-                int team = rand() % 2;
-                int is_bot = MINION;
-                int connfd = -1;
-                struct sockaddr_in sock = {0};
-                int sock_len = 0;
-
-                struct player *minion = &players[dead_bot_idx];
-                player_init(minion, team, is_bot, connfd, sock, sock_len);
-                player_select_hero(minion);
-                player_spawn(minion, players);
-                player_draw(minion, players);
-            }else{
-                printf("entiy limit reached, cannot spawn new minion\n");
-            }
         }
 
         // check if an entire team is dead
