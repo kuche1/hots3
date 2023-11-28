@@ -43,6 +43,7 @@ void player_init_mem(struct player *player){
     player->alive = 0;
     player->level = 0;
     player->xp = 0;
+    player->leveled_up_at_ms = 0;
 
     player->team = 0;
 
@@ -138,12 +139,9 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
 
-    player->level = 0;
-    player->xp = 0;
-    for(int i=0; i<LEVEL_ON_SPAWN; ++i){
-        player_gain_xp(player, XP_FOR_LEVEL_UP);
-    }
-    player_gain_xp(player, XP_ON_SPAWN);
+    player->leveled_up_at_ms = 0;
+    player->level = LEVEL_ON_SPAWN;
+    player->xp = XP_ON_SPAWN;
 
     // set spawn
 
@@ -342,7 +340,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
             if(team_member->team != team){
                 continue;
             }
-            player_gain_xp(team_member, xp);
+            player_gain_xp(team_member, players, xp);
         }
 
         // deal with dying player
@@ -402,12 +400,13 @@ void player_recalculate_health_state(struct player *player, struct player player
     }
 }
 
-void player_gain_xp(struct player *player, int xp){
+void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], int xp){
     player->xp += xp;
     if(player->xp >= XP_FOR_LEVEL_UP){
         player->xp -= XP_FOR_LEVEL_UP;
         player->level += 1;
-        // TODO add indication that player has leveled up
+        player->leveled_up_at_ms = get_time_ms();
+        player_draw(player, players);
     }
 }
 
@@ -424,13 +423,26 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         return;
     }
 
+    int draw_level_up_effect = (player->leveled_up_at_ms + LEVEL_UP_EFFECT_DURATION_MS) >= get_time_ms();
+
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player_receiver = &players[player_idx];
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
+
+        if(draw_level_up_effect){
+            screen_print_single(player_receiver->connfd, STATIC_effect_blink, sizeof(STATIC_effect_blink));
+        }
+
         screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
+
         screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
+
         hero_draw_single(&player->hero, player_receiver->connfd);
+
+        if(draw_level_up_effect){
+            screen_print_single(player_receiver->connfd, STATIC_effect_no_blink, sizeof(STATIC_effect_no_blink));
+        }
     }
 }
 

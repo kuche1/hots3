@@ -15,6 +15,7 @@
 #define LEVEL_ON_SPAWN 5
 #define XP_ON_SPAWN 1
 #define XP_FOR_LEVEL_UP 8
+#define LEVEL_UP_EFFECT_DURATION_MS 2e3
 
 // bot parameters
 
@@ -42,9 +43,9 @@
 #define MINION_SPAWN_AREA_Y 2
 #define MINION_SPAWN_AREA_X 4
 
-#define PLAYERS_MAX 20 // includes minions
+#define PLAYERS_MAX 26 // includes minions
 
-#define MINION_SPAWN_INTERVAL_MS 2700
+#define MINION_SPAWN_INTERVAL_MS 2400
 
 // keybinds
 

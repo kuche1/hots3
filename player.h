@@ -35,6 +35,8 @@ static char STATIC_col_bg_black_dark[]    __attribute__((unused)) = {'\033', '['
 // effects
 static char STATIC_effect_underline[]    __attribute__((unused)) = {'\033', '[', '4', 'm'};
 static char STATIC_effect_no_underline[] __attribute__((unused)) = {'\033', '[', '2', '4', 'm'};
+static char STATIC_effect_blink[]        __attribute__((unused)) = {'\033', '[', '5', 'm'};
+static char STATIC_effect_no_blink[]     __attribute__((unused)) = {'\033', '[', '2', '5', 'm'};
 
 static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
 
@@ -60,6 +62,7 @@ struct player {
     int alive;
     int level;
     int xp;
+    long long leveled_up_at_ms;
 
     // other
     int team;
@@ -89,7 +92,7 @@ void player_heal_ability(struct player *player, struct player players[PLAYERS_MA
 // deal with status
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]);
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]);
-void player_gain_xp(struct player *player, int xp);
+void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], int xp);
 // drawing
 void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
 // bot stuff
