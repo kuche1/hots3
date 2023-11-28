@@ -143,14 +143,6 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     player->died_at_ms = 0;
 
-    player->hp = player->hero.hp_max;
-    // health state recalc will be called later since it can cause a redraw
-
-    player->level = 0;
-    player->xp = 0;
-    player_gain_xp(player, players, (LEVEL_ON_SPAWN * XP_FOR_LEVEL_UP) + XP_ON_SPAWN);
-    assert(player->level >= 1); // otherwise the level color will not be initialised
-
     // set spawn
 
     int spawn_area_y = SPAWN_AREA_Y;
@@ -161,7 +153,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         spawn_area_x = MINION_SPAWN_AREA_X;
     }
 
-    // try to spawn
+    // try to find a spot
 
     int spawn_attempts_left = 50;
 
@@ -189,9 +181,18 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
     }
 
+    // fix health
+
+    player->hp = player->hero.hp_max;
+    player_recalculate_health_state(player, players);
+
+    player->level = 0;
+    player->xp = 0;
+    player_gain_xp(player, players, (LEVEL_ON_SPAWN * XP_FOR_LEVEL_UP) + XP_ON_SPAWN);
+    assert(player->level >= 1); // otherwise the level color will not be initialised
+
     // draw
 
-    player_recalculate_health_state(player, players);
     player_draw(player, players);
 }
 
@@ -457,6 +458,10 @@ void player_recalculate_health_state(struct player *player, struct player player
 }
 
 void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], int xp){
+    if(!player->alive){
+        return;
+    }
+
     player->xp += xp;
     while(player->xp >= XP_FOR_LEVEL_UP){
         player->xp -= XP_FOR_LEVEL_UP;
