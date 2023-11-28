@@ -22,7 +22,7 @@ void screen_cur_set_single(int connfd, int pos_y, int pos_x){
     char msg_buf[11];
     int written = snprintf(msg_buf, sizeof(msg_buf), "\033[%d;%dH", pos_y+1, pos_x+1); // the return values excludes the final \0
     assert(written >= 0);
-    assert((long unsigned int)written < sizeof(msg_buf)); // need to make buffer larger
+    assert((long unsigned int)written < sizeof(msg_buf)); // buffer is too small
     screen_print_single(connfd, msg_buf, written);
 }
 

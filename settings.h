@@ -21,6 +21,8 @@
 #define RESPAWN_TIME_MS 20e3
 #define MINION_SPAWN_INTERVAL_MS 2800
 
+#define HEALTH_STATES 8
+
 // bot parameters
 
 // reactions
