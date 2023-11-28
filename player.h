@@ -80,9 +80,9 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_MA
 void player_heal_ability(struct player *player, struct player players[PLAYERS_MAX]);
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]);
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]);
+// drawing
+void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
 // bot stuff
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action);
-// other stuff
-void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
 
 #endif

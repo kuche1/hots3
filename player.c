@@ -338,6 +338,29 @@ void player_recalculate_health_state(struct player *player, struct player player
 }
 
 /////////////
+///////////// drawing
+/////////////
+
+void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
+    if(!player->alive){
+        return;
+    }
+
+    if((player->x < 0) || (player->y < 0)){
+        return;
+    }
+
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+        struct player *player_receiver = &players[player_idx];
+
+        screen_cur_set_single(player_receiver->connfd, player->y, player->x);
+        screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
+        screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
+        hero_draw_single(&player->hero, player_receiver->connfd);
+    }
+}
+
+/////////////
 ///////////// bot stuff
 /////////////
 
@@ -444,27 +467,4 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
 
     return 0;
-}
-
-/////////////
-///////////// other stuff
-/////////////
-
-void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
-    if(!player->alive){
-        return;
-    }
-
-    if((player->x < 0) || (player->y < 0)){
-        return;
-    }
-
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
-        struct player *player_receiver = &players[player_idx];
-
-        screen_cur_set_single(player_receiver->connfd, player->y, player->x);
-        screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
-        screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
-        hero_draw_single(&player->hero, player_receiver->connfd);
-    }
 }
