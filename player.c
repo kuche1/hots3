@@ -440,34 +440,43 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
     {
 
-        int human_wave = rand() % BOT_HUMAN_WAVE_DENOMINTOR < BOT_HUMAN_WAVE_NUMERATOR;
-        char encirclement_tactics[2];
+        char human_wave_action;
+        char encirclement_action;
 
         if(abs(player->y - target->y) > abs(player->x - target->x)){
+
             if(player->y < target->y){
-                *action = KEY_MOVE_DOWN;
-                encirclement_tactics[0] = KEY_MOVE_LEFT;
-                encirclement_tactics[1] = KEY_MOVE_RIGHT;
+                human_wave_action = KEY_MOVE_DOWN;
             }else{
-                *action = KEY_MOVE_UP;
-                encirclement_tactics[0] = KEY_MOVE_LEFT;
-                encirclement_tactics[1] = KEY_MOVE_RIGHT;
+                human_wave_action = KEY_MOVE_UP;
             }
-        }else{
+
             if(player->x < target->x){
-                *action = KEY_MOVE_RIGHT;
-                encirclement_tactics[0] = KEY_MOVE_UP;
-                encirclement_tactics[1] = KEY_MOVE_DOWN;
+                encirclement_action = KEY_MOVE_RIGHT;
             }else{
-                *action = KEY_MOVE_LEFT;
-                encirclement_tactics[0] = KEY_MOVE_UP;
-                encirclement_tactics[1] = KEY_MOVE_DOWN;
+                encirclement_action = KEY_MOVE_LEFT;
             }
+
+        }else{
+
+            if(player->x < target->x){
+                human_wave_action = KEY_MOVE_RIGHT;
+            }else{
+                human_wave_action = KEY_MOVE_LEFT;
+            }
+
+            if(player->y < target->y){
+                encirclement_action = KEY_MOVE_DOWN;
+            }else{
+                encirclement_action = KEY_MOVE_UP;
+            }
+
         }
 
-        if(!human_wave){
-            int tactic = rand() % sizeof(encirclement_tactics);
-            *action = encirclement_tactics[tactic];
+        if(rand() % BOT_HUMAN_WAVE_DENOMINTOR < BOT_HUMAN_WAVE_NUMERATOR){
+            *action = human_wave_action;
+        }else{
+            *action = encirclement_action;
         }
 
         return 0;
