@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include "networking.h"
+#include "color.h"
 
 void screen_clear_single(int connfd){
     char clear_cmd[] = "\033[H\033[J";
@@ -44,4 +45,9 @@ void screen_print(struct player players[PLAYERS_MAX], char *msg, int msg_len){
         struct player *player = &players[player_idx];
         net_send_single(player->connfd, msg, msg_len);
     }
+}
+
+void screen_print_empty_tile(struct player players[PLAYERS_MAX]){
+    static char empty_tile[] = RESET_WITH_SPACE;
+    screen_print(players, empty_tile, sizeof(empty_tile));
 }

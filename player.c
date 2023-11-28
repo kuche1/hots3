@@ -234,7 +234,7 @@ void player_process_action(struct player *player, char action, struct player pla
 
         if(map_is_tile_empty(players, y_desired, x_desired)){
             screen_cur_set(players, player->y, player->x);
-            net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
+            screen_print_empty_tile(players);
 
             player->x = x_desired;
             player->y = y_desired;
@@ -367,7 +367,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
         player->alive = 0;
         player->died_at_ms = get_time_ms();
         screen_cur_set(players, player->y, player->x);
-        net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
+        screen_print_empty_tile(players);
         player->x = -1;
         player->y = -1;
     

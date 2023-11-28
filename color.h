@@ -34,4 +34,7 @@
 #define EFFECT_ITALIC             {'\033', '[',      '3', 'm'}
 #define EFFECT_NO_ITALIC          {'\033', '[', '2', '3', 'm'}
 
+// this is not the most appropriate place of all but it will be fine for now
+#define RESET_WITH_SPACE {'\033', '[', '0', 'm', ' '}
+
 #endif

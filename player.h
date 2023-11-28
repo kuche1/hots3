@@ -13,8 +13,6 @@
 #define BOT 1
 #define MINION 2
 
-static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
-
 struct player {
     // networking
     int connfd;
