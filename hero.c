@@ -118,7 +118,7 @@ void hero_init_regular_guy(struct hero *hero){
 void hero_init_varian(struct hero *hero){
     hero->model = 'V';
 
-    hero->basic_attack_damage = (hero->basic_attack_damage * 14) / 10;
+    hero->basic_attack_damage = (hero->basic_attack_damage * 13) / 10;
 
     hero->legpower = 6;
     hero->weight   = 7;
