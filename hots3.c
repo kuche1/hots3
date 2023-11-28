@@ -47,7 +47,7 @@ int main(void){
             is_bot = BOT;
             printf("bot connected\n");
         }else{
-            connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len); // TODO this seems to be using 100% CPU
+            connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
             if(connfd < 0){
                 printf("player could not connect\n");
                 continue;
