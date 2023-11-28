@@ -20,12 +20,12 @@ void hero_init_mem(struct hero *hero){
 void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
 
     char *choices_str[NUMBER_OF_HEROES] = {
-        "basic bitch\n\tnothing special\n",
-        "varian\n\tslower\n\thigher dmg\n",
-        "valla\n\tlower hp\n\thigher range\n",
-        "stiches\n\thigher hp\n\tslower\n",
-        "lili\n\tlower hp\n\tlower damage\n\tcan heal\n",
-        "minion\n\tpiece of shit stats\n\tgood for mindgames\n",
+        "basic bitch\n\r\tnothing special\n\r",
+        "varian\n\r\tslower\n\r\thigher dmg\n\r",
+        "valla\n\r\tlower hp\n\r\thigher range\n\r",
+        "stiches\n\r\thigher hp\n\r\tslower\n\r",
+        "lili\n\r\tlower hp\n\r\tlower damage\n\r\tcan heal\n\r",
+        "minion\n\r\tpiece of shit stats\n\r\tgood for mindgames\n\r",
     };
 
     void (*choices_fnc[NUMBER_OF_HEROES])(struct hero *) = {
