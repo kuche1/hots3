@@ -389,7 +389,7 @@ void player_recalculate_health_state(struct player *player, struct player player
         health_state_palette_generated = 1;
 
         for(int color_idx=0; color_idx < HEALTH_STATES; color_idx++){
-            int red = ((color_idx+1) * 255) / HEALTH_STATES;
+            int red = (color_idx * 255) / (HEALTH_STATES-1);
             int green = 255 - red;
             int blue = 0;
 
@@ -439,7 +439,7 @@ void player_recalculate_health_state(struct player *player, struct player player
     int health_amount = ((HEALTH_STATES-1) * player->hp) / player->hero.hp_max;
     int health_amount_idx = (HEALTH_STATES-1) - health_amount;
 
-    if(health_amount_idx < 0){
+    if(health_amount_idx < 0){ // perhaps the hp is below 0
         health_amount_idx = 0;
     }
 
