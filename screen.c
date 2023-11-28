@@ -18,8 +18,9 @@ void screen_clear(struct player players[PLAYERS_MAX]){
 }
 
 void screen_cur_set_single(int connfd, int pos_y, int pos_x){
-    char msg_buf[20]; // TODO fat fingered
+    char msg_buf[11];
     int written = snprintf(msg_buf, sizeof(msg_buf), "\033[%d;%dH", pos_y+1, pos_x+1); // the return values excludes the final \0
+    assert(written < sizeof(msg_buf)); // need to make buffer larger
     screen_print_single(connfd, msg_buf, written);
 }
 
