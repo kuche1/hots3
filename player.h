@@ -13,37 +13,6 @@
 #define BOT 1
 #define MINION 2
 
-// https://ss64.com/nt/syntax-ansi.html
-// https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
-// TODO? use rgb instead of this for higher resolution
-// foreground colors
-static char STATIC_col_green_bright[]   __attribute__((unused)) = {'\033', '[', '9', '2', 'm'};
-static char STATIC_col_green_dark[]     __attribute__((unused)) = {'\033', '[', '3', '2', 'm'};
-static char STATIC_col_yellow_bright[]  __attribute__((unused)) = {'\033', '[', '9', '3', 'm'};
-static char STATIC_col_yellow_dark[]    __attribute__((unused)) = {'\033', '[', '3', '3', 'm'};
-static char STATIC_col_magenta_bright[] __attribute__((unused)) = {'\033', '[', '9', '5', 'm'};
-static char STATIC_col_magenta_dark[]   __attribute__((unused)) = {'\033', '[', '3', '5', 'm'};
-static char STATIC_col_red_bright[]     __attribute__((unused)) = {'\033', '[', '9', '1', 'm'};
-static char STATIC_col_red_dark[]       __attribute__((unused)) = {'\033', '[', '3', '1', 'm'};
-// background colors
-static char STATIC_col_bg_red_dark[]      __attribute__((unused)) = {'\033', '[', '4', '1',      'm'};
-static char STATIC_col_bg_blue_dark[]     __attribute__((unused)) = {'\033', '[', '4', '4',      'm'};
-static char STATIC_col_bg_white_dark[]    __attribute__((unused)) = {'\033', '[', '4', '6',      'm'};
-static char STATIC_col_bg_white_bright[]  __attribute__((unused)) = {'\033', '[', '1', '0', '7', 'm'};
-static char STATIC_col_bg_magenta_dark[]  __attribute__((unused)) = {'\033', '[', '4', '5',      'm'};
-static char STATIC_col_bg_black_dark[]    __attribute__((unused)) = {'\033', '[', '4', '0',      'm'};
-// effects
-static char STATIC_effect_underline[]          __attribute__((unused)) = {'\033', '[', '4', 'm'};
-static char STATIC_effect_no_underline[]       __attribute__((unused)) = {'\033', '[', '2', '4', 'm'};
-static char STATIC_effect_blink[]              __attribute__((unused)) = {'\033', '[', '5', 'm'};
-static char STATIC_effect_no_blink[]           __attribute__((unused)) = {'\033', '[', '2', '5', 'm'};
-static char STATIC_effect_strikethrough[]      __attribute__((unused)) = {'\033', '[', '9', 'm'};
-static char STATIC_effect_no_strikethrough[]   __attribute__((unused)) = {'\033', '[', '2', '9', 'm'};
-static char STATIC_effect_inverse_reverse[]    __attribute__((unused)) = {'\033', '[', '7', 'm'};
-static char STATIC_effect_no_inverse_reverse[] __attribute__((unused)) = {'\033', '[', '2', '7', 'm'};
-static char STATIC_effect_italic[]             __attribute__((unused)) = {'\033', '[', '3', 'm'};
-static char STATIC_effect_no_italic[]          __attribute__((unused)) = {'\033', '[', '2', '3', 'm'};
-
 static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
 
 struct player {

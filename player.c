@@ -14,6 +14,7 @@
 #include "map.h"
 #include "hero.h"
 #include "util.h"
+#include "color.h"
 
 /////////////
 ///////////// private
@@ -66,11 +67,13 @@ void player_init(struct player *player, int team, int is_bot, int connfd, struct
 
     player->team = team;
     if(player->team){
-        player->team_color     = STATIC_effect_no_strikethrough;
-        player->team_color_len = sizeof(STATIC_effect_no_strikethrough);
+        static char team_color[] = EFFECT_NO_STRIKETHROUGH;
+        player->team_color       = team_color;
+        player->team_color_len   = sizeof(team_color);
     }else{
-        player->team_color     = STATIC_effect_strikethrough;
-        player->team_color_len = sizeof(STATIC_effect_strikethrough);
+        static char team_color[] = EFFECT_STRIKETHROUGH;
+        player->team_color       = team_color;
+        player->team_color_len   = sizeof(team_color);
     }
 
     player->bot = is_bot;
@@ -460,11 +463,13 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
         player->level += 1;
         
         if((player->level & 1) == (LEVEL_ON_SPAWN & 1)){
-            player->level_color = STATIC_effect_no_inverse_reverse;
-            player->level_color_len = sizeof(STATIC_effect_no_inverse_reverse);
+            static char level_color[] = EFFECT_NO_INVERSE_REVERSE;
+            player->level_color       = level_color;
+            player->level_color_len   = sizeof(level_color);
         }else{
-            player->level_color = STATIC_effect_inverse_reverse;
-            player->level_color_len = sizeof(STATIC_effect_inverse_reverse);
+            static char level_color[] = EFFECT_INVERSE_REVERSE;
+            player->level_color       = level_color;
+            player->level_color_len   = sizeof(level_color);
         }
 
         int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
@@ -500,13 +505,15 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         if(player_receiver == player){
             // indicate that this is the player itself
-            screen_print_single(player_receiver->connfd, STATIC_effect_italic, sizeof(STATIC_effect_italic));
+            static char player_is_self_color[] = EFFECT_ITALIC;
+            screen_print_single(player_receiver->connfd, player_is_self_color, sizeof(player_is_self_color));
         }
 
         hero_draw_single(&player->hero, player_receiver->connfd);
 
         if(player_receiver == player){
-            screen_print_single(player_receiver->connfd, STATIC_effect_no_italic, sizeof(STATIC_effect_no_italic));
+            static char player_is_self_color_off[] = EFFECT_NO_ITALIC;
+            screen_print_single(player_receiver->connfd, player_is_self_color_off, sizeof(player_is_self_color_off));
         }
     }
 }
