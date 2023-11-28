@@ -41,6 +41,8 @@ static char STATIC_effect_strikethrough[]      __attribute__((unused)) = {'\033'
 static char STATIC_effect_no_strikethrough[]   __attribute__((unused)) = {'\033', '[', '2', '9', 'm'};
 static char STATIC_effect_inverse_reverse[]    __attribute__((unused)) = {'\033', '[', '7', 'm'};
 static char STATIC_effect_no_inverse_reverse[] __attribute__((unused)) = {'\033', '[', '2', '7', 'm'};
+static char STATIC_effect_italic[]             __attribute__((unused)) = {'\033', '[', '3', 'm'};
+static char STATIC_effect_no_italic[]          __attribute__((unused)) = {'\033', '[', '2', '3', 'm'};
 
 static char STATIC_map_tile_empty[] __attribute__((unused)) = {'\033', '[', '0', 'm', ' '};
 

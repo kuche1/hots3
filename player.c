@@ -447,7 +447,16 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
 
+        if(player_receiver == player){
+            // indicate that this is the player itself
+            screen_print_single(player_receiver->connfd, STATIC_effect_italic, sizeof(STATIC_effect_italic));
+        }
+
         hero_draw_single(&player->hero, player_receiver->connfd);
+
+        if(player_receiver == player){
+            screen_print_single(player_receiver->connfd, STATIC_effect_no_italic, sizeof(STATIC_effect_no_italic));
+        }
     }
 }
 
