@@ -2,10 +2,6 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-// debug
-
-// #define DEBUG
-
 // networking
 
 #define PORT 6969
@@ -15,6 +11,12 @@
 
 #define PLAYERS_REQUIRED 1
 #define NUMBER_OF_BOT_PLAYERS 0
+
+#define LEVEL_ON_SPAWN 5
+#define XP_ON_SPAWN 1
+#define XP_FOR_LEVEL_UP 8
+
+// bot parameters
 
 // reactions
 #define BOT_REACTION_TIME_MS 400

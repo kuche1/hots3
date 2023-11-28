@@ -58,8 +58,8 @@ struct player {
     int y;
     int hp;
     int alive;
-
-    // TODO add levels
+    int level;
+    int xp;
 
     // other
     int team;
@@ -86,8 +86,10 @@ void player_select_hero(struct player *player);
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]);
 void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]);
 void player_heal_ability(struct player *player, struct player players[PLAYERS_MAX]);
+// deal with status
 void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]);
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]);
+void player_gain_xp(struct player *player, int xp);
 // drawing
 void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
 // bot stuff

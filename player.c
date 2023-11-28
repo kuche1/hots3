@@ -35,12 +35,14 @@ void player_init_mem(struct player *player){
     player->team_color = "";
     player->team_color_len = 0;
 
+    hero_init_mem(&player->hero);
+
     player->x = -1;
     player->y = -1;
     player->hp = 0;
     player->alive = 0;
-
-    hero_init_mem(&player->hero);
+    player->level = 0;
+    player->xp = 0;
 
     player->team = 0;
 
@@ -135,6 +137,13 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
+
+    player->level = 0;
+    player->xp = 0;
+    for(int i=0; i<LEVEL_ON_SPAWN; ++i){
+        player_gain_xp(player, XP_FOR_LEVEL_UP);
+    }
+    player_gain_xp(player, XP_ON_SPAWN);
 
     // set spawn
 
@@ -261,7 +270,8 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_MA
     }
 
     if(closest_distance <= player->hero.basic_attack_distance){
-        player_receive_damage(closest_player, player->hero.basic_attack_damage, players);
+        int damage = player->hero.basic_attack_damage * player->level;
+        player_receive_damage(closest_player, damage, players);
     }
 }
 
@@ -298,28 +308,53 @@ void player_heal_ability(struct player *player, struct player players[PLAYERS_MA
     }
 
     if(heal_target != NULL){
-        player_receive_damage(heal_target, -player->hero.heal_ability_amount, players);
+        int heal = player->hero.heal_ability_amount * player->level;
+        player_receive_damage(heal_target, -heal, players);
     }
 }
 
-void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]){
+/////////////
+///////////// deal with status
+/////////////
 
-#ifdef DEBUG
-    amount *= 30;
-#endif
+void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]){
 
     if(!player->alive){
         return;
     }
 
+    if(amount > 0){
+        // if being damaged
+        amount /= player->level;
+    }
+
     player->hp -= amount;
 
     if(player->hp <= 0){
+
+        // reward opposite team
+
+        int team = !player->team;
+        int xp = player->xp;
+
+        for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+            struct player *team_member = &players[player_idx];
+            if(team_member->team != team){
+                continue;
+            }
+            player_gain_xp(team_member, xp);
+        }
+
+        // deal with dying player
+
         player->alive = 0;
         screen_cur_set(players, player->y, player->x);
         net_send(players, STATIC_map_tile_empty, sizeof(STATIC_map_tile_empty));
         player->x = -1;
         player->y = -1;
+    
+        // exit
+
         return;
     }
 
@@ -364,6 +399,15 @@ void player_recalculate_health_state(struct player *player, struct player player
 
     if(old_color != player->health_color){
         player_draw(player, players);
+    }
+}
+
+void player_gain_xp(struct player *player, int xp){
+    player->xp += xp;
+    if(player->xp >= XP_FOR_LEVEL_UP){
+        player->xp -= XP_FOR_LEVEL_UP;
+        player->level += 1;
+        // TODO add indication that player has leveled up
     }
 }
 

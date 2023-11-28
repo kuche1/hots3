@@ -103,10 +103,10 @@ void hero_draw_single(struct hero *hero, int connfd){
 void hero_init_regular_guy(struct hero *hero){
     hero->model = 'B';
 
-    hero->hp_max = 280;
+    hero->hp_max = 560;
 
     hero->basic_attack_distance = 1;
-    hero->basic_attack_damage = 3;
+    hero->basic_attack_damage = 6;
 
     hero->legpower = 1;
     hero->weight   = 1;
@@ -118,7 +118,7 @@ void hero_init_regular_guy(struct hero *hero){
 void hero_init_varian(struct hero *hero){
     hero->model = 'V';
 
-    hero->basic_attack_damage += 1;
+    hero->basic_attack_damage = (hero->basic_attack_damage * 14) / 10;
 
     hero->legpower = 6;
     hero->weight   = 7;
@@ -145,7 +145,7 @@ void hero_init_lili(struct hero *hero){
     hero->model = 'l';
 
     hero->hp_max = (hero->hp_max * 8) / 10;
-    hero->basic_attack_damage -= 1;
+    hero->basic_attack_damage = (hero->basic_attack_damage * 4) / 10;
 
     hero->heal_ability_range = 2;
     hero->heal_ability_amount = 1;
