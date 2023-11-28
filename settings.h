@@ -4,7 +4,7 @@
 
 // networking
 
-#define PORT 6969
+#define PORT 32793
 #define LISTEN 5
 
 // game parameters
