@@ -44,8 +44,10 @@ void player_init_mem(struct player *player){
 
     player->team = 0;
 
-    player->bot = 1;
+    player->bot = BOT;
     player->bot_action_delay_ms = 1e3;
+    player->bot_willpower = 1;
+    player->bot_schizophrenia = 1;
 
     player->bot_last_action_at_ms = 0;
 }
@@ -101,8 +103,26 @@ static void player_init_bot(struct player *player){
     player->connfd = -1;
 
     assert(player->bot);
-    player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
+
     player->bot_last_action_at_ms = 0;
+
+    if(player->bot == BOT){
+
+        player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
+
+        player->bot_willpower = BOT_WILLPOWER;
+        player->bot_schizophrenia = BOT_SCHIZOPHRENIA;
+
+    }else if(player->bot == MINION){
+
+        player->bot_action_delay_ms = MINION_REACTION_TIME_MS;
+
+        player->bot_willpower = MINION_WILLPOWER;
+        player->bot_schizophrenia = MINION_SCHIZOPHRENIA;
+
+    }else{
+        assert(0);
+    }
 }
 
 void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
@@ -112,17 +132,25 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     // set spawn
 
+    int spawn_area_y = SPAWN_AREA_Y;
+    int spawn_area_x = SPAWN_AREA_X;
+
+    if(player->bot == MINION){
+        spawn_area_y = MINION_SPAWN_AREA_Y;
+        spawn_area_x = MINION_SPAWN_AREA_X;
+    }
+
     for(int loop_count=0; loop_count<50; loop_count++){
 
         int pos_y;
         int pos_x;
 
         if(player->team){
-            pos_y = rand() % SPAWN_AREA_Y;
-            pos_x = rand() % SPAWN_AREA_X;
+            pos_y = rand() % spawn_area_y;
+            pos_x = rand() % spawn_area_x;
         }else{
-            pos_y = rand() % SPAWN_AREA_Y + (MAP_Y - SPAWN_AREA_Y);
-            pos_x = rand() % SPAWN_AREA_X + (MAP_X - SPAWN_AREA_X);
+            pos_y = rand() % spawn_area_y + (MAP_Y - spawn_area_y);
+            pos_x = rand() % spawn_area_x + (MAP_X - spawn_area_x);
         }
 
         if(map_is_tile_empty(players, pos_y, pos_x)){
@@ -384,7 +412,7 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
     // your schizophrenia is trolling you
 
-    if(!(rand() % BOT_SCHIZOPHRENIA < BOT_WILLPOWER)){
+    if(!(rand() % player->bot_schizophrenia < player->bot_willpower)){
         char directions[] = {KEY_MOVE_DOWN, KEY_MOVE_UP, KEY_MOVE_LEFT, KEY_MOVE_RIGHT};
         char direction = directions[rand() % sizeof(directions)];
         *action = direction;

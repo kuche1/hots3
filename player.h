@@ -65,8 +65,10 @@ struct player {
     int team;
 
     // bot data
-    int bot; // 0=human 1=bot 2=minion
+    int bot; // HUMAN, BOT or MINION
     long long bot_action_delay_ms;
+    int bot_willpower;
+    int bot_schizophrenia;
 
     // bot variable data
     long long bot_last_action_at_ms;

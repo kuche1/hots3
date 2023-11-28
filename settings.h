@@ -14,12 +14,16 @@
 // game parameters
 
 #define PLAYERS_REQUIRED 6
-
 #define NUMBER_OF_BOT_PLAYERS 5
-#define BOT_REACTION_TIME_MS 400 // 1e3 is 1 second
+
+// reactions
+#define BOT_REACTION_TIME_MS 400
+#define MINION_REACTION_TIME_MS 800
 // b-line or random movement
-#define BOT_WILLPOWER     1
+#define BOT_WILLPOWER     4
 #define BOT_SCHIZOPHRENIA 5
+#define MINION_WILLPOWER     1
+#define MINION_SCHIZOPHRENIA 1
 // human wave or encirclement
 #define BOT_HUMAN_WAVE_NUMERATOR  2
 #define BOT_HUMAN_WAVE_DENOMINTOR 4
@@ -31,10 +35,12 @@
 
 #define SPAWN_AREA_Y 8
 #define SPAWN_AREA_X 16
+#define MINION_SPAWN_AREA_Y 2
+#define MINION_SPAWN_AREA_X 4
 
 #define PLAYERS_MAX 20 // includes minions
 
-#define MINION_SPAWN_INTERVAL_MS 2700 // 1e3 is 1 second
+#define MINION_SPAWN_INTERVAL_MS 2700
 
 // keybinds
 
