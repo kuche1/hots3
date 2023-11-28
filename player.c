@@ -67,7 +67,7 @@ void player_init(struct player *player, int team, int is_bot, int connfd, struct
     }
 
     player->bot = is_bot;
-    if(is_bot){
+    if(player->bot){
         player_init_bot(player);
     }
 }
@@ -100,7 +100,7 @@ void player_init_telnet(struct player *player){
 static void player_init_bot(struct player *player){
     player->connfd = -1;
 
-    player->bot = 1;
+    assert(player->bot);
     player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
     player->bot_last_action_at_ms = 0;
 }
@@ -135,12 +135,8 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
 }
 
-void player_select_hero(struct player *player, int is_minion){
-    if(is_minion){
-        hero_init_minion(&player->hero);
-    }else{
-        hero_select_player_hero(&player->hero, player->connfd, player->bot);
-    }
+void player_select_hero(struct player *player){
+    hero_select_player_hero(&player->hero, player->connfd, player->bot);
 }
 
 /////////////

@@ -36,7 +36,7 @@ int main(void){
     assert(PLAYERS_REQUIRED <= PLAYERS_MAX);
     while(players_len < PLAYERS_REQUIRED){
 
-        int is_bot = 0;
+        int is_bot = HUMAN;
         int connfd = -1;
         struct sockaddr_in sock;
         unsigned int sock_len = sizeof(sock);
@@ -44,7 +44,7 @@ int main(void){
         printf("established connections %d of %d\n", players_len, PLAYERS_REQUIRED);
     
         if(players_len < NUMBER_OF_BOT_PLAYERS){
-            is_bot = 1;
+            is_bot = BOT;
             printf("bot connected\n");
         }else{
             connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
@@ -66,7 +66,7 @@ int main(void){
 
     for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
         struct player *player = &players[player_idx];
-        player_select_hero(player, 0);
+        player_select_hero(player);
     }
 
     // change to draw mode
@@ -150,14 +150,14 @@ int main(void){
 
             if(dead_bot_idx != -1){
                 int team = rand() % 2;
-                int is_bot = 1;
+                int is_bot = MINION;
                 int connfd = -1;
                 struct sockaddr_in sock = {0};
                 int sock_len = 0;
 
                 struct player *minion = &players[dead_bot_idx];
                 player_init(minion, team, is_bot, connfd, sock, sock_len);
-                player_select_hero(minion, 1);
+                player_select_hero(minion);
                 player_spawn(minion, players);
                 player_draw(minion, players);
             }

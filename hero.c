@@ -35,9 +35,14 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         hero_init_lili,
     };
 
-    if(is_bot){
+    if(is_bot == BOT){
         void (*choice)(struct hero *) = choices_fnc[rand() % NUMBER_OF_HEROES];
         choice(hero);
+        return;
+    }
+
+    if(is_bot == MINION){
+        hero_init_minion(hero);
         return;
     }
 

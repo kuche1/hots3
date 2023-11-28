@@ -9,6 +9,10 @@
 #include "errors.h"
 #include "hero.h"
 
+#define HUMAN 0
+#define BOT 1
+#define MINION 2
+
 // https://ss64.com/nt/syntax-ansi.html
 // https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 // TODO? use rgb instead of this for higher resolution
@@ -61,7 +65,7 @@ struct player {
     int team;
 
     // bot data
-    int bot;
+    int bot; // 0=human 1=bot 2=minion
     long long bot_action_delay_ms;
 
     // bot variable data
@@ -73,7 +77,7 @@ void player_init_mem(struct player *player);
 void player_init(struct player *player, int team, int is_bot, int connfd, struct sockaddr_in sock, int sock_len);
 void player_init_telnet(struct player *player);
 void player_spawn(struct player *player, struct player players[PLAYERS_MAX]);
-void player_select_hero(struct player *player, int is_minion);
+void player_select_hero(struct player *player);
 // actions
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]);
 void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]);
