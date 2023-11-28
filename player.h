@@ -69,6 +69,8 @@ struct player {
     long long bot_action_delay_ms;
     int bot_willpower;
     int bot_schizophrenia;
+    int bot_human_wave_numerator;
+    int bot_human_wave_denomintor;
 
     // bot variable data
     long long bot_last_action_at_ms;

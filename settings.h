@@ -27,6 +27,8 @@
 // human wave or encirclement
 #define BOT_HUMAN_WAVE_NUMERATOR  2
 #define BOT_HUMAN_WAVE_DENOMINTOR 4
+#define MINION_HUMAN_WAVE_NUMERATOR  1
+#define MINION_HUMAN_WAVE_DENOMINTOR 1
 
 // map parameters
 

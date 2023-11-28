@@ -113,12 +113,18 @@ static void player_init_bot(struct player *player){
         player->bot_willpower = BOT_WILLPOWER;
         player->bot_schizophrenia = BOT_SCHIZOPHRENIA;
 
+        player->bot_human_wave_numerator = BOT_HUMAN_WAVE_NUMERATOR;
+        player->bot_human_wave_denomintor = BOT_HUMAN_WAVE_DENOMINTOR;
+
     }else if(player->bot == MINION){
 
         player->bot_action_delay_ms = MINION_REACTION_TIME_MS;
 
         player->bot_willpower = MINION_WILLPOWER;
         player->bot_schizophrenia = MINION_SCHIZOPHRENIA;
+
+        player->bot_human_wave_numerator = MINION_HUMAN_WAVE_NUMERATOR;
+        player->bot_human_wave_denomintor = MINION_HUMAN_WAVE_DENOMINTOR;
 
     }else{
         assert(0);
@@ -497,7 +503,7 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
         }
 
-        if(rand() % BOT_HUMAN_WAVE_DENOMINTOR < BOT_HUMAN_WAVE_NUMERATOR){
+        if(rand() % player->bot_human_wave_denomintor < player->bot_human_wave_numerator){
             *action = human_wave_action;
         }else{
             *action = encirclement_action;
