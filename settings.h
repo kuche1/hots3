@@ -19,6 +19,7 @@
 #define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 3
 
 #define RESPAWN_TIME_MS 20e3
+#define MINION_SPAWN_INTERVAL_MS 1900
 
 // bot parameters
 
@@ -47,8 +48,6 @@
 #define MINION_SPAWN_AREA_X 4
 
 #define PLAYERS_MAX 26 // includes minions
-
-#define MINION_SPAWN_INTERVAL_MS 2400
 
 // keybinds
 

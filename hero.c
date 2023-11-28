@@ -108,11 +108,11 @@ void hero_init_regular_guy(struct hero *hero){
     hero->basic_attack_distance = 1;
     hero->basic_attack_damage = 6;
 
-    hero->legpower = 1;
-    hero->weight   = 1;
-
     hero->heal_ability_range = 0;
     hero->heal_ability_amount = 0;
+
+    hero->legpower = 1;
+    hero->weight   = 1;
 }
 
 void hero_init_varian(struct hero *hero){
@@ -142,13 +142,16 @@ void hero_init_stiches(struct hero *hero){
 }
 
 void hero_init_lili(struct hero *hero){
+    int base_attack = hero->basic_attack_damage;
+
     hero->model = 'l';
 
     hero->hp_max = (hero->hp_max * 8) / 10;
-    hero->basic_attack_damage = (hero->basic_attack_damage * 4) / 10;
+
+    hero->basic_attack_damage = (base_attack * 4) / 10;
 
     hero->heal_ability_range = 2;
-    hero->heal_ability_amount = 1;
+    hero->heal_ability_amount = (base_attack * 6) / 10;
 }
 
 /////////////
@@ -162,6 +165,6 @@ void hero_init_minion(struct hero *hero){
 
     hero->basic_attack_damage = 1;
 
-    hero->legpower = 1;
-    hero->weight   = 2;
+    hero->legpower =  6;
+    hero->weight   = 10;
 }
