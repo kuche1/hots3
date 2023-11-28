@@ -7,7 +7,7 @@
 #include "screen.h"
 #include "networking.h"
 
-#define NUMBER_OF_HEROES 5
+#define NUMBER_OF_HEROES 6
 
 /////////////
 ///////////// initialisations
@@ -24,7 +24,8 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         "varian\n\tslower\n\thigher dmg\n",
         "valla\n\tlower hp\n\thigher range\n",
         "stiches\n\thigher hp\n\tslower\n",
-        "lili\n\tlower hp\n\tlower damage\n\tcan heal\n"
+        "lili\n\tlower hp\n\tlower damage\n\tcan heal\n",
+        "minion\n\tpiece of shit stats\n\tgood for mindgames\n",
     };
 
     void (*choices_fnc[NUMBER_OF_HEROES])(struct hero *) = {
@@ -33,6 +34,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         hero_init_valla,
         hero_init_stiches,
         hero_init_lili,
+        hero_init_minion,
     };
 
     if(is_bot == BOT){
