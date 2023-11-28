@@ -13,8 +13,8 @@
 
 // game parameters
 
-#define PLAYERS_REQUIRED 6
-#define NUMBER_OF_BOT_PLAYERS 5
+#define PLAYERS_REQUIRED 1
+#define NUMBER_OF_BOT_PLAYERS 0
 
 // reactions
 #define BOT_REACTION_TIME_MS 400
@@ -27,8 +27,8 @@
 // human wave or encirclement
 #define BOT_HUMAN_WAVE_NUMERATOR  2
 #define BOT_HUMAN_WAVE_DENOMINTOR 4
-#define MINION_HUMAN_WAVE_NUMERATOR  1
-#define MINION_HUMAN_WAVE_DENOMINTOR 1
+#define MINION_HUMAN_WAVE_NUMERATOR  5
+#define MINION_HUMAN_WAVE_DENOMINTOR 6
 
 // map parameters
 
