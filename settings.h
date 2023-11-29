@@ -56,7 +56,7 @@
 #define MINION_SPAWN_AREA_Y 2
 #define MINION_SPAWN_AREA_X 4
 
-#define TOWERS_PER_TEAM 1
+#define TOWERS_PER_TEAM 1 // TODO currently 0 and 1 are the only valid values
 #define TOWER_SPAWN_Y 3
 #define TOWER_SPAWN_X 6
 
