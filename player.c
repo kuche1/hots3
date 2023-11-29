@@ -49,8 +49,8 @@ void player_init_mem(struct player *player){
     player->died_at_ms = 0;
 
     player->team = 0;
+    player->et = MINION;
 
-    player->bot = MINION;
     player->bot_action_delay_ms = 1e3;
     player->bot_willpower = 1;
     player->bot_schizophrenia = 1;
@@ -58,7 +58,7 @@ void player_init_mem(struct player *player){
     player->bot_last_action_at_ms = 0;
 }
 
-void player_init(struct player *player, int team, int is_bot, int connfd, struct sockaddr_in sock, int sock_len){
+void player_init(struct player *player, int team, int entity_type, int connfd, struct sockaddr_in sock, int sock_len){
     player_init_mem(player);
 
     player->connfd = connfd;
@@ -76,14 +76,14 @@ void player_init(struct player *player, int team, int is_bot, int connfd, struct
         player->team_color_len   = sizeof(team_color);
     }
 
-    player->bot = is_bot;
-    if(player->bot){
+    player->et = entity_type;
+    if(player->et){
         player_init_bot(player);
     }
 }
 
 void player_init_telnet(struct player *player){
-    if(player->bot){
+    if(player->et){
         return;
     }
 
@@ -110,11 +110,11 @@ void player_init_telnet(struct player *player){
 static void player_init_bot(struct player *player){
     player->connfd = -1;
 
-    assert(player->bot);
+    assert(player->et);
 
     player->bot_last_action_at_ms = 0;
 
-    if(player->bot == BOT){
+    if(player->et == BOT){
 
         player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
 
@@ -124,7 +124,7 @@ static void player_init_bot(struct player *player){
         player->bot_human_wave_numerator = BOT_HUMAN_WAVE_NUMERATOR;
         player->bot_human_wave_denomintor = BOT_HUMAN_WAVE_DENOMINTOR;
 
-    }else if(player->bot == MINION){
+    }else if(player->et == MINION){
 
         player->bot_action_delay_ms = MINION_REACTION_TIME_MS;
 
@@ -148,7 +148,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     int spawn_area_y = SPAWN_AREA_Y;
     int spawn_area_x = SPAWN_AREA_X;
 
-    if(player->bot == MINION){
+    if(player->et == MINION){
         spawn_area_y = MINION_SPAWN_AREA_Y;
         spawn_area_x = MINION_SPAWN_AREA_X;
     }
@@ -197,7 +197,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 }
 
 void player_select_hero(struct player *player){
-    hero_select_player_hero(&player->hero, player->connfd, player->bot);
+    hero_select_player_hero(&player->hero, player->connfd, player->et);
 }
 
 /////////////

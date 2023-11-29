@@ -135,7 +135,7 @@ int main(void){
             
             char action;
 
-            if(player->bot){
+            if(player->et){
                 int skip = player_bot_select_action(player, players, &action); // TODO this can be replaced with `receive_action` or something like that
                 if(skip){
                     continue;
@@ -157,7 +157,7 @@ int main(void){
             long long now = get_time_ms();
             for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
                 struct player *player = &players[player_idx];
-                if((player->bot == HUMAN) || (player->bot == BOT)){
+                if((player->et == HUMAN) || (player->et == BOT)){
                     if(!player->alive){
                         if(player->died_at_ms + RESPAWN_TIME_MS <= now){
                             player_spawn(player, players);

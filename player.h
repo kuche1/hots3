@@ -47,9 +47,9 @@ struct player {
 
     // other
     int team;
+    int et; // entity type
 
     // bot data
-    int bot; // HUMAN, BOT or MINION
     long long bot_action_delay_ms;
     int bot_willpower;
     int bot_schizophrenia;
@@ -62,7 +62,7 @@ struct player {
 
 // initialising
 void player_init_mem(struct player *player);
-void player_init(struct player *player, int team, int is_bot, int connfd, struct sockaddr_in sock, int sock_len);
+void player_init(struct player *player, int team, int entity_type, int connfd, struct sockaddr_in sock, int sock_len);
 void player_init_telnet(struct player *player);
 void player_spawn(struct player *player, struct player players[PLAYERS_MAX]);
 void player_select_hero(struct player *player);

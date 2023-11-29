@@ -15,7 +15,7 @@ struct player * generate_new_entity(struct player players[PLAYERS_MAX]){
 
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
-        if((!player->alive) && (player->bot == MINION)){
+        if((!player->alive) && (player->et == MINION)){
             return player;
         }
     }

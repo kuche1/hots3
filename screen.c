@@ -43,7 +43,7 @@ void screen_print_single(int connfd, char *msg, int msg_len){
 void screen_print(struct player players[PLAYERS_MAX], char *msg, int msg_len){
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
-        if(player->bot){
+        if(player->et){
             continue;
         }
         screen_print_single(player->connfd, msg, msg_len);
