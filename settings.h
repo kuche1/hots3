@@ -60,7 +60,7 @@
 #define TOWER_SPAWN_Y 3
 #define TOWER_SPAWN_X 6
 
-// keybinds
+// keybinds // TODO? export to a different file and make into enum
 
 // keybind movement
 #define KEY_MOVE_LEFT 'a'
