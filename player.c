@@ -487,7 +487,7 @@ void player_recalculate_health_state(struct player *player, struct player player
         health_amount_idx = 0;
     }
 
-    assert((long unsigned int)health_amount_idx < (sizeof(health_state_palette) / sizeof(*health_state_palette)));
+    assert((long unsigned int)health_amount_idx < LENOF(health_state_palette));
 
     player->health_color = health_state_palette[health_amount_idx];
     player->health_color_len = strlen(player->health_color);
