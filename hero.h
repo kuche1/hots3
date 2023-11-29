@@ -19,7 +19,7 @@ struct hero{
     int legpower;
     int weight;
 
-    // healing ability
+    // healing ability // TODO? make separate ability for healing towers
     int heal_ability_range;
     int heal_ability_amount;
 };

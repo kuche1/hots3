@@ -14,6 +14,7 @@
 #define PLAYERS_REQUIRED 4
 #define NUMBER_OF_BOT_PLAYERS 3
 
+#define MINIONS_AND_TOWERS_CAN_LEVEL_UP 1
 #define LEVEL_ON_SPAWN 5
 #define XP_ON_SPAWN 1
 #define XP_FOR_LEVEL_UP 8
@@ -24,8 +25,6 @@
 #define MINION_SPAWN_INTERVAL_MS 2800
 
 #define HEALTH_STATES 8 // clarity vs bandwidth
-
-#define MINIONS_AND_TOWERS_CAN_LEVEL_UP 1
 
 // bot parameters
 
