@@ -23,6 +23,7 @@ struct player {
     int team_color_len;
     char *level_color;
     int level_color_len;
+    int christmas_lights_on;
 
     // selected character stats
     struct hero hero;
@@ -66,6 +67,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]);
 void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], int xp);
 // drawing
+void player_toggle_christmas_lights(struct player *player, struct player players[PLAYERS_MAX]);
 void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
 // bot stuff
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action);

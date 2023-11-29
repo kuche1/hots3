@@ -37,6 +37,7 @@ void player_init_mem(struct player *player){
     player->team_color_len = 0;
     player->level_color = "";
     player->level_color_len = 0;
+    player->christmas_lights_on = 0;
 
     hero_init_mem(&player->hero);
 
@@ -350,6 +351,7 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_MA
     if(closest_distance <= player->hero.basic_attack_distance){
         int damage = player->hero.basic_attack_damage * player->level;
         player_receive_damage(closest_player, damage, players);
+        player_toggle_christmas_lights(player, players); // indicate that an attack was performed
     }
 }
 
@@ -548,6 +550,11 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
 ///////////// drawing
 /////////////
 
+void player_toggle_christmas_lights(struct player *player, struct player players[PLAYERS_MAX]){
+    player->christmas_lights_on = !player->christmas_lights_on;
+    player_draw(player, players);
+}
+
 void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
     if(!player->alive){
         return;
@@ -568,6 +575,12 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
 
+        if(player->christmas_lights_on){
+            // sample effect used for various shits
+            static char christmas_lights_effect_on[] = EFFECT_ITALIC;
+            screen_print_single(player_receiver->connfd, christmas_lights_effect_on, sizeof(christmas_lights_effect_on));
+        }
+
         if(player_receiver == player){
             // indicate that this is the player itself
             static char player_is_self_color[] = EFFECT_BOLD;
@@ -579,6 +592,12 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         if(player_receiver == player){
             static char player_is_self_color_off[] = EFFECT_NO_ITALIC;
             screen_print_single(player_receiver->connfd, player_is_self_color_off, sizeof(player_is_self_color_off));
+        }
+
+        if(player->christmas_lights_on){
+            // sample effect used for various shits
+            static char christmas_lights_effect_off[] = EFFECT_NO_ITALIC;
+            screen_print_single(player_receiver->connfd, christmas_lights_effect_off, sizeof(christmas_lights_effect_off));
         }
     }
 }
