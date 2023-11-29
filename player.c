@@ -570,7 +570,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         if(player_receiver == player){
             // indicate that this is the player itself
-            static char player_is_self_color[] = EFFECT_ITALIC;
+            static char player_is_self_color[] = EFFECT_BOLD;
             screen_print_single(player_receiver->connfd, player_is_self_color, sizeof(player_is_self_color));
         }
 

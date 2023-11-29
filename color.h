@@ -23,16 +23,18 @@
 #define COL_BG_BLACK_DARK   {'\033', '[', '4', '0',      'm'}
 
 // effects
+#define EFFECT_BOLD               {'\033', '[',      '1', 'm'}
+#define EFFECT_NO_BOLD            {'\033', '[', '2', '1', 'm'}
+#define EFFECT_ITALIC             {'\033', '[',      '3', 'm'}
+#define EFFECT_NO_ITALIC          {'\033', '[', '2', '3', 'm'}
 #define EFFECT_UNDERLINE          {'\033', '[',      '4', 'm'}
 #define EFFECT_NO_UNDERLINE       {'\033', '[', '2', '4', 'm'}
 #define EFFECT_BLINK              {'\033', '[',      '5', 'm'}
 #define EFFECT_NO_BLINK           {'\033', '[', '2', '5', 'm'}
-#define EFFECT_STRIKETHROUGH      {'\033', '[',      '9', 'm'}
-#define EFFECT_NO_STRIKETHROUGH   {'\033', '[', '2', '9', 'm'}
 #define EFFECT_INVERSE_REVERSE    {'\033', '[',      '7', 'm'}
 #define EFFECT_NO_INVERSE_REVERSE {'\033', '[', '2', '7', 'm'}
-#define EFFECT_ITALIC             {'\033', '[',      '3', 'm'}
-#define EFFECT_NO_ITALIC          {'\033', '[', '2', '3', 'm'}
+#define EFFECT_STRIKETHROUGH      {'\033', '[',      '9', 'm'}
+#define EFFECT_NO_STRIKETHROUGH   {'\033', '[', '2', '9', 'm'}
 
 // this is not the most appropriate place of all but it will be fine for now
 #define RESET_WITH_SPACE {'\033', '[', '0', 'm', ' '}
