@@ -454,7 +454,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
 
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]){
 
-    static char health_state_palette[HEALTH_STATES+1][20]; // 0=healthy last=lowhp // 1 additional state for when full hp
+    static char health_state_palette[HEALTH_STATES][20]; // 0=healthy last=lowhp
     static int health_state_palette_generated = 0;
 
     if(!health_state_palette_generated){
@@ -466,7 +466,7 @@ void player_recalculate_health_state(struct player *player, struct player player
             color_idx++
         ){
 
-            int red = (color_idx * 255) / (LENOF(health_state_palette)-1);
+            int red = (255 * color_idx) / (LENOF(health_state_palette)-1);
             int green = 255 - red;
             int blue = 0;
 
@@ -481,16 +481,15 @@ void player_recalculate_health_state(struct player *player, struct player player
     char *old_color = player->health_color;
 
     int health_amount = ((HEALTH_STATES-1) * player->hp) / player->hero.hp_max;
-    int health_amount_idx = (HEALTH_STATES-1) - health_amount;
-    health_amount_idx += 1; // compensate for that 1 health states that only shows when full hp
+    int health_state_idx = (HEALTH_STATES-1) - health_amount;
 
-    if(health_amount_idx < 0){ // perhaps the hp is below 0
-        health_amount_idx = 0;
+    if(health_state_idx < 0){ // perhaps the hp is below 0
+        health_state_idx = 0;
     }
 
-    assert((long unsigned int)health_amount_idx < LENOF(health_state_palette));
+    assert((long unsigned int)health_state_idx < LENOF(health_state_palette));
 
-    player->health_color = health_state_palette[health_amount_idx];
+    player->health_color = health_state_palette[health_state_idx];
     player->health_color_len = strlen(player->health_color);
 
     if(old_color != player->health_color){
