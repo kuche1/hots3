@@ -621,9 +621,32 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
     // your schizophrenia is trolling you
 
     if(!(rand() % player->bot_schizophrenia < player->bot_willpower)){
-        char directions[] = {KEY_MOVE_DOWN, KEY_MOVE_UP, KEY_MOVE_LEFT, KEY_MOVE_RIGHT};
-        char direction = directions[rand() % sizeof(directions)];
-        *action = direction;
+        struct map_get_empty_tiles_near_return empty_tile = map_get_empty_tiles_near(players, player->y, player->x);
+
+        char choices[4];
+        int choices_len = 0;
+
+        if(empty_tile.left){
+            choices[choices_len++] = KEY_MOVE_LEFT;
+        }
+        if(empty_tile.right){
+            choices[choices_len++] = KEY_MOVE_RIGHT;
+        }
+        if(empty_tile.up){
+            choices[choices_len++] = KEY_MOVE_UP;
+        }
+        if(empty_tile.down){
+            choices[choices_len++] = KEY_MOVE_DOWN;
+        }
+
+        if(choices_len <= 0){
+            // no spece to move to
+            return 1;
+        }
+
+        int choice = rand() % choices_len;
+
+        *action = choices[choice];
         return 0;
     }
 
