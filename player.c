@@ -475,39 +475,6 @@ void player_recalculate_health_state(struct player *player, struct player player
 
     char *old_color = player->health_color;
 
-    // if      (player->hp >= player->hero.hp_max){
-    //     player->health_color     =        STATIC_col_green_dark;
-    //     player->health_color_len = sizeof(STATIC_col_green_dark);
-
-    // }else if(player->hp >= player->hero.hp_max * 6 / 7){
-    //     player->health_color     =        STATIC_col_green_bright;
-    //     player->health_color_len = sizeof(STATIC_col_green_bright);
-
-    // }else if(player->hp >= player->hero.hp_max * 5 / 7){
-    //     player->health_color     =        STATIC_col_yellow_dark;
-    //     player->health_color_len = sizeof(STATIC_col_yellow_dark);
-
-    // }else if(player->hp >= player->hero.hp_max * 4 / 7){
-    //     player->health_color     =        STATIC_col_yellow_bright;
-    //     player->health_color_len = sizeof(STATIC_col_yellow_bright);
-
-    // }else if(player->hp >= player->hero.hp_max * 3 / 7){
-    //     player->health_color     =        STATIC_col_magenta_dark;
-    //     player->health_color_len = sizeof(STATIC_col_magenta_dark);
-
-    // }else if(player->hp >= player->hero.hp_max * 2 / 7){
-    //     player->health_color     =        STATIC_col_magenta_bright;
-    //     player->health_color_len = sizeof(STATIC_col_magenta_bright);
-
-    // }else if(player->hp >= player->hero.hp_max * 1 / 7){
-    //     player->health_color     =        STATIC_col_red_dark;
-    //     player->health_color_len = sizeof(STATIC_col_red_dark);
-
-    // }else{
-    //     player->health_color     =        STATIC_col_red_bright;
-    //     player->health_color_len = sizeof(STATIC_col_red_bright);
-    // }
-
     int health_amount = ((HEALTH_STATES-1) * player->hp) / player->hero.hp_max;
     int health_amount_idx = (HEALTH_STATES-1) - health_amount;
 
