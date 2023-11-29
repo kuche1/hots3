@@ -24,7 +24,7 @@ int main(void){
 
     // lobby
 
-    struct player players[PLAYERS_MAX];
+    struct player players[PLAYERS_MAX]; // TODO? rename to entities
     int players_len = 0;
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
@@ -102,6 +102,24 @@ int main(void){
         player_spawn(player, players);
     }
 
+    // spawn towers // TODO? add animation for when the user attacks?
+
+    for(int team=0; team<=1; ++team){
+        for(int tower_idx=0; tower_idx<TOWERS_PER_TEAM; ++tower_idx){
+            struct player *tower = generate_new_entity(players);
+            assert(tower); // entity limit reached
+
+            int is_bot = MINION; // TODO perhaps make this into an enum and add TOWER type
+            int connfd = -1;
+            struct sockaddr_in sock = {0};
+            int sock_len = 0;
+
+            player_init(tower, team, is_bot, connfd, sock, sock_len);
+            hero_init_tower(&tower->hero); // TODO kinda sucks
+            player_spawn(tower, players);
+        }
+    }
+
     // game loop
 
     int winning_team = -1;
@@ -157,33 +175,22 @@ int main(void){
             if(now - MINION_SPAWN_INTERVAL_MS > last_minion_spawned_at){
                 last_minion_spawned_at = now;
 
-                // see if there is room to spawn
+                // spawn if there is enough room
 
-                int dead_bot_idx = -1;
+                struct player *minion = generate_new_entity(players);
 
-                for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
-                    struct player *player = &players[player_idx];
-                    if((!player->alive) && (player->bot == MINION)){
-                        dead_bot_idx = player_idx;
-                        break;
-                    }
-                }
-
-                // spawn
-
-                if(dead_bot_idx != -1){
+                if(!minion){
+                    printf("entiy limit reached, cannot spawn new minion\n");
+                }else{
                     int team = rand() % 2;
                     int is_bot = MINION;
                     int connfd = -1;
                     struct sockaddr_in sock = {0};
                     int sock_len = 0;
 
-                    struct player *minion = &players[dead_bot_idx];
                     player_init(minion, team, is_bot, connfd, sock, sock_len);
                     player_select_hero(minion);
                     player_spawn(minion, players);
-                }else{
-                    printf("entiy limit reached, cannot spawn new minion\n");
                 }
             }
 

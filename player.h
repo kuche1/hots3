@@ -13,6 +13,12 @@
 #define BOT 1
 #define MINION 2
 
+// enum entity_type{
+//     ET_HUMAN = 0,
+//     ET_BOT,
+//     ET_MINION,
+// };
+
 struct player {
     // networking
     int connfd;

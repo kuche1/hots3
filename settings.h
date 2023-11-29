@@ -49,7 +49,9 @@
 #define MINION_SPAWN_AREA_Y 2
 #define MINION_SPAWN_AREA_X 4
 
-#define PLAYERS_MAX 26 // includes minions
+#define PLAYERS_MAX 26 // includes minions and towers // TODO? rename to entities
+
+#define TOWERS_PER_TEAM 1
 
 // keybinds
 

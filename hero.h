@@ -8,7 +8,6 @@ struct hero{
 
     // hp
     int hp_max;
-    // TODO? health regen
 
     // basic attacks
     int basic_attack_distance;
@@ -34,7 +33,8 @@ void hero_init_varian(struct hero *hero);
 void hero_init_valla(struct hero *hero);
 void hero_init_stiches(struct hero *hero);
 void hero_init_lili(struct hero *hero);
-// minions
+// special
 void hero_init_minion(struct hero *hero);
+void hero_init_tower(struct hero *hero);
 
 #endif

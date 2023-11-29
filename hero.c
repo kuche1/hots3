@@ -155,7 +155,7 @@ void hero_init_lili(struct hero *hero){
 }
 
 /////////////
-///////////// minions
+///////////// special
 /////////////
 
 void hero_init_minion(struct hero *hero){
@@ -167,4 +167,19 @@ void hero_init_minion(struct hero *hero){
 
     hero->legpower =  6;
     hero->weight   = 10;
+}
+
+void hero_init_tower(struct hero *hero){
+    hero->model = 'T';
+
+    hero->hp_max = (hero->hp_max) * 10;
+
+    hero->basic_attack_distance = (hero->basic_attack_distance) * 5;
+    hero->basic_attack_damage = (hero->basic_attack_damage) * 2;
+
+    hero->heal_ability_range = 1;
+    hero->heal_ability_amount = 1;
+
+    hero->legpower = 0;
+    hero->weight = 1;
 }
