@@ -9,6 +9,8 @@
 
 // game parameters
 
+#define PLAYERS_MAX 30 // includes minions and towers // TODO? rename to entities
+
 #define PLAYERS_REQUIRED 4
 #define NUMBER_OF_BOT_PLAYERS 3
 
@@ -23,7 +25,7 @@
 
 #define HEALTH_STATES 8 // clarity vs bandwidth
 
-#define PLAYERS_MAX 28 // includes minions and towers // TODO? rename to entities
+#define MINIONS_AND_TOWERS_CAN_LEVEL_UP 1
 
 // bot parameters
 
@@ -34,9 +36,9 @@
 // b-line or random movement
 #define BOT_WILLPOWER     4
 #define BOT_SCHIZOPHRENIA 5
-#define MINION_WILLPOWER     1
-#define MINION_SCHIZOPHRENIA 1
-#define TOWER_WILLPOWER   1
+#define MINION_WILLPOWER      9
+#define MINION_SCHIZOPHRENIA 10
+#define TOWER_WILLPOWER     1
 #define TOWER_SCHIZOPHRENIA 1
 // human wave or encirclement
 #define BOT_HUMAN_WAVE_NUMERATOR  2

@@ -237,7 +237,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         }
 
         if(spawn_attempts_left <= 0){
-            exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
+            exit(ERR_COULD_NOT_FIND_SPAWN_SPOT);
         }
 
     }
@@ -418,7 +418,12 @@ void player_receive_damage(struct player *player, int amount, struct player play
         int team = !player->team;
         int xp = player->xp;
 
-        for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        int player_idx_max = PLAYERS_REQUIRED;
+        if(MINIONS_AND_TOWERS_CAN_LEVEL_UP){
+            player_idx_max = PLAYERS_MAX;
+        }
+
+        for(int player_idx=0; player_idx < player_idx_max; ++player_idx){
             struct player *team_member = &players[player_idx];
             if(team_member->team != team){
                 continue;
@@ -526,7 +531,7 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
     }
 
     player->xp += xp;
-    while(player->xp >= XP_FOR_LEVEL_UP){
+    while(player->xp >= XP_FOR_LEVEL_UP){ // TODO? make it so that you give at least 1 xp
         player->xp -= XP_FOR_LEVEL_UP;
         player->level += 1;
         
