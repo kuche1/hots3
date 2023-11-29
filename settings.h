@@ -57,8 +57,8 @@
 #define MINION_SPAWN_AREA_X 4
 
 #define TOWERS_PER_TEAM 1
-#define TOWER_SPAWN_Y 0
-#define TOWER_SPAWN_X 0
+#define TOWER_SPAWN_Y 3
+#define TOWER_SPAWN_X 6
 
 // keybinds
 

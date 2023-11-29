@@ -7,7 +7,7 @@
 #include "screen.h"
 #include "networking.h"
 
-#define NUMBER_OF_HEROES 6
+#define NUMBER_OF_HEROES 5
 
 /////////////
 ///////////// initialisations
@@ -25,7 +25,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         "valla\n\r\tlower hp\n\r\thigher range\n\r",
         "stiches\n\r\thigher hp\n\r\tslower\n\r",
         "lili\n\r\tlower hp\n\r\tlower damage\n\r\tcan heal\n\r",
-        "minion\n\r\tpiece of shit stats\n\r\tgood for mindgames\n\r",
+        // "minion\n\r\tpiece of shit stats\n\r\tgood for mindgames\n\r",
     };
 
     void (*choices_fnc[NUMBER_OF_HEROES])(struct hero *) = {
@@ -34,7 +34,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         hero_init_valla,
         hero_init_stiches,
         hero_init_lili,
-        hero_init_minion,
+        // hero_init_minion,
     };
 
     switch(entity_type){
