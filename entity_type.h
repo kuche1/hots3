@@ -6,6 +6,7 @@ enum entity_type{
     ET_HERO_HUMAN = 0,
     ET_HERO_BOT,
     ET_MINION,
+    ET_TOWER,
 };
 
 #endif

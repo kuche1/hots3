@@ -139,6 +139,18 @@ static void player_init_bot(struct player *player){
 
             break;
         
+        case ET_TOWER:
+
+            player->bot_action_delay_ms = TOWER_REACTION_TIME_MS;
+
+            player->bot_willpower = TOWER_WILLPOWER;
+            player->bot_schizophrenia = TOWER_SCHIZOPHRENIA;
+
+            player->bot_human_wave_numerator = TOWER_HUMAN_WAVE_NUMERATOR;
+            player->bot_human_wave_denomintor = TOWER_HUMAN_WAVE_DENOMINTOR;
+
+            break;
+        
         case ET_HERO_HUMAN:
 
             assert(0);
@@ -156,6 +168,8 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     int spawn_area_y = 0;
     int spawn_area_x = 0;
 
+    int is_tower = 0;
+
     switch(player->et){
         case ET_HERO_HUMAN:
         case ET_HERO_BOT:
@@ -167,34 +181,64 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
             spawn_area_y = MINION_SPAWN_AREA_Y;
             spawn_area_x = MINION_SPAWN_AREA_X;
             break;
+        
+        case ET_TOWER:
+            is_tower = 1;
+            spawn_area_y = TOWER_SPAWN_Y;
+            spawn_area_x = TOWER_SPAWN_X;
+            break;
     }
 
     // try to find a spot
 
-    int spawn_attempts_left = 50;
-
-    for(; spawn_attempts_left>0; spawn_attempts_left--){
+    if(is_tower){
 
         int pos_y;
         int pos_x;
 
         if(player->team){
-            pos_y = rand() % spawn_area_y;
-            pos_x = rand() % spawn_area_x;
+            pos_y = spawn_area_y;
+            pos_x = spawn_area_x;
         }else{
-            pos_y = rand() % spawn_area_y + (MAP_Y - spawn_area_y);
-            pos_x = rand() % spawn_area_x + (MAP_X - spawn_area_x);
+            pos_y = (MAP_Y-1) - spawn_area_y;
+            pos_x = (MAP_X-1) - spawn_area_x;
         }
 
-        if(map_is_tile_empty(players, pos_y, pos_x)){
-            player->y = pos_y;
-            player->x = pos_x;
-            break;
+        if(!map_is_tile_empty(players, pos_y, pos_x)){
+            exit(ERR_COULD_NOT_SPAWN_TOWER);
         }
-    }
 
-    if(spawn_attempts_left <= 0){
-        exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
+        player->y = pos_y;
+        player->x = pos_x;
+
+    }else{
+
+        int spawn_attempts_left = 50;
+
+        for(; spawn_attempts_left>0; spawn_attempts_left--){
+
+            int pos_y;
+            int pos_x;
+
+            if(player->team){
+                pos_y = rand() % spawn_area_y;
+                pos_x = rand() % spawn_area_x;
+            }else{
+                pos_y = rand() % spawn_area_y + (MAP_Y - spawn_area_y);
+                pos_x = rand() % spawn_area_x + (MAP_X - spawn_area_x);
+            }
+
+            if(map_is_tile_empty(players, pos_y, pos_x)){
+                player->y = pos_y;
+                player->x = pos_x;
+                break;
+            }
+        }
+
+        if(spawn_attempts_left <= 0){
+            exit(ERR_COULD_NOT_FIND_SPAWN_FOR_PLAYER);
+        }
+
     }
 
     // fix health

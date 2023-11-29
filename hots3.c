@@ -95,13 +95,6 @@ int main(void){
         screen_print(players, "|", 1);
     }
 
-    // spawn players
-
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
-        struct player *player = &players[player_idx];
-        player_spawn(player, players);
-    }
-
     // spawn towers // TODO? add animation for when the user attacks?
 
     for(int team=0; team<=1; ++team){
@@ -109,15 +102,22 @@ int main(void){
             struct player *tower = generate_new_entity(players);
             assert(tower); // entity limit reached
 
-            enum entity_type et = ET_MINION; // TODO perhaps make this into an enum and add TOWER type
+            enum entity_type et = ET_TOWER;
             int connfd = -1;
             struct sockaddr_in sock = {0};
             int sock_len = 0;
 
             player_init(tower, team, et, connfd, sock, sock_len);
-            hero_init_tower(&tower->hero); // TODO kinda sucks
+            player_select_hero(tower);
             player_spawn(tower, players);
         }
+    }
+
+    // spawn players
+
+    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+        struct player *player = &players[player_idx];
+        player_spawn(player, players);
     }
 
     // game loop
@@ -167,6 +167,7 @@ int main(void){
                         }
                         break;
                     case ET_MINION:
+                    case ET_TOWER:
                         break;
                 }
             }

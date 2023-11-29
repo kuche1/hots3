@@ -49,6 +49,10 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
             hero_init_minion(hero);
             return;
         
+        case ET_TOWER:
+            hero_init_tower(hero);
+            return;
+        
         case ET_HERO_HUMAN:
             break;
     }

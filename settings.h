@@ -21,23 +21,30 @@
 #define RESPAWN_TIME_MS 20e3
 #define MINION_SPAWN_INTERVAL_MS 2800
 
-#define HEALTH_STATES 8
+#define HEALTH_STATES 8 // clarity vs bandwidth
+
+#define PLAYERS_MAX 26 // includes minions and towers // TODO? rename to entities
 
 // bot parameters
 
 // reactions
 #define BOT_REACTION_TIME_MS 400
 #define MINION_REACTION_TIME_MS 800
+#define TOWER_REACTION_TIME_MS 1600
 // b-line or random movement
 #define BOT_WILLPOWER     4
 #define BOT_SCHIZOPHRENIA 5
 #define MINION_WILLPOWER     1
 #define MINION_SCHIZOPHRENIA 1
+#define TOWER_WILLPOWER   1
+#define TOWER_SCHIZOPHRENIA 1
 // human wave or encirclement
 #define BOT_HUMAN_WAVE_NUMERATOR  2
 #define BOT_HUMAN_WAVE_DENOMINTOR 4
 #define MINION_HUMAN_WAVE_NUMERATOR  5
 #define MINION_HUMAN_WAVE_DENOMINTOR 6
+#define TOWER_HUMAN_WAVE_NUMERATOR  1
+#define TOWER_HUMAN_WAVE_DENOMINTOR 1
 
 // map parameters
 
@@ -49,9 +56,9 @@
 #define MINION_SPAWN_AREA_Y 2
 #define MINION_SPAWN_AREA_X 4
 
-#define PLAYERS_MAX 26 // includes minions and towers // TODO? rename to entities
-
 #define TOWERS_PER_TEAM 1
+#define TOWER_SPAWN_Y 0
+#define TOWER_SPAWN_X 0
 
 // keybinds
 
