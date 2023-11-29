@@ -179,15 +179,17 @@ void hero_init_minion(struct hero *hero){
 }
 
 void hero_init_tower(struct hero *hero){
+    int base_attack = hero->basic_attack_damage;
+
     hero->model = 'T';
 
     hero->hp_max = (hero->hp_max) * 10;
 
-    hero->basic_attack_distance = (hero->basic_attack_distance) * 5;
-    hero->basic_attack_damage = (hero->basic_attack_damage) * 2;
+    hero->basic_attack_distance += 4;
+    hero->basic_attack_damage = (base_attack * 25) / 10;
 
     hero->heal_ability_range = 1;
-    hero->heal_ability_amount = 1;
+    hero->heal_ability_amount = base_attack / 3;
 
     hero->legpower = 0;
     hero->weight = 1;
