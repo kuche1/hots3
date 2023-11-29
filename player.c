@@ -462,7 +462,7 @@ void player_recalculate_health_state(struct player *player, struct player player
 
         for(
             int color_idx=0;
-            (long unsigned int)color_idx < sizeof(health_state_palette)/sizeof(*health_state_palette);
+            (long unsigned int)color_idx < LENOF(health_state_palette);
             color_idx++
         ){
 
