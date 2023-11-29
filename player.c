@@ -68,11 +68,11 @@ void player_init(struct player *player, int team, int entity_type, int connfd, s
 
     player->team = team;
     if(player->team){
-        static char team_color[] = EFFECT_NO_STRIKETHROUGH;
+        static char team_color[] = EFFECT_NO_INVERSE_REVERSE;
         player->team_color       = team_color;
         player->team_color_len   = sizeof(team_color);
     }else{
-        static char team_color[] = EFFECT_STRIKETHROUGH;
+        static char team_color[] = EFFECT_INVERSE_REVERSE;
         player->team_color       = team_color;
         player->team_color_len   = sizeof(team_color);
     }
@@ -536,11 +536,11 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
         player->level += 1;
         
         if((player->level & 1) == (LEVEL_ON_SPAWN & 1)){
-            static char level_color[] = EFFECT_NO_INVERSE_REVERSE;
+            static char level_color[] = EFFECT_NO_STRIKETHROUGH;
             player->level_color       = level_color;
             player->level_color_len   = sizeof(level_color);
         }else{
-            static char level_color[] = EFFECT_INVERSE_REVERSE;
+            static char level_color[] = EFFECT_STRIKETHROUGH;
             player->level_color       = level_color;
             player->level_color_len   = sizeof(level_color);
         }
