@@ -172,9 +172,9 @@ void hero_init_minion(struct hero *hero){
 
     hero->hp_max = hero->hp_max / 10;
 
-    hero->basic_attack_damage = 1;
+    hero->basic_attack_damage = hero->basic_attack_damage / 4;
 
-    hero->legpower =  6;
+    hero->legpower =  7;
     hero->weight   = 10;
 }
 

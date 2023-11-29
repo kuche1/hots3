@@ -9,17 +9,17 @@
 
 // game parameters
 
-#define PLAYERS_MAX 30 // includes minions and towers // TODO? rename to entities
+#define PLAYERS_MAX 32 // includes minions and towers // TODO? rename to entities
 
-#define PLAYERS_REQUIRED 4
-#define NUMBER_OF_BOT_PLAYERS 3
+#define PLAYERS_REQUIRED 6
+#define NUMBER_OF_BOT_PLAYERS 5
 
 #define MINIONS_AND_TOWERS_CAN_LEVEL_UP 1
 #define LEVEL_ON_SPAWN 5
 #define XP_ON_SPAWN 1
 #define XP_FOR_LEVEL_UP 8
 #define LEVEL_UP_HEALTH_RESTORED_NUMERATOR   1
-#define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 3
+#define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 4
 
 #define RESPAWN_TIME_MS 20e3
 #define MINION_SPAWN_INTERVAL_MS 2800
@@ -29,8 +29,8 @@
 // bot parameters
 
 // reactions
-#define BOT_REACTION_TIME_MS 400
-#define MINION_REACTION_TIME_MS 800
+#define BOT_REACTION_TIME_MS 300
+#define MINION_REACTION_TIME_MS 700
 #define TOWER_REACTION_TIME_MS 1600
 // b-line or random movement
 #define BOT_WILLPOWER     4
@@ -49,17 +49,17 @@
 
 // map parameters
 
-#define MAP_Y 20
-#define MAP_X 40
+#define MAP_Y 24
+#define MAP_X (MAP_Y * 2)
 
 #define SPAWN_AREA_Y 8
-#define SPAWN_AREA_X 16
+#define SPAWN_AREA_X (SPAWN_AREA_Y * 2)
 #define MINION_SPAWN_AREA_Y 3
-#define MINION_SPAWN_AREA_X 6
+#define MINION_SPAWN_AREA_X (MINION_SPAWN_AREA_Y * 2)
 
-#define TOWERS_PER_TEAM 1 // TODO currently 0 and 1 are the only valid values
+#define TOWERS_PER_TEAM 3 // TODO currently 0 and 1 are the only valid values
 #define TOWER_SPAWN_Y 3
-#define TOWER_SPAWN_X 6
+#define TOWER_SPAWN_X (TOWER_SPAWN_Y * 2)
 
 // keybinds // TODO? export to a different file and make into enum
 
