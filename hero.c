@@ -17,7 +17,7 @@ void hero_init_mem(struct hero *hero){
     hero_init_regular_guy(hero);
 }
 
-void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
+void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type entity_type){
 
     char *choices_str[NUMBER_OF_HEROES] = {
         "basic bitch\n\r\tnothing special\n\r",
@@ -37,15 +37,20 @@ void hero_select_player_hero(struct hero *hero, int connfd, int is_bot){
         hero_init_minion,
     };
 
-    if(is_bot == BOT){
-        void (*choice)(struct hero *) = choices_fnc[rand() % NUMBER_OF_HEROES];
-        choice(hero);
-        return;
-    }
+    switch(entity_type){
+        case ET_HERO_BOT:
+            {
+                void (*choice)(struct hero *) = choices_fnc[rand() % NUMBER_OF_HEROES];
+                choice(hero);
+            }
+            return;
 
-    if(is_bot == MINION){
-        hero_init_minion(hero);
-        return;
+        case ET_MINION:
+            hero_init_minion(hero);
+            return;
+        
+        case ET_HERO_HUMAN:
+            break;
     }
 
     char msg_select_hero[] = "\nSelect a hero and press enter:\n";

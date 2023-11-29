@@ -2,6 +2,8 @@
 #ifndef HERO_H
 #define HERO_H
 
+#include "entity_type.h"
+
 struct hero{
     // graphics
     char model;
@@ -24,7 +26,7 @@ struct hero{
 
 // initialisations
 void hero_init_mem(struct hero *hero);
-void hero_select_player_hero(struct hero *hero, int connfd, int is_bot);
+void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type entity_type);
 // drawing
 void hero_draw_single(struct hero *hero, int connfd);
 // heroes

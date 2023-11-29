@@ -8,16 +8,7 @@
 #include "settings.h"
 #include "errors.h"
 #include "hero.h"
-
-#define HUMAN 0
-#define BOT 1
-#define MINION 2
-
-// enum entity_type{
-//     ET_HUMAN = 0,
-//     ET_BOT,
-//     ET_MINION,
-// };
+#include "entity_type.h"
 
 struct player {
     // networking
@@ -47,7 +38,7 @@ struct player {
 
     // other
     int team;
-    int et; // entity type
+    enum entity_type et;
 
     // bot data
     long long bot_action_delay_ms;

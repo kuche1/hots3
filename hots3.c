@@ -36,7 +36,7 @@ int main(void){
     assert(PLAYERS_REQUIRED <= PLAYERS_MAX);
     while(players_len < PLAYERS_REQUIRED){
 
-        int is_bot = HUMAN;
+        enum entity_type et = ET_HERO_HUMAN;
         int connfd = -1;
         struct sockaddr_in sock;
         unsigned int sock_len = sizeof(sock);
@@ -44,7 +44,7 @@ int main(void){
         printf("established connections %d of %d\n", players_len, PLAYERS_REQUIRED);
     
         if(players_len < NUMBER_OF_BOT_PLAYERS){
-            is_bot = BOT;
+            et = ET_HERO_BOT;
             printf("bot connected\n");
         }else{
             connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
@@ -56,7 +56,7 @@ int main(void){
         }
 
         struct player *player = &players[players_len];
-        player_init(player, team, is_bot, connfd, sock, sock_len);
+        player_init(player, team, et, connfd, sock, sock_len);
 
         team = !team;
         players_len += 1;
@@ -109,12 +109,12 @@ int main(void){
             struct player *tower = generate_new_entity(players);
             assert(tower); // entity limit reached
 
-            int is_bot = MINION; // TODO perhaps make this into an enum and add TOWER type
+            enum entity_type et = ET_MINION; // TODO perhaps make this into an enum and add TOWER type
             int connfd = -1;
             struct sockaddr_in sock = {0};
             int sock_len = 0;
 
-            player_init(tower, team, is_bot, connfd, sock, sock_len);
+            player_init(tower, team, et, connfd, sock, sock_len);
             hero_init_tower(&tower->hero); // TODO kinda sucks
             player_spawn(tower, players);
         }
@@ -157,12 +157,17 @@ int main(void){
             long long now = get_time_ms();
             for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
                 struct player *player = &players[player_idx];
-                if((player->et == HUMAN) || (player->et == BOT)){
-                    if(!player->alive){
-                        if(player->died_at_ms + RESPAWN_TIME_MS <= now){
-                            player_spawn(player, players);
+                switch(player->et){
+                    case ET_HERO_HUMAN:
+                    case ET_HERO_BOT:
+                        if(!player->alive){
+                            if(player->died_at_ms + RESPAWN_TIME_MS <= now){
+                                player_spawn(player, players);
+                            }
                         }
-                    }
+                        break;
+                    case ET_MINION:
+                        break;
                 }
             }
         }
@@ -183,12 +188,12 @@ int main(void){
                     printf("entiy limit reached, cannot spawn new minion\n");
                 }else{
                     int team = rand() % 2;
-                    int is_bot = MINION;
+                    int et = ET_MINION;
                     int connfd = -1;
                     struct sockaddr_in sock = {0};
                     int sock_len = 0;
 
-                    player_init(minion, team, is_bot, connfd, sock, sock_len);
+                    player_init(minion, team, et, connfd, sock, sock_len);
                     player_select_hero(minion);
                     player_spawn(minion, players);
                 }

@@ -49,7 +49,7 @@ void player_init_mem(struct player *player){
     player->died_at_ms = 0;
 
     player->team = 0;
-    player->et = MINION;
+    player->et = ET_MINION;
 
     player->bot_action_delay_ms = 1e3;
     player->bot_willpower = 1;
@@ -114,28 +114,36 @@ static void player_init_bot(struct player *player){
 
     player->bot_last_action_at_ms = 0;
 
-    if(player->et == BOT){
+    switch(player->et){
+        case ET_HERO_BOT:
 
-        player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
+            player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
 
-        player->bot_willpower = BOT_WILLPOWER;
-        player->bot_schizophrenia = BOT_SCHIZOPHRENIA;
+            player->bot_willpower = BOT_WILLPOWER;
+            player->bot_schizophrenia = BOT_SCHIZOPHRENIA;
 
-        player->bot_human_wave_numerator = BOT_HUMAN_WAVE_NUMERATOR;
-        player->bot_human_wave_denomintor = BOT_HUMAN_WAVE_DENOMINTOR;
+            player->bot_human_wave_numerator = BOT_HUMAN_WAVE_NUMERATOR;
+            player->bot_human_wave_denomintor = BOT_HUMAN_WAVE_DENOMINTOR;
 
-    }else if(player->et == MINION){
+            break;
 
-        player->bot_action_delay_ms = MINION_REACTION_TIME_MS;
+        case ET_MINION:
 
-        player->bot_willpower = MINION_WILLPOWER;
-        player->bot_schizophrenia = MINION_SCHIZOPHRENIA;
+            player->bot_action_delay_ms = MINION_REACTION_TIME_MS;
 
-        player->bot_human_wave_numerator = MINION_HUMAN_WAVE_NUMERATOR;
-        player->bot_human_wave_denomintor = MINION_HUMAN_WAVE_DENOMINTOR;
+            player->bot_willpower = MINION_WILLPOWER;
+            player->bot_schizophrenia = MINION_SCHIZOPHRENIA;
 
-    }else{
-        assert(0);
+            player->bot_human_wave_numerator = MINION_HUMAN_WAVE_NUMERATOR;
+            player->bot_human_wave_denomintor = MINION_HUMAN_WAVE_DENOMINTOR;
+
+            break;
+        
+        case ET_HERO_HUMAN:
+
+            assert(0);
+
+            break;
     }
 }
 
@@ -145,12 +153,20 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     // set spawn
 
-    int spawn_area_y = SPAWN_AREA_Y;
-    int spawn_area_x = SPAWN_AREA_X;
+    int spawn_area_y = 0;
+    int spawn_area_x = 0;
 
-    if(player->et == MINION){
-        spawn_area_y = MINION_SPAWN_AREA_Y;
-        spawn_area_x = MINION_SPAWN_AREA_X;
+    switch(player->et){
+        case ET_HERO_HUMAN:
+        case ET_HERO_BOT:
+            spawn_area_y = SPAWN_AREA_Y;
+            spawn_area_x = SPAWN_AREA_X;
+            break;
+
+        case ET_MINION:
+            spawn_area_y = MINION_SPAWN_AREA_Y;
+            spawn_area_x = MINION_SPAWN_AREA_X;
+            break;
     }
 
     // try to find a spot

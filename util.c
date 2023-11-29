@@ -4,6 +4,8 @@
 #include <sys/time.h>
 #include <stddef.h>
 
+#include "entity_type.h"
+
 long long get_time_ms(void){
     struct timeval te; 
     gettimeofday(&te, NULL); // get current time
@@ -15,8 +17,18 @@ struct player * generate_new_entity(struct player players[PLAYERS_MAX]){
 
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
-        if((!player->alive) && (player->et == MINION)){
-            return player;
+
+        if(player->alive){
+            continue;
+        }
+
+        switch(player->et){
+            case ET_MINION:
+                return player;
+
+            case ET_HERO_HUMAN:
+            case ET_HERO_BOT:
+                break;
         }
     }
 
