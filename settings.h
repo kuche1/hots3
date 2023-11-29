@@ -23,7 +23,7 @@
 
 #define HEALTH_STATES 8 // clarity vs bandwidth
 
-#define PLAYERS_MAX 26 // includes minions and towers // TODO? rename to entities
+#define PLAYERS_MAX 28 // includes minions and towers // TODO? rename to entities
 
 // bot parameters
 
