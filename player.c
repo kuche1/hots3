@@ -460,7 +460,12 @@ void player_recalculate_health_state(struct player *player, struct player player
     if(!health_state_palette_generated){
         health_state_palette_generated = 1;
 
-        for(int color_idx=0; color_idx < HEALTH_STATES; color_idx++){
+        for(
+            int color_idx=0;
+            (long unsigned int)color_idx < sizeof(health_state_palette)/sizeof(*health_state_palette);
+            color_idx++
+        ){
+
             int red = (color_idx * 255) / (HEALTH_STATES-1);
             int green = 255 - red;
             int blue = 0;
