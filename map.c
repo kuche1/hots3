@@ -29,3 +29,22 @@ int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
 
     return 1;
 }
+
+struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
+    struct map_get_empty_tiles_near_return ret = {0};
+
+    if(map_is_tile_empty(players, pos_y-1, pos_x)){
+        ret.up = 1;
+    }
+    if(map_is_tile_empty(players, pos_y+1, pos_x)){
+        ret.down = 1;
+    }
+    if(map_is_tile_empty(players, pos_y, pos_x-1)){
+        ret.left = 1;
+    }
+    if(map_is_tile_empty(players, pos_y, pos_x+1)){
+        ret.right = 1;
+    }
+    
+    return ret;
+}
