@@ -596,6 +596,9 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
 
     // TODO? make healers pussies
+    // TODO teach bots how to retreat
+    // TODO make it so that bots know if a given tile they intend to move to is not empty
+    // TODO? pathfinding algorithm
 
     // do nothing if dead
 
