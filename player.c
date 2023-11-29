@@ -466,7 +466,7 @@ void player_recalculate_health_state(struct player *player, struct player player
             color_idx++
         ){
 
-            int red = (255 * color_idx) / (LENOF(health_state_palette)-1);
+            int red = (255 * color_idx) / LENOF(health_state_palette);
             int green = 255 - red;
             int blue = 0;
 
@@ -480,13 +480,10 @@ void player_recalculate_health_state(struct player *player, struct player player
 
     char *old_color = player->health_color;
 
-    int health_amount = ((HEALTH_STATES-1) * player->hp) / player->hero.hp_max;
-    int health_state_idx = (HEALTH_STATES-1) - health_amount;
+    int health_state_idx_reversed = ((HEALTH_STATES-1) * player->hp) / player->hero.hp_max;
+    int health_state_idx = (HEALTH_STATES-1) - health_state_idx_reversed;
 
-    if(health_state_idx < 0){ // perhaps the hp is below 0
-        health_state_idx = 0;
-    }
-
+    assert(health_state_idx >= 0);
     assert((long unsigned int)health_state_idx < LENOF(health_state_palette));
 
     player->health_color = health_state_palette[health_state_idx];
