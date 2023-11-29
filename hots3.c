@@ -95,6 +95,29 @@ int main(void){
         screen_print(players, "|", 1);
     }
 
+    // give some help
+
+    {
+        screen_cur_set(players, MAP_Y+1, 0);
+
+        char help_msg[150];
+        int written = snprintf(help_msg, sizeof(help_msg),
+            "%c - move up\n\r"
+            "%c - move down\n\r"
+            "%c - move left\n\r"
+            "%c - move right\n\r"
+            "%c - basic attack\n\r"
+            "%c - heal ability (not all heroes have one)\n\r"
+            ,
+            KEY_MOVE_UP, KEY_MOVE_DOWN, KEY_MOVE_LEFT, KEY_MOVE_RIGHT, KEY_BASIC_ATTACK, KEY_HEAL_ABILITY
+        );
+
+        assert(written >= 0);
+        assert((long unsigned int)written < sizeof(help_msg)); // buffer is too small
+
+        screen_print(players, help_msg, written);
+    }
+
     // spawn towers // TODO? add animation for when the user attacks?
 
     for(int team=0; team<=1; ++team){
