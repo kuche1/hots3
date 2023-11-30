@@ -64,9 +64,17 @@ int main(void){
 
     // hero selection
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
-        player_select_hero(player);
+        switch(player->et){
+            case ET_HERO_HUMAN:
+            case ET_HERO_BOT:
+                player_select_hero(player);
+                break;
+            case ET_MINION:
+            case ET_TOWER:
+                break;
+        }
     }
 
     // change to draw mode
@@ -118,7 +126,7 @@ int main(void){
         screen_print(players, help_msg, written);
     }
 
-    // spawn towers // TODO? add animation for when the user attacks?
+    // spawn towers
 
     for(int team=0; team<=1; ++team){
         for(int tower_idx=0; tower_idx<TOWERS_PER_TEAM; ++tower_idx){
