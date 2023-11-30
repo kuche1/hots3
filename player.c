@@ -742,16 +742,15 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
     {
 
-        char human_wave_action;
         char encirclement_action;
 
         if(abs(player->y - target->y) > abs(player->x - target->x)){
 
-            if(player->y < target->y){
-                human_wave_action = KEY_MOVE_DOWN;
-            }else{
-                human_wave_action = KEY_MOVE_UP;
-            }
+            // if(player->y < target->y){
+            //     human_wave_action = KEY_MOVE_DOWN;
+            // }else{
+            //     human_wave_action = KEY_MOVE_UP;
+            // }
 
             if(player->x < target->x){
                 encirclement_action = KEY_MOVE_RIGHT;
@@ -761,11 +760,11 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
         }else{
 
-            if(player->x < target->x){
-                human_wave_action = KEY_MOVE_RIGHT;
-            }else{
-                human_wave_action = KEY_MOVE_LEFT;
-            }
+            // if(player->x < target->x){
+            //     human_wave_action = KEY_MOVE_RIGHT;
+            // }else{
+            //     human_wave_action = KEY_MOVE_LEFT;
+            // }
 
             if(player->y < target->y){
                 encirclement_action = KEY_MOVE_DOWN;
@@ -776,7 +775,25 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
         }
 
         if(rand() % player->bot_human_wave_denomintor < player->bot_human_wave_numerator){
-            *action = human_wave_action;
+            // *action = human_wave_action;
+            enum direction direction = map_pathfind_depth_1(players, player->y, player->x, target->y, target->x);
+            switch(direction){
+                case D_NONE:
+                    return 1;
+                case D_LEFT:
+                    *action = KEY_MOVE_LEFT;
+                    return 0;
+                case D_RIGHT:
+                    *action = KEY_MOVE_RIGHT;
+                    return 0;
+                case D_UP:
+                    *action = KEY_MOVE_UP;
+                    return 0;
+                case D_DOWN:
+                    *action = KEY_MOVE_DOWN;
+                    return 0;
+            }
+            assert(0);
         }else{
             *action = encirclement_action;
         }
