@@ -740,67 +740,48 @@ int player_bot_select_action(struct player *player, struct player players[PLAYER
 
     // move to closest target // TODO? check if we're moving there for heal and make a b-line to the target
 
-    {
+    if(rand() % player->bot_human_wave_denomintor < player->bot_human_wave_numerator){ // if human wave
+        enum direction direction = map_pathfind_depth_1(players, player->y, player->x, target->y, target->x);
+        switch(direction){
+            case D_NONE:
+                return 1;
+            case D_LEFT:
+                *action = KEY_MOVE_LEFT;
+                return 0;
+            case D_RIGHT:
+                *action = KEY_MOVE_RIGHT;
+                return 0;
+            case D_UP:
+                *action = KEY_MOVE_UP;
+                return 0;
+            case D_DOWN:
+                *action = KEY_MOVE_DOWN;
+                return 0;
+        }
+        assert(0);
+
+    }else{ // if encirclement // TODO this still does not take into account non-empty tiles
 
         char encirclement_action;
 
         if(abs(player->y - target->y) > abs(player->x - target->x)){
-
-            // if(player->y < target->y){
-            //     human_wave_action = KEY_MOVE_DOWN;
-            // }else{
-            //     human_wave_action = KEY_MOVE_UP;
-            // }
-
             if(player->x < target->x){
                 encirclement_action = KEY_MOVE_RIGHT;
             }else{
                 encirclement_action = KEY_MOVE_LEFT;
             }
-
         }else{
-
-            // if(player->x < target->x){
-            //     human_wave_action = KEY_MOVE_RIGHT;
-            // }else{
-            //     human_wave_action = KEY_MOVE_LEFT;
-            // }
-
             if(player->y < target->y){
                 encirclement_action = KEY_MOVE_DOWN;
             }else{
                 encirclement_action = KEY_MOVE_UP;
             }
-
         }
 
-        if(rand() % player->bot_human_wave_denomintor < player->bot_human_wave_numerator){
-            // *action = human_wave_action;
-            enum direction direction = map_pathfind_depth_1(players, player->y, player->x, target->y, target->x);
-            switch(direction){
-                case D_NONE:
-                    return 1;
-                case D_LEFT:
-                    *action = KEY_MOVE_LEFT;
-                    return 0;
-                case D_RIGHT:
-                    *action = KEY_MOVE_RIGHT;
-                    return 0;
-                case D_UP:
-                    *action = KEY_MOVE_UP;
-                    return 0;
-                case D_DOWN:
-                    *action = KEY_MOVE_DOWN;
-                    return 0;
-            }
-            assert(0);
-        }else{
-            *action = encirclement_action;
-        }
-
+        *action = encirclement_action;
         return 0;
-    
+
     }
 
-    assert(0); // unreachable
+    assert(0);
 }
