@@ -83,36 +83,6 @@ void player_init(struct player *player, int team, int entity_type, int connfd, s
     }
 }
 
-void player_init_telnet(struct player *player){
-    switch(player->et){
-        case ET_HERO_HUMAN:
-            break;
-        case ET_HERO_BOT:
-        case ET_MINION:
-        case ET_TOWER:
-            return;
-    }
-
-    // tell telnet client to not send on line but rather on character
-    char telnet_mode_character[] = "\377\375\042\377\373\001";
-    screen_print_single(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
-
-    // use ansi escape code to hide the cursor
-    // https://notes.burke.libbey.me/ansi-escape-codes/
-    char hide_cur_code[] = "\x1b[?25l";
-    screen_print_single(player->connfd, hide_cur_code, sizeof(hide_cur_code));
-
-    // also make the socket nonblocking
-    int flags = fcntl(player->connfd, F_GETFL, 0);
-    if(flags == -1){
-        exit(ERR_CANT_GET_FCNTL_FOR_CLIENT_SOCKET);
-    }
-    flags = flags | O_NONBLOCK;
-    if(fcntl(player->connfd, F_SETFL, flags) == -1){
-        exit(ERR_CANT_SET_FCNTL_FOR_CLIENT_SOCKET);
-    }
-}
-
 static void player_init_bot(struct player *player){
     player->connfd = -1;
 
