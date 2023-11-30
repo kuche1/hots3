@@ -146,9 +146,17 @@ int main(void){
 
     // spawn players
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
-        player_spawn(player, players);
+        switch(player->et){
+            case ET_HERO_HUMAN:
+            case ET_HERO_BOT:
+                player_spawn(player, players);
+                break;
+            case ET_MINION:
+            case ET_TOWER:
+                break;
+        }
     }
 
     // game loop
