@@ -84,8 +84,13 @@ void player_init(struct player *player, int team, int entity_type, int connfd, s
 }
 
 void player_init_telnet(struct player *player){
-    if(player->et){
-        return;
+    switch(player->et){
+        case ET_HERO_HUMAN:
+            break;
+        case ET_HERO_BOT:
+        case ET_MINION:
+        case ET_TOWER:
+            return;
     }
 
     // tell telnet client to not send on line but rather on character
