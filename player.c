@@ -59,7 +59,7 @@ void player_init_mem(struct player *player){
     player->bot_last_action_at_ms = 0;
 }
 
-void player_init(struct player *player, int team, int entity_type, int connfd, struct sockaddr_in sock, int sock_len){
+void player_init(struct player *player, int team, enum entity_type entity_type, int connfd, struct sockaddr_in sock, int sock_len){
     player_init_mem(player);
 
     player->connfd = connfd;
@@ -78,8 +78,14 @@ void player_init(struct player *player, int team, int entity_type, int connfd, s
     }
 
     player->et = entity_type;
-    if(player->et){
-        player_init_bot(player);
+    switch(player->et){
+        case ET_HERO_HUMAN:
+            break;
+        case ET_HERO_BOT:
+        case ET_MINION:
+        case ET_TOWER:
+            player_init_bot(player);
+            break;
     }
 }
 
