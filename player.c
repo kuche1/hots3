@@ -435,15 +435,21 @@ void player_receive_damage(struct player *player, int amount, struct player play
         int team = !player->team;
         int xp = player->xp;
 
-        int player_idx_max = PLAYERS_REQUIRED;
-        if(MINIONS_AND_TOWERS_CAN_LEVEL_UP){
-            player_idx_max = PLAYERS_MAX;
-        }
-
-        for(int player_idx=0; player_idx < player_idx_max; ++player_idx){
+        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
             struct player *team_member = &players[player_idx];
             if(team_member->team != team){
                 continue;
+            }
+            switch(team_member->et){
+                case ET_HERO_HUMAN:
+                case ET_HERO_BOT:
+                    break;
+                case ET_MINION:
+                case ET_TOWER:
+                    if(!MINIONS_AND_TOWERS_CAN_LEVEL_UP){
+                        continue;
+                    }
+                    break;
             }
             player_gain_xp(team_member, players, xp);
         }
