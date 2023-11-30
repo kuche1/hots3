@@ -175,38 +175,36 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     if(is_tower){
 
-        int pos_y = TOWER_SPAWN_Y;
-        int pos_x = TOWER_SPAWN_X;
+        int pos_ys[TOWERS_PER_TEAM] = {TOWER_SPAWN_Y, TOWER_SPAWN_Y,   TOWER_SPAWN_Y,   TOWER_SPAWN_Y*3, TOWER_SPAWN_Y*2, TOWER_SPAWN_Y*5, TOWER_SPAWN_Y*3};
+        int pos_xs[TOWERS_PER_TEAM] = {TOWER_SPAWN_X, TOWER_SPAWN_X*3, TOWER_SPAWN_X*5, TOWER_SPAWN_X,   TOWER_SPAWN_X*2, TOWER_SPAWN_X,   TOWER_SPAWN_X*3};
 
-        if(!player->team){
-            pos_y = (MAP_Y-1) - pos_y;
-            pos_x = (MAP_X-1) - pos_x;
-        }
+        int y = 0;
+        int x = 0;
 
-        int attempts_left = TOWERS_PER_TEAM;
-        for(; attempts_left>0; --attempts_left){
+        int empty_spot_found = 0;
 
-            if(map_is_tile_empty(players, pos_y, pos_x)){
-                break;
+        for(int idx=0; idx<TOWERS_PER_TEAM; ++idx){
+            y = pos_ys[idx];
+            x = pos_xs[idx];
+
+            if(!player->team){
+                y = (MAP_Y-1) - y;
+                x = (MAP_X-1) - x;
             }
 
-            if(player->team){
-                pos_y += TOWER_SPAWN_Y;
-                pos_x += TOWER_SPAWN_X;
-            }else{
-                pos_y -= TOWER_SPAWN_Y;
-                pos_x -= TOWER_SPAWN_X;
-
-            }        
+            if(map_is_tile_empty(players, y, x)){
+                empty_spot_found = 1;
+                break;
+            }
         }
 
-        if(attempts_left <= 0){
+        if(!empty_spot_found){
             exit(ERR_COULD_NOT_SPAWN_TOWER);
         }
 
-        player->y = pos_y;
-        player->x = pos_x;
-
+        player->y = y;
+        player->x = x;
+        
     }else{
 
         int spawn_attempts_left = 50;

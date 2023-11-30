@@ -9,7 +9,7 @@
 
 // game parameters
 
-#define PLAYERS_MAX 34 // includes minions and towers // TODO? rename to entities
+#define PLAYERS_MAX 42 // includes minions and towers // TODO? rename to entities
 
 #define PLAYERS_REQUIRED 8
 #define NUMBER_OF_BOT_PLAYERS 7
@@ -57,7 +57,7 @@
 #define MINION_SPAWN_AREA_Y 3
 #define MINION_SPAWN_AREA_X (MINION_SPAWN_AREA_Y * 2)
 
-#define TOWERS_PER_TEAM 3
+#define TOWERS_PER_TEAM 7
 #define TOWER_SPAWN_Y 3
 #define TOWER_SPAWN_X (TOWER_SPAWN_Y * 2)
 
