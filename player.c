@@ -87,6 +87,8 @@ void player_init(struct player *player, int team, enum entity_type entity_type, 
             player_init_bot(player);
             break;
     }
+
+    player_select_hero(player);
 }
 
 static void player_init_bot(struct player *player){

@@ -55,26 +55,13 @@ int main(void){
             printf("player connected\n");
         }
 
+        printf("initialising player...\n");
         struct player *player = &players[players_len];
         player_init(player, team, et, connfd, sock, sock_len);
+        printf("init done\n");
 
         team = !team;
         players_len += 1;
-    }
-
-    // hero selection
-
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
-        switch(player->et){
-            case ET_HERO_HUMAN:
-            case ET_HERO_BOT:
-                player_select_hero(player);
-                break;
-            case ET_MINION:
-            case ET_TOWER:
-                break;
-        }
     }
 
     // change to draw mode
@@ -133,7 +120,6 @@ int main(void){
             int sock_len = 0;
 
             player_init(tower, team, et, connfd, sock, sock_len);
-            player_select_hero(tower);
             player_spawn(tower, players);
         }
     }
@@ -228,7 +214,6 @@ int main(void){
                     int sock_len = 0;
 
                     player_init(minion, team, et, connfd, sock, sock_len);
-                    player_select_hero(minion);
                     player_spawn(minion, players);
                 }
             }
