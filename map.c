@@ -2,6 +2,8 @@
 #include "map.h"
 
 #include <stdio.h>
+#include <limits.h>
+#include <assert.h>
 
 #include "settings.h"
 
@@ -47,4 +49,71 @@ struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player pl
     }
     
     return ret;
+}
+
+int map_calc_dist(int start_y, int start_x, int dest_x, int dest_y){
+    return abs(start_y - dest_y) + abs(start_x - dest_x);
+}
+
+enum direction map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+    struct map_get_empty_tiles_near_return tiles = map_get_empty_tiles_near(players, start_y, start_x);
+
+    enum direction available[4];
+    int available_len = 0;
+
+    if(tiles.left){
+        available[available_len] = D_LEFT;
+        available_len += 1;
+    }
+    if(tiles.right){
+        available[available_len] = D_RIGHT;
+        available_len += 1;
+    }
+    if(tiles.up){
+        available[available_len] = D_UP;
+        available_len += 1;
+    }
+    if(tiles.down){
+        available[available_len] = D_DOWN;
+        available_len += 1;
+    }
+
+
+    int closest_distance = INT_MAX;
+    int closest_direction = D_NONE;
+
+    for(int available_idx=0; available_idx<available_len; ++available_idx){
+        enum direction direction = available[available_idx];
+
+        int y_ofs = 0;
+        int x_ofs = 0;
+
+        switch(direction){
+            case D_LEFT:
+                x_ofs = -1;
+                break;
+            case D_RIGHT:
+                x_ofs = 1;
+                break;
+            case D_UP:
+                y_ofs = -1;
+                break;
+            case D_DOWN:
+                y_ofs = 1;
+                break;
+            case D_NONE:
+                assert(0);
+                break;
+        }
+
+        int distance = map_calc_dist(start_y+y_ofs, start_x+x_ofs, dest_y, dest_x);
+
+        if(distance < closest_distance){
+            closest_distance = distance;
+            closest_direction = direction;
+        }
+    }
+
+    return closest_direction;
+
 }
