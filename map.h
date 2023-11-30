@@ -22,7 +22,7 @@ struct map_get_empty_tiles_near_return{
 };
 struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player players[PLAYERS_MAX], int pos_y, int pos_x);
 
-int map_calc_dist(int start_y, int start_x, int dest_x, int dest_y);
+int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x);
 
 enum direction map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x);
 

@@ -51,7 +51,7 @@ struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player pl
     return ret;
 }
 
-int map_calc_dist(int start_y, int start_x, int dest_x, int dest_y){
+int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x){
     return abs(start_y - dest_y) + abs(start_x - dest_x);
 }
 
