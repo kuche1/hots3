@@ -244,7 +244,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     player->level = 0;
     player->xp = 0;
-    player_gain_xp(player, players, (LEVEL_ON_SPAWN * XP_FOR_LEVEL_UP) + XP_ON_SPAWN);
+    player_gain_xp(player, players, LEVEL_ON_SPAWN * XP_FOR_LEVEL_UP);
     assert(player->level >= 1); // otherwise the level color will not be initialised
 
     // draw
@@ -411,7 +411,6 @@ void player_receive_damage(struct player *player, int amount, struct player play
         // reward opposite team
 
         int team = !player->team;
-        int xp = player->xp;
 
         for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
             struct player *team_member = &players[player_idx];
@@ -429,7 +428,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
                     }
                     break;
             }
-            player_gain_xp(team_member, players, xp);
+            player_gain_xp(team_member, players, KILL_REWARD_XP);
         }
 
         // deal with dying player
@@ -584,10 +583,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
 int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
 
-    // TODO? make healers pussies
     // TODO teach bots how to retreat
-    // TODO make it so that bots know if a given tile they intend to move to is not empty
-    // TODO? pathfinding algorithm
 
     // do nothing if dead
 

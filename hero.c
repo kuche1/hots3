@@ -183,7 +183,7 @@ void hero_init_tower(struct hero *hero){
 
     hero->model = 'T';
 
-    hero->hp_max = (hero->hp_max) * 10;
+    hero->hp_max = (hero->hp_max) * 7;
 
     hero->basic_attack_distance += 4;
     hero->basic_attack_damage = (base_attack * 25) / 10;
