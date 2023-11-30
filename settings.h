@@ -9,7 +9,7 @@
 
 // game parameters
 
-#define PLAYERS_MAX 32 // includes minions and towers // TODO? rename to entities
+#define PLAYERS_MAX 34 // includes minions and towers // TODO? rename to entities
 
 #define PLAYERS_REQUIRED 6
 #define NUMBER_OF_BOT_PLAYERS 5
@@ -18,8 +18,8 @@
 #define LEVEL_ON_SPAWN 5
 #define XP_ON_SPAWN 1
 #define XP_FOR_LEVEL_UP 8
-#define LEVEL_UP_HEALTH_RESTORED_NUMERATOR   1
-#define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 4
+#define LEVEL_UP_HEALTH_RESTORED_NUMERATOR    3
+#define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 16
 
 #define RESPAWN_TIME_MS 20e3
 #define MINION_SPAWN_INTERVAL_MS 2800
