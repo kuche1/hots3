@@ -79,17 +79,11 @@ int main(void){
 
     // change to draw mode
 
-    for(int player_idx=0; player_idx < PLAYERS_REQUIRED; ++player_idx){
-        struct player *player = &players[player_idx];
-        player_init_telnet(player);
-    }
+    screen_switch_to_draw_mode(players);
 
     // clear screen
 
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
-        screen_clear_single(player->connfd);
-    }
+    screen_clear(players);
 
     // draw map borders
 

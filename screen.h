@@ -7,6 +7,8 @@
 
 void screen_clear_single(int connfd);
 void screen_clear(struct player players[PLAYERS_MAX]);
+void screen_switch_to_draw_mode_single(struct player *player);
+void screen_switch_to_draw_mode(struct player players[PLAYERS_MAX]);
 void screen_cur_set_single(int connfd, int pos_y, int pos_x);
 void screen_cur_set(struct player players[PLAYERS_MAX], int pos_y, int pos_x);
 void screen_print_single(int connfd, char *msg, int msg_len);

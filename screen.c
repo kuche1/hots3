@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <fcntl.h>
 
 #include "networking.h"
 #include "color.h"
@@ -16,6 +17,43 @@ void screen_clear(struct player players[PLAYERS_MAX]){
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         screen_clear_single(player->connfd);
+    }
+}
+
+void screen_switch_to_draw_mode_single(struct player *player){
+    switch(player->et){
+        case ET_HERO_HUMAN:
+            break;
+        case ET_HERO_BOT:
+        case ET_MINION:
+        case ET_TOWER:
+            return;
+    }
+
+    // tell telnet client to not send on line but rather on character
+    char telnet_mode_character[] = "\377\375\042\377\373\001";
+    screen_print_single(player->connfd, telnet_mode_character, sizeof(telnet_mode_character));
+
+    // use ansi escape code to hide the cursor
+    // https://notes.burke.libbey.me/ansi-escape-codes/
+    char hide_cur_code[] = "\x1b[?25l";
+    screen_print_single(player->connfd, hide_cur_code, sizeof(hide_cur_code));
+
+    // also make the socket nonblocking
+    int flags = fcntl(player->connfd, F_GETFL, 0);
+    if(flags == -1){
+        exit(ERR_CANT_GET_FCNTL_FOR_CLIENT_SOCKET);
+    }
+    flags = flags | O_NONBLOCK;
+    if(fcntl(player->connfd, F_SETFL, flags) == -1){
+        exit(ERR_CANT_SET_FCNTL_FOR_CLIENT_SOCKET);
+    }
+}
+
+void screen_switch_to_draw_mode(struct player players[PLAYERS_MAX]){
+    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+        struct player *player = &players[player_idx];
+        screen_switch_to_draw_mode_single(player);
     }
 }
 
