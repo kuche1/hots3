@@ -303,9 +303,6 @@ void player_process_action(struct player *player, char action, struct player pla
     if(action == KEY_BASIC_ATTACK){
         player_basic_attack(player, players);
     }
-    if((action == KEY_BASIC_ATTACK_2) && (player->hero.can_use_basic_attack_2)){
-        player_basic_attack(player, players);
-    }
 
     // heal ability
 
@@ -515,20 +512,8 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
             player->level_color_len   = sizeof(level_color);
         }
 
-        switch(player->et){
-            case ET_TOWER:
-                if(!TOWERS_RESTORE_HP_ON_LEVEL_UP){
-                    break;
-                }
-            case ET_HERO_HUMAN:
-            case ET_HERO_BOT:
-            case ET_MINION:
-                {
-                    int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
-                    player_receive_damage(player, -health_restored, players);
-                }
-                break;
-        }
+        int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
+        player_receive_damage(player, -health_restored, players);
 
         player_draw(player, players); // TODO? draw too many times?
     }

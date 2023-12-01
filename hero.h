@@ -15,9 +15,6 @@ struct hero{
     int basic_attack_distance;
     int basic_attack_damage;
 
-    // basic attack 2
-    int can_use_basic_attack_2;
-
     // movement - the change for the move action to work will be `legpower / weight`
     int legpower;
     int weight;
@@ -38,7 +35,6 @@ void hero_init_varian(struct hero *hero);
 void hero_init_valla(struct hero *hero);
 void hero_init_stiches(struct hero *hero);
 void hero_init_lili(struct hero *hero);
-void hero_init_alarac(struct hero *hero);
 // special
 void hero_init_minion(struct hero *hero);
 void hero_init_tower(struct hero *hero);
