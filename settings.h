@@ -18,7 +18,7 @@
 #define LEVEL_ON_SPAWN 5
 #define XP_FOR_LEVEL_UP 6
 #define KILL_REWARD_XP 1
-#define LEVEL_UP_HEALTH_RESTORED_NUMERATOR    3
+#define LEVEL_UP_HEALTH_RESTORED_NUMERATOR    3 // TODO make it so that towers do not regen hp on level up
 #define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 16
 
 #define RESPAWN_TIME_MS 20e3
@@ -68,7 +68,7 @@
 #define KEY_MOVE_RIGHT 'd'
 #define KEY_MOVE_UP 'w'
 #define KEY_MOVE_DOWN 's'
-// basic attack
+// basic attack // TODO add another basic attack ability
 #define KEY_BASIC_ATTACK 'j'
 // heal ability
 #define KEY_HEAL_ABILITY 'k'
