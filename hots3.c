@@ -89,7 +89,7 @@ int main(void){
     {
         screen_cur_set(players, MAP_Y+1, 0);
 
-        char help_msg[150];
+        char help_msg[170];
         int written = snprintf(help_msg, sizeof(help_msg),
             "%c - move up\n\r"
             "%c - move down\n\r"
@@ -97,8 +97,9 @@ int main(void){
             "%c - move right\n\r"
             "%c - basic attack\n\r"
             "%c - heal ability (not all heroes have one)\n\r"
+            "%c - basic attack #2 (not all heroes have one)\n\r"
             ,
-            KEY_MOVE_UP, KEY_MOVE_DOWN, KEY_MOVE_LEFT, KEY_MOVE_RIGHT, KEY_BASIC_ATTACK, KEY_HEAL_ABILITY
+            KEY_MOVE_UP, KEY_MOVE_DOWN, KEY_MOVE_LEFT, KEY_MOVE_RIGHT, KEY_BASIC_ATTACK, KEY_HEAL_ABILITY, KEY_BASIC_ATTACK_2
         );
 
         assert(written >= 0);
