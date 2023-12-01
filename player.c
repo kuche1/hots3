@@ -515,19 +515,24 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
             player->level_color_len   = sizeof(level_color);
         }
 
+        int restore_hp = 0;
+
         switch(player->et){
             case ET_TOWER:
-                if(!TOWERS_RESTORE_HP_ON_LEVEL_UP){
-                    break;
+                if(TOWERS_RESTORE_HP_ON_LEVEL_UP){
+                    restore_hp = 1;
                 }
+                break;
             case ET_HERO_HUMAN:
             case ET_HERO_BOT:
             case ET_MINION:
-                {
-                    int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
-                    player_receive_damage(player, -health_restored, players);
-                }
+                restore_hp = 1;
                 break;
+        }
+
+        if(restore_hp){
+            int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
+            player_receive_damage(player, -health_restored, players);
         }
 
         player_draw(player, players); // TODO? draw too many times?
