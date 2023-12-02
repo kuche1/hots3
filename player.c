@@ -498,7 +498,7 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
     }
 
     player->xp += xp;
-    while(player->xp >= XP_FOR_LEVEL_UP){ // TODO? make it so that you give at least 1 xp
+    while(player->xp >= XP_FOR_LEVEL_UP){
         player->xp -= XP_FOR_LEVEL_UP;
         player->level += 1;
         
@@ -512,10 +512,28 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
             player->level_color_len   = sizeof(level_color);
         }
 
-        int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
-        player_receive_damage(player, -health_restored, players);
+        // restore hp
 
-        player_draw(player, players); // TODO? draw too many times?
+        int restore_hp = 0;
+        switch(player->et){
+            case ET_HERO_HUMAN:
+            case ET_HERO_BOT:
+            case ET_MINION:
+                restore_hp = 1;
+                break;
+            case ET_TOWER:
+                restore_hp = TOWERS_RESTORE_HP_ON_LEVEL_UP;
+                break;
+        }
+
+        if(restore_hp){
+            int health_restored = (player->hp * LEVEL_UP_HEALTH_RESTORED_NUMERATOR) / LEVEL_UP_HEALTH_RESTORED_DENOMINATOR;
+            player_receive_damage(player, -health_restored, players);
+        }
+
+        // draw
+
+        player_draw(player, players); // TODO? draw too many times (since you can level up more than once)?
     }
 }
 
