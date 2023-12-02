@@ -21,6 +21,7 @@
 /////////////
 
 static void player_init_bot(struct player *player);
+static int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action);
 
 /////////////
 ///////////// initialising
@@ -258,6 +259,29 @@ void player_select_hero(struct player *player){
 ///////////// actions
 /////////////
 
+int player_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
+    switch(player->et){
+        case ET_HERO_HUMAN:
+            {
+                int bytes = net_recv_1B(player->connfd, action);
+                if(bytes <= 0){
+                    return -1;
+                }
+            }
+            break;
+        case ET_HERO_BOT:
+        case ET_MINION:
+        case ET_TOWER:
+            {
+                int skip = player_bot_select_action(player, players, action);
+                if(skip){
+                    return -1;
+                }
+            }
+            break;
+    }
+    return 0;
+}
 
 void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]){
 
@@ -597,7 +621,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 ///////////// bot stuff
 /////////////
 
-int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
+static int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
 
     // TODO teach bots how to retreat
 

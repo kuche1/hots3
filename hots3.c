@@ -153,18 +153,9 @@ int main(void){
             struct player *player = &players[player_idx];
             
             char action;
-
-            if(player->et){
-                int skip = player_bot_select_action(player, players, &action); // TODO this can be replaced with `receive_action` or something like that
-                if(skip){
-                    continue;
-                }
-            }else{
-                int bytes = net_recv_1B(player->connfd, &action);
-                if(bytes <= 0){
-                    continue;
-                }
-                // printf("received from `%d`: `%c` (%d)\n", player->connfd, action, (int)action);
+            int skip = player_select_action(player, players, &action);
+            if(skip){
+                continue;
             }
 
             player_process_action(player, action, players);
