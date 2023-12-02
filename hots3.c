@@ -151,14 +151,7 @@ int main(void){
 
         for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
             struct player *player = &players[player_idx];
-            
-            char action;
-            int skip = player_select_action(player, players, &action);
-            if(skip){
-                continue;
-            }
-
-            player_process_action(player, action, players);
+            player_select_action(player, players);
         }
 
         // respawn players

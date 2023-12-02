@@ -36,6 +36,7 @@ struct player {
     int level;
     int xp;
     long long died_at_ms;
+    long long last_action_at_ms;
 
     // other
     int team;
@@ -58,8 +59,7 @@ void player_init(struct player *player, int team, enum entity_type entity_type, 
 void player_select_hero(struct player *player);
 void player_spawn(struct player *player, struct player players[PLAYERS_MAX]);
 // actions
-int player_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action);
-void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]);
+void player_select_action(struct player *player, struct player players[PLAYERS_MAX]);
 void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]);
 void player_heal_ability(struct player *player, struct player players[PLAYERS_MAX]);
 // deal with status

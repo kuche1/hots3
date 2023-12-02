@@ -20,6 +20,8 @@
 ///////////// private
 /////////////
 
+static int player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]);
+
 static void player_init_bot(struct player *player);
 static int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action);
 
@@ -49,6 +51,7 @@ void player_init_mem(struct player *player){
     player->level = 0;
     player->xp = 0;
     player->died_at_ms = 0;
+    player->last_action_at_ms = 0;
 
     player->team = 0;
     player->et = ET_MINION;
@@ -259,13 +262,22 @@ void player_select_hero(struct player *player){
 ///////////// actions
 /////////////
 
-int player_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
+void player_select_action(struct player *player, struct player players[PLAYERS_MAX]){
+
+    long long now = get_time_ms();
+
+    if(player->last_action_at_ms + ACTION_INTERVAL_MS > now){
+        return;
+    }
+
+    char action;
+
     switch(player->et){
         case ET_HERO_HUMAN:
             {
-                int bytes = net_recv_1B(player->connfd, action);
+                int bytes = net_recv_1B(player->connfd, &action);
                 if(bytes <= 0){
-                    return -1;
+                    return;
                 }
             }
             break;
@@ -273,44 +285,56 @@ int player_select_action(struct player *player, struct player players[PLAYERS_MA
         case ET_MINION:
         case ET_TOWER:
             {
-                int skip = player_bot_select_action(player, players, action);
+                int skip = player_bot_select_action(player, players, &action);
                 if(skip){
-                    return -1;
+                    return;
                 }
             }
             break;
     }
-    return 0;
+
+    int request_was_valid = player_process_action(player, action, players);
+    if(!request_was_valid){
+        return;
+    }
+
+    player->last_action_at_ms = now;
 }
 
-void player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]){
+// returns 1 when player REQUESTED ANYTHING VALID, not when anything was actuallydone
+static int player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]){
 
     if(!player->alive){
-        return;
+        return 0;
     }
 
     // movement
 
+    int action_is_movement = 0;
+
+    int x_desired = player->x;
+    int y_desired = player->y;
+
+    switch(action){
+        case KEY_MOVE_LEFT:
+            x_desired -= 1;
+            action_is_movement = 1;
+            break;
+        case KEY_MOVE_RIGHT:
+            x_desired += 1;
+            action_is_movement = 1;
+            break;
+        case KEY_MOVE_UP:
+            y_desired -= 1;
+            action_is_movement = 1;
+            break;
+        case KEY_MOVE_DOWN:
+            y_desired += 1;
+            action_is_movement = 1;
+            break;
+    }
+
     if(rand() % player->hero.weight < player->hero.legpower){
-
-        int x_desired = player->x;
-        int y_desired = player->y;
-
-        switch(action){
-            case KEY_MOVE_LEFT:
-                x_desired -= 1;
-                break;
-            case KEY_MOVE_RIGHT:
-                x_desired += 1;
-                break;
-            case KEY_MOVE_UP:
-                y_desired -= 1;
-                break;
-            case KEY_MOVE_DOWN:
-                y_desired += 1;
-                break;
-        }
-
         if(map_is_tile_empty(players, y_desired, x_desired)){
             screen_cur_set(players, player->y, player->x);
             screen_print_empty_tile(players);
@@ -318,21 +342,31 @@ void player_process_action(struct player *player, char action, struct player pla
             player->x = x_desired;
             player->y = y_desired;
             player_draw(player, players);
+            return 1;
         }
+    }
 
+    if(action_is_movement){
+        return 1;
     }
 
     // basic attack
 
     if(action == KEY_BASIC_ATTACK){
         player_basic_attack(player, players);
+        return 1;
     }
 
     // heal ability
 
     if(action == KEY_HEAL_ABILITY){
         player_heal_ability(player, players);
+        return 1;
     }
+
+    // nothing
+
+    return 0;
 }
 
 void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]){

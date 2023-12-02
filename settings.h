@@ -8,12 +8,16 @@
 #define LISTEN 5
 #define SEND_MAX_ATTEMPTS 5 // this does not take into account the size of the data
 
+// anti hacking
+
+#define ACTION_INTERVAL_MS 60
+
 // game parameters
 
 #define PLAYERS_MAX 50 // includes minions and towers // TODO? rename to entities
 
 #define PLAYERS_REQUIRED 8
-#define NUMBER_OF_BOT_PLAYERS 6
+#define NUMBER_OF_BOT_PLAYERS 7
 
 #define LEVEL_ON_SPAWN 6
 #define XP_FOR_LEVEL_UP 8
