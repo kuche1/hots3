@@ -46,8 +46,18 @@ void net_send_single(int connfd, char *data, int data_len){
     if(connfd < 0){
         return;
     }
-    int sent = write(connfd, data, data_len);
-    assert(sent == data_len); // could not send data
+
+    int attempts_left = SEND_MAX_ATTEMPTS;
+    while((attempts_left > 0) && (data_len > 0)){
+        attempts_left -= 1;
+
+        int sent = write(connfd, data, data_len);
+        assert(sent >= 0);
+        data += sent;
+        data_len -= sent;
+    }
+
+    assert(data_len <= 0); // not all data could be sent
 }
 
 void net_send(struct player players[PLAYERS_MAX], char *data, int data_len){

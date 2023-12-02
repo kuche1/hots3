@@ -6,6 +6,7 @@
 
 #define PORT 32793
 #define LISTEN 5
+#define SEND_MAX_ATTEMPTS 5 // this does not take into account the size of the data
 
 // game parameters
 
