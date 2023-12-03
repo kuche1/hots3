@@ -239,10 +239,12 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     }
 
-    // fix health
+    // health
 
     player->hp = player->hero.hp_max;
     player_recalculate_health_state(player, players);
+
+    // level
 
     player->level = 0;
     player->xp = 0;
