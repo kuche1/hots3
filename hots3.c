@@ -10,6 +10,8 @@
 // da dobavq alarak
 //
 // hotjoin ako ima botove?
+//
+// da napravq ne6to za razli4nite otbori da sa v razli4ni cvetove
 
 #include <stdio.h>
 #include <string.h>
