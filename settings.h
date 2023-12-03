@@ -10,7 +10,7 @@
 
 // anti hacking
 
-#define ACTION_INTERVAL_MS 60
+#define ACTION_INTERVAL_MS 55
 
 // game parameters
 
@@ -25,8 +25,8 @@
 
 // levels
 
-#define LEVEL_ON_SPAWN 6
-#define XP_FOR_LEVEL_UP 9
+#define LEVEL_ON_SPAWN 7
+#define XP_FOR_LEVEL_UP 10
 #define KILL_REWARD_XP 1
 
 #define MINIONS_AND_TOWERS_CAN_LEVEL_UP 1
@@ -43,7 +43,7 @@
 // reactions
 #define BOT_REACTION_TIME_MS 300
 #define MINION_REACTION_TIME_MS 700
-#define TOWER_REACTION_TIME_MS 1600
+#define TOWER_REACTION_TIME_MS 1400
 // b-line or random movement
 #define BOT_WILLPOWER     4
 #define BOT_SCHIZOPHRENIA 5
@@ -76,7 +76,8 @@
 // UI
 
 #define UI_LEVEL_Y (MAP_Y+1)
-#define UI_HELP_Y (UI_LEVEL_Y+1)
+#define UI_XP_Y (UI_LEVEL_Y+1)
+#define UI_HELP_Y (UI_XP_Y+1)
 
 // keybinds
 

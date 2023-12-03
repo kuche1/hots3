@@ -225,6 +225,29 @@ int main(int argc, char **argv){
 
                     player_init(minion, team, et, connfd, sock, sock_len);
                     player_spawn(minion, players);
+
+                    // give the minion the average level of all alive players
+
+                    int average_level = 0;
+                    int average_level_count = 0;
+
+                    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+                        struct player *player = &players[player_idx];
+                        if(!player->alive){
+                            continue;
+                        }
+                        if(player->team != minion->team){
+                            continue;
+                        }
+
+                        average_level += player->level;
+                        average_level_count += 1;
+                    }
+
+                    average_level /= average_level_count;
+
+                    int level_diff = average_level - minion->level;
+                    player_gain_xp(minion, players, level_diff * XP_FOR_LEVEL_UP);
                 }
             }
 

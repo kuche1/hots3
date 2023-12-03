@@ -568,6 +568,8 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
         return;
     }
 
+    int xp_before = player->xp;
+
     player->xp += xp;
     while(player->xp >= XP_FOR_LEVEL_UP){
         player->xp -= XP_FOR_LEVEL_UP;
@@ -615,9 +617,22 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
             assert(written >= 0);
             assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
-            screen_cur_set_single(player->connfd, MAP_Y+1, 0);
+            screen_cur_set_single(player->connfd, UI_LEVEL_Y, 0);
             screen_print_single(player->connfd, msg, written);
         }
+    }
+
+    // draw XP if it has changed
+
+    if(xp_before != player->xp){
+        assert(player->xp < 99);
+        char msg[10];
+        int written = snprintf(msg, sizeof(msg), "XP: %02d/%02d", player->xp, XP_FOR_LEVEL_UP);
+        assert(written >= 0);
+        assert((long unsigned int)written < sizeof(msg)); // buffer is too small
+
+        screen_cur_set_single(player->connfd, UI_XP_Y, 0);
+        screen_print_single(player->connfd, msg, written);
     }
 }
 
