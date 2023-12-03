@@ -10,9 +10,6 @@
 // da dobavq alarak
 //
 // hotjoin ako ima botove?
-//
-// po-burz minion spawn?
-// pove4e kila za xp?
 
 #include <stdio.h>
 #include <string.h>
