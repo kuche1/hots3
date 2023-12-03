@@ -808,7 +808,7 @@ static int player_bot_select_action(struct player *player, struct player players
 
     assert(target != NULL);
 
-    // move to closest target // TODO? check if we're moving there for heal and make a b-line to the target
+    // move to closest target
 
     if(rand() % player->bot_human_wave_denomintor < player->bot_human_wave_numerator){ // if human wave
         enum direction direction = map_pathfind_depth_1(players, player->y, player->x, target->y, target->x);
