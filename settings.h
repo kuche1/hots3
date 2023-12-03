@@ -14,10 +14,9 @@
 
 // game parameters
 
-#define PLAYERS_MAX 50 // includes minions and towers // TODO? rename to entities
+#define PLAYERS_MAX 50 // includes minions and towers // more like entities_max
 
-#define PLAYERS_REQUIRED 8
-#define NUMBER_OF_BOT_PLAYERS 7
+#define PLAYERS_REQUIRED 8 // more like heroes_required
 
 #define LEVEL_ON_SPAWN 6
 #define XP_FOR_LEVEL_UP 8

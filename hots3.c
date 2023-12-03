@@ -25,16 +25,28 @@
 #include "screen.h"
 #include "util.h"
 
-int main(void){
-    int err;
+int main(int argc, char **argv){
+
+    // command line args
+
+    if(argc != 2){
+        printf("You need to specify exactly 1 arguments - number of bot players\n");
+        return ERR_BAD_COMMAND_LINE_ARGS;
+    }
+
+    int number_of_bot_players = atoi(argv[1]);
+    assert(number_of_bot_players != 0);
 
     // init socket
 
     int sockfd;
     struct sockaddr_in servaddr;
 
-    if((err = create_server(&sockfd, &servaddr, PORT, LISTEN))){
-        return err;
+    {
+        int err;
+        if((err = create_server(&sockfd, &servaddr, PORT, LISTEN))){
+            return err;
+        }
     }
 
     // lobby
@@ -58,7 +70,7 @@ int main(void){
 
         printf("established connections %d of %d\n", players_len, PLAYERS_REQUIRED);
     
-        if(players_len < NUMBER_OF_BOT_PLAYERS){
+        if(players_len < number_of_bot_players){
             et = ET_HERO_BOT;
             printf("bot connected\n");
         }else{
