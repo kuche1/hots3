@@ -1,4 +1,19 @@
 
+// TODO
+//
+// 2 butona za ataka
+//
+// da napravq kulite da sa za4erknati i levelup da e underline
+//
+// local multiplayer
+//
+// da dobavq alarak
+//
+// hotjoin ako ima botove?
+//
+// po-burz minion spawn?
+// pove4e kila za xp?
+
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
