@@ -114,10 +114,12 @@ int main(int argc, char **argv){
     // give some help
 
     {
-        screen_cur_set(players, MAP_Y+1, 0);
+        screen_cur_set(players, UI_HELP_Y, 0);
 
-        char help_msg[150];
+        char help_msg[160];
         int written = snprintf(help_msg, sizeof(help_msg),
+            "--------------------\n\r"
+            "Controls:\n\r"
             "%c - move up\n\r"
             "%c - move down\n\r"
             "%c - move left\n\r"

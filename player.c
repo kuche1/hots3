@@ -599,9 +599,22 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
             player_receive_damage(player, -health_restored, players);
         }
 
-        // draw
+        // draw player model
 
         player_draw(player, players); // TODO? draw too many times (since you can level up more than once)?
+
+        // draw UI: level
+
+        {
+            assert(player->level < 99);
+            char msg[10];
+            int written = snprintf(msg, sizeof(msg), "Level: %02d", player->level);
+            assert(written >= 0);
+            assert((long unsigned int)written < sizeof(msg)); // buffer is too small
+
+            screen_cur_set_single(player->connfd, MAP_Y+1, 0);
+            screen_print_single(player->connfd, msg, written);
+        }
     }
 }
 

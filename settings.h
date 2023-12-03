@@ -72,7 +72,12 @@
 #define TOWER_SPAWN_Y 3
 #define TOWER_SPAWN_X (TOWER_SPAWN_Y * 2)
 
-// keybinds // TODO? export to a different file and make into enum
+// UI
+
+#define UI_LEVEL_Y (MAP_Y+1)
+#define UI_HELP_Y (UI_LEVEL_Y+1)
+
+// keybinds
 
 // keybind movement
 #define KEY_MOVE_LEFT 'a'
