@@ -246,9 +246,17 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     // level
 
-    player->level = 0;
+    int xp = player->xp; // xp will be unaffected
+    int level = player->level - LEVELS_LOST_ON_DEATH;
+
+    if(level < LEVEL_ON_SPAWN){
+        level = LEVEL_ON_SPAWN;
+    }
+
     player->xp = 0;
-    player_gain_xp(player, players, LEVEL_ON_SPAWN * XP_FOR_LEVEL_UP);
+    player->level = 0;
+
+    player_gain_xp(player, players, level * XP_FOR_LEVEL_UP + xp);
     assert(player->level >= 1); // otherwise the level color will not be initialised
 
     // draw
