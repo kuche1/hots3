@@ -35,7 +35,8 @@
 #define LEVEL_UP_HEALTH_RESTORED_NUMERATOR    7
 #define LEVEL_UP_HEALTH_RESTORED_DENOMINATOR 32
 
-#define LEVELS_LOST_ON_DEATH 1
+#define LEVELS_LOST_ON_DEATH 0
+#define XP_IS_LOST_ON_DEATH 1 // yes or no
 
 // bot parameters
 

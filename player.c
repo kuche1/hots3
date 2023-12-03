@@ -247,8 +247,11 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     // level
 
     int xp = player->xp; // xp will be unaffected
-    int level = player->level - LEVELS_LOST_ON_DEATH;
+    if(XP_IS_LOST_ON_DEATH){
+        xp = 0;
+    }
 
+    int level = player->level - LEVELS_LOST_ON_DEATH;
     if(level < LEVEL_ON_SPAWN){
         level = LEVEL_ON_SPAWN;
     }
