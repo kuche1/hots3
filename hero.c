@@ -136,7 +136,7 @@ void hero_init_varian(struct hero *hero){
 void hero_init_valla(struct hero *hero){
     hero->model = 'v';
 
-    hero->hp_max = (hero->hp_max * 4) / 10;
+    hero->hp_max = (hero->hp_max * 6) / 10;
 
     hero->basic_attack_distance += 1;
 }
@@ -183,7 +183,7 @@ void hero_init_tower(struct hero *hero){
 
     hero->model = 'T';
 
-    hero->hp_max = (hero->hp_max * 25) / 10;
+    hero->hp_max = (hero->hp_max * 30) / 10;
 
     hero->basic_attack_distance += 4;
     hero->basic_attack_damage = (base_attack * 25) / 10;
