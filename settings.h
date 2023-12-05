@@ -21,7 +21,7 @@
 #define RESPAWN_TIME_MS 20e3
 #define MINION_SPAWN_INTERVAL_MS 2100
 
-#define HEALTH_STATES 8 // clarity vs bandwidth
+#define HEALTH_STATES 8 // clarity vs bandwidth (and style)
 
 // levels
 
