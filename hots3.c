@@ -42,6 +42,10 @@ int main(int argc, char **argv){
 
     int number_of_bot_players = atoi(argv[1]);
     assert(number_of_bot_players != 0);
+    if(number_of_bot_players >= PLAYERS_REQUIRED){
+        printf("ERROR: number of bot players is too high\n");
+        return ERR_BAD_COMMAND_LINE_ARGS;
+    }
 
     // init socket
 
