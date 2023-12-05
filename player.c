@@ -536,8 +536,13 @@ void player_recalculate_health_state(struct player *player, struct player player
                 // indicate HP
                 int green = 200 - ((200 * color_idx) / HEALTH_STATES);
                 // indicate team
-                int red = 15 + (240 * team);
-                int blue = 255 - red;
+                int red  = 25 + (230 *  team);
+                int blue = 25 + (230 * !team);
+                if(team){
+                    blue = 0;
+                }else{
+                    red = 0;
+                }
 
                 int written = snprintf(health_state_palette[color_idx+color_idx_ofs], sizeof(health_state_palette[color_idx+color_idx_ofs]), "\033[38;2;%d;%d;%dm", red, green, blue);
                 assert(written >= 0);
