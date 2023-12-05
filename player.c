@@ -687,7 +687,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         hero_draw_single(&player->hero, player_receiver->connfd);
 
         if(player_receiver == player){
-            static char player_is_self_color_off[] = EFFECT_NO_ITALIC;
+            static char player_is_self_color_off[] = EFFECT_NO_BOLD;
             screen_print_single(player_receiver->connfd, player_is_self_color_off, sizeof(player_is_self_color_off));
         }
 

@@ -24,7 +24,7 @@
 
 // effects
 #define EFFECT_BOLD               {'\033', '[',      '1', 'm'}
-#define EFFECT_NO_BOLD            {'\033', '[', '2', '1', 'm'}
+#define EFFECT_NO_BOLD            {'\033', '[', '2', '2', 'm'} // note that this is used for disabling both bold and dim/faint
 #define EFFECT_ITALIC             {'\033', '[',      '3', 'm'}
 #define EFFECT_NO_ITALIC          {'\033', '[', '2', '3', 'm'}
 #define EFFECT_UNDERLINE          {'\033', '[',      '4', 'm'}
