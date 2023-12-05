@@ -10,11 +10,11 @@
 
 // anti hacking
 
-#define ACTION_INTERVAL_MS 55
+#define ACTION_INTERVAL_MS 50
 
 // game parameters
 
-#define PLAYERS_MAX 50 // includes minions and towers // more like entities_max
+#define PLAYERS_MAX 50 // includes minions and towers, more like entities_max
 
 #define PLAYERS_REQUIRED 8 // more like heroes_required
 
@@ -86,8 +86,9 @@
 #define KEY_MOVE_RIGHT 'd'
 #define KEY_MOVE_UP 'w'
 #define KEY_MOVE_DOWN 's'
-// basic attack // TODO add another basic attack ability
-#define KEY_BASIC_ATTACK 'j'
+// basic attack
+#define KEY_BASIC_ATTACK_1 'j'
+#define KEY_BASIC_ATTACK_2 'h'
 // heal ability
 #define KEY_HEAL_ABILITY 'k'
 

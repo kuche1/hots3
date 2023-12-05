@@ -7,8 +7,6 @@
 
 // TODO
 //
-// 2 butona za ataka
-//
 // da napravq kulite da sa za4erknati i levelup da e underline
 //
 // local multiplayer
@@ -117,7 +115,7 @@ int main(int argc, char **argv){
     {
         screen_cur_set(players, UI_HELP_Y, 0);
 
-        char help_msg[160];
+        char help_msg[180];
         int written = snprintf(help_msg, sizeof(help_msg),
             "--------------------\n\r"
             "Controls:\n\r"
@@ -126,9 +124,10 @@ int main(int argc, char **argv){
             "%c - move left\n\r"
             "%c - move right\n\r"
             "%c - basic attack\n\r"
+            "%c - basic attack\n\r"
             "%c - heal ability (not all heroes have one)\n\r"
             ,
-            KEY_MOVE_UP, KEY_MOVE_DOWN, KEY_MOVE_LEFT, KEY_MOVE_RIGHT, KEY_BASIC_ATTACK, KEY_HEAL_ABILITY
+            KEY_MOVE_UP, KEY_MOVE_DOWN, KEY_MOVE_LEFT, KEY_MOVE_RIGHT, KEY_BASIC_ATTACK_1, KEY_BASIC_ATTACK_2, KEY_HEAL_ABILITY
         );
 
         assert(written >= 0);

@@ -365,7 +365,7 @@ static int player_process_action(struct player *player, char action, struct play
 
     // basic attack
 
-    if(action == KEY_BASIC_ATTACK){
+    if((action == KEY_BASIC_ATTACK_1) || (action == KEY_BASIC_ATTACK_2)){
         player_basic_attack(player, players);
         return 1;
     }
@@ -822,14 +822,14 @@ static int player_bot_select_action(struct player *player, struct player players
             *action = KEY_HEAL_ABILITY;
             return 0;
         }else{
-            *action = KEY_BASIC_ATTACK;
+            *action = KEY_BASIC_ATTACK_1;
             return 0;
         }
     }else if(heal_in_rage){
         *action = KEY_HEAL_ABILITY;
         return 0;
     }else if(attack_in_range){
-        *action = KEY_BASIC_ATTACK;
+        *action = KEY_BASIC_ATTACK_1;
         return 0;
     }
 
