@@ -50,7 +50,7 @@ int main(int argc, char **argv){
 
     // lobby
 
-    struct player players[PLAYERS_MAX]; // TODO? rename to entities
+    struct player players[PLAYERS_MAX];
     int players_len = 0;
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player = &players[player_idx];
