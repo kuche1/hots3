@@ -696,8 +696,13 @@ void player_draw_ui(struct player *player){
     static int xp_before    = INT_MIN / 2;
 
     int hp_updated = hp_before != player->hp;
+    hp_before = player->hp;
+
     int level_updated = level_before != player->level;
+    level_before = player->level;
+
     int xp_updated = xp_before != player->xp;
+    xp_before = player->xp;
 
     int anything_updated = hp_updated || level_updated || xp_updated;
 
@@ -712,8 +717,6 @@ void player_draw_ui(struct player *player){
     // draw hp
 
     if(hp_updated){
-        hp_before = player->hp;
-
         assert(player->hp          < 9999);
         assert(player->hero.hp_max < 9999);
         char msg[20];
@@ -730,8 +733,6 @@ void player_draw_ui(struct player *player){
     // draw level
 
     if(level_updated){
-        level_before = player->level;
-
         assert(player->level < 99);
         char msg[10];
         int written = snprintf(msg, sizeof(msg), "Level: %02d", player->level);
@@ -747,8 +748,6 @@ void player_draw_ui(struct player *player){
     // draw xp
 
     if(xp_updated){
-        xp_before = player->xp;
-
         assert(player->xp < 99);
         char msg[10];
         int written = snprintf(msg, sizeof(msg), "XP: %02d/%02d", player->xp, XP_FOR_LEVEL_UP);
