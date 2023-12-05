@@ -2,6 +2,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "color.h"
+
 // networking
 
 #define PORT 32793
@@ -38,6 +40,37 @@
 #define LEVELS_LOST_ON_DEATH 0
 #define XP_IS_LOST_ON_DEATH 1 // yes or no
 
+// map parameters
+
+#define MAP_Y 24
+#define MAP_X (MAP_Y * 2)
+
+#define SPAWN_AREA_Y 8
+#define SPAWN_AREA_X (SPAWN_AREA_Y * 2)
+#define MINION_SPAWN_AREA_Y 3
+#define MINION_SPAWN_AREA_X (MINION_SPAWN_AREA_Y * 2)
+
+#define TOWERS_PER_TEAM 7
+#define TOWER_SPAWN_Y 3
+#define TOWER_SPAWN_X (TOWER_SPAWN_Y * 2)
+
+// keybinds
+
+// keybind movement
+#define KEY_MOVE_LEFT 'a'
+#define KEY_MOVE_RIGHT 'd'
+#define KEY_MOVE_UP 'w'
+#define KEY_MOVE_DOWN 's'
+// basic attack
+#define KEY_BASIC_ATTACK_1 'j'
+#define KEY_BASIC_ATTACK_2 'h'
+// heal ability
+#define KEY_HEAL_ABILITY 'k'
+
+// UI
+
+#define UI_COLOR COL_GREEN_DARK
+
 // bot parameters
 
 // reactions
@@ -58,39 +91,5 @@
 #define MINION_HUMAN_WAVE_DENOMINTOR 6
 #define TOWER_HUMAN_WAVE_NUMERATOR  1
 #define TOWER_HUMAN_WAVE_DENOMINTOR 1
-
-// map parameters
-
-#define MAP_Y 24
-#define MAP_X (MAP_Y * 2)
-
-#define SPAWN_AREA_Y 8
-#define SPAWN_AREA_X (SPAWN_AREA_Y * 2)
-#define MINION_SPAWN_AREA_Y 3
-#define MINION_SPAWN_AREA_X (MINION_SPAWN_AREA_Y * 2)
-
-#define TOWERS_PER_TEAM 7
-#define TOWER_SPAWN_Y 3
-#define TOWER_SPAWN_X (TOWER_SPAWN_Y * 2)
-
-// UI
-
-#define UI_HP_Y (MAP_Y+1)
-#define UI_LEVEL_Y (UI_HP_Y+1)
-#define UI_XP_Y (UI_LEVEL_Y+1)
-#define UI_HELP_Y (UI_XP_Y+1)
-
-// keybinds
-
-// keybind movement
-#define KEY_MOVE_LEFT 'a'
-#define KEY_MOVE_RIGHT 'd'
-#define KEY_MOVE_UP 'w'
-#define KEY_MOVE_DOWN 's'
-// basic attack
-#define KEY_BASIC_ATTACK_1 'j'
-#define KEY_BASIC_ATTACK_2 'h'
-// heal ability
-#define KEY_HEAL_ABILITY 'k'
 
 #endif

@@ -15,6 +15,8 @@
 //
 // da napravq UI-a da se risuva otdelno (pak s check-ovete ako tova ili onova e razli4no, posibly v nova funkciq)
 // i da ostavq map-a da se 4ertae v realtime
+//
+// allah
 
 // INFO
 //
@@ -42,6 +44,10 @@ int main(int argc, char **argv){
 
     int number_of_bot_players = atoi(argv[1]);
     assert(number_of_bot_players != 0);
+    if(number_of_bot_players >= PLAYERS_REQUIRED){
+        printf("ERROR: number of bot players is too high\n");
+        return ERR_BAD_COMMAND_LINE_ARGS;
+    }
 
     // init socket
 

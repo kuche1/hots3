@@ -533,17 +533,21 @@ void player_recalculate_health_state(struct player *player, struct player player
             int color_idx_ofs = HEALTH_STATES * team;
 
             for(int color_idx=0; color_idx < HEALTH_STATES; color_idx++){
-                // indicate HP
-                int green = 200 - ((200 * color_idx) / HEALTH_STATES);
                 // indicate team
-                int red  = 25 + (230 *  team);
-                int blue = 25 + (230 * !team);
+                int red = 0;
+                int green = 0;
+                int blue = 0;
                 if(team){
+                    red = 255;
+                    green = (200 * color_idx) / HEALTH_STATES;
                     blue = 0;
                 }else{
                     red = 0;
+                    green = 65 + (190 * color_idx) / HEALTH_STATES;
+                    blue = 255;
                 }
 
+                // draw
                 int written = snprintf(health_state_palette[color_idx+color_idx_ofs], sizeof(health_state_palette[color_idx+color_idx_ofs]), "\033[38;2;%d;%d;%dm", red, green, blue);
                 assert(written >= 0);
                 assert((long unsigned int)written < sizeof(health_state_palette[color_idx+color_idx_ofs])); // buffer is too small
@@ -684,13 +688,39 @@ void player_draw_ui(struct player *player){
 
     int ui_y = MAP_Y + 1;
 
+    // static variables for previous values (they have to be here so that we can check if we need to clear the screen for the hud color)
+
+    // make sure those values are something unreachable so that the UI gets updated when this function gets run for the first time
+    static int hp_before    = INT_MIN / 2;
+    static int level_before = INT_MIN / 2;
+    static int xp_before    = INT_MIN / 2;
+    static int help_drawn_before = 0;
+
+    int hp_updated = hp_before != player->hp;
+    hp_before = player->hp;
+
+    int level_updated = level_before != player->level;
+    level_before = player->level;
+
+    int xp_updated = xp_before != player->xp;
+    xp_before = player->xp;
+
+    int help_updated = !help_drawn_before;
+    help_drawn_before = 1;
+
+    int anything_updated = hp_updated || level_updated || xp_updated || help_updated;
+
+    // set UI color
+
+    if(anything_updated){
+        char color[] = UI_COLOR;
+        screen_cur_set_single(player->connfd, ui_y, 0);
+        screen_print_single(player->connfd, color, sizeof(color));
+    }
+
     // draw hp
 
-    static int hp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
-
-    if(hp_before != player->hp){
-        hp_before = player->hp;
-
+    if(hp_updated){
         assert(player->hp          < 9999);
         assert(player->hero.hp_max < 9999);
         char msg[20];
@@ -706,11 +736,7 @@ void player_draw_ui(struct player *player){
 
     // draw level
 
-    static int level_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
-
-    if(level_before != player->level){
-        level_before = player->level;
-
+    if(level_updated){
         assert(player->level < 99);
         char msg[10];
         int written = snprintf(msg, sizeof(msg), "Level: %02d", player->level);
@@ -725,11 +751,7 @@ void player_draw_ui(struct player *player){
 
     // draw xp
 
-    static int xp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
-
-    if(xp_before != player->xp){
-        xp_before = player->xp;
-
+    if(xp_updated){
         assert(player->xp < 99);
         char msg[10];
         int written = snprintf(msg, sizeof(msg), "XP: %02d/%02d", player->xp, XP_FOR_LEVEL_UP);
@@ -744,11 +766,7 @@ void player_draw_ui(struct player *player){
 
     // draw help
 
-    static int help_drawn = 0;
-
-    if(!help_drawn){
-        help_drawn = 1;
-
+    if(help_updated){
         screen_cur_set_single(player->connfd, ui_y, 0);
 
         char help_msg[180];
