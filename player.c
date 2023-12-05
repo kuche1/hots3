@@ -575,8 +575,6 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
         return;
     }
 
-    int xp_before = player->xp;
-
     player->xp += xp;
     while(player->xp >= XP_FOR_LEVEL_UP){
         player->xp -= XP_FOR_LEVEL_UP;
@@ -614,32 +612,6 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
         // draw player model
 
         player_draw(player, players); // TODO? draw too many times (since you can level up more than once)?
-
-        // draw UI: level
-
-        {
-            assert(player->level < 99);
-            char msg[10];
-            int written = snprintf(msg, sizeof(msg), "Level: %02d", player->level);
-            assert(written >= 0);
-            assert((long unsigned int)written < sizeof(msg)); // buffer is too small
-
-            screen_cur_set_single(player->connfd, UI_LEVEL_Y, 0);
-            screen_print_single(player->connfd, msg, written);
-        }
-    }
-
-    // draw XP if it has changed
-
-    if(xp_before != player->xp){
-        assert(player->xp < 99);
-        char msg[10];
-        int written = snprintf(msg, sizeof(msg), "XP: %02d/%02d", player->xp, XP_FOR_LEVEL_UP);
-        assert(written >= 0);
-        assert((long unsigned int)written < sizeof(msg)); // buffer is too small
-
-        screen_cur_set_single(player->connfd, UI_XP_Y, 0);
-        screen_print_single(player->connfd, msg, written);
     }
 }
 
@@ -712,13 +684,7 @@ void player_draw_ui(struct player *player){
 
     // draw hp
 
-    static int hp_before;
-    static int hp_before_initialised = 0;
-
-    if(!hp_before_initialised){
-        hp_before_initialised = 1;
-        hp_before = player->hp + 1; // must be anything but the actual hp so that the UI gets updated when this gets run for the first time
-    }
+    static int hp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
 
     if(hp_before != player->hp){
         hp_before = player->hp;
@@ -731,6 +697,40 @@ void player_draw_ui(struct player *player){
         assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
         screen_cur_set_single(player->connfd, UI_HP_Y, 0);
+        screen_print_single(player->connfd, msg, written);
+    }
+
+    // draw level
+
+    static int level_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
+
+    if(level_before != player->level){
+        level_before = player->level;
+
+        assert(player->level < 99);
+        char msg[10];
+        int written = snprintf(msg, sizeof(msg), "Level: %02d", player->level);
+        assert(written >= 0);
+        assert((long unsigned int)written < sizeof(msg)); // buffer is too small
+
+        screen_cur_set_single(player->connfd, UI_LEVEL_Y, 0);
+        screen_print_single(player->connfd, msg, written);
+    }
+
+    // draw xp
+
+    static int xp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
+
+    if(xp_before != player->xp){
+        xp_before = player->xp;
+
+        assert(player->xp < 99);
+        char msg[10];
+        int written = snprintf(msg, sizeof(msg), "XP: %02d/%02d", player->xp, XP_FOR_LEVEL_UP);
+        assert(written >= 0);
+        assert((long unsigned int)written < sizeof(msg)); // buffer is too small
+
+        screen_cur_set_single(player->connfd, UI_XP_Y, 0);
         screen_print_single(player->connfd, msg, written);
     }
 
