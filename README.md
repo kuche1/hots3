@@ -1,5 +1,5 @@
 
-build and run with with `make -j && ./hots3 6969`
+build and run with with `make -j && ./hots3 <number-of-bot-players>`
 
 this is only the server
 
