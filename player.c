@@ -682,6 +682,8 @@ void player_draw_ui(struct player *player){
             return;
     }
 
+    int ui_y = MAP_Y + 1;
+
     // draw hp
 
     static int hp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
@@ -696,9 +698,11 @@ void player_draw_ui(struct player *player){
         assert(written >= 0);
         assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
-        screen_cur_set_single(player->connfd, UI_HP_Y, 0);
+        screen_cur_set_single(player->connfd, ui_y, 0);
         screen_print_single(player->connfd, msg, written);
     }
+
+    ui_y += 1;
 
     // draw level
 
@@ -713,9 +717,11 @@ void player_draw_ui(struct player *player){
         assert(written >= 0);
         assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
-        screen_cur_set_single(player->connfd, UI_LEVEL_Y, 0);
+        screen_cur_set_single(player->connfd, ui_y, 0);
         screen_print_single(player->connfd, msg, written);
     }
+
+    ui_y += 1;
 
     // draw xp
 
@@ -730,9 +736,11 @@ void player_draw_ui(struct player *player){
         assert(written >= 0);
         assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
-        screen_cur_set_single(player->connfd, UI_XP_Y, 0);
+        screen_cur_set_single(player->connfd, ui_y, 0);
         screen_print_single(player->connfd, msg, written);
     }
+
+    ui_y += 1;
 
     // draw help
 
@@ -763,6 +771,8 @@ void player_draw_ui(struct player *player){
 
         screen_print_single(player->connfd, help_msg, written);
     }
+
+    // ui_y += ?;
 
 }
 
