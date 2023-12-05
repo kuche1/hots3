@@ -69,5 +69,6 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
 // drawing
 void player_toggle_christmas_lights(struct player *player, struct player players[PLAYERS_MAX]);
 void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
+void player_draw_ui(struct player *player);
 
 #endif

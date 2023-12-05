@@ -568,30 +568,6 @@ void player_recalculate_health_state(struct player *player, struct player player
     if(old_color != player->health_color){
         player_draw(player, players);
     }
-
-    // update UI
-
-    static int hp_before;
-    static int hp_before_initialised = 0;
-
-    if(!hp_before_initialised){
-        hp_before_initialised = 1;
-        hp_before = player->hp + 1; // must be anything but the actual hp so that the UI gets updated when this gets run for the first time
-    }
-
-    if(hp_before != player->hp){
-        hp_before = player->hp;
-
-        assert(player->hp          < 9999);
-        assert(player->hero.hp_max < 9999);
-        char msg[20];
-        int written = snprintf(msg, sizeof(msg), "HP: %4d / %4d", player->hp, player->hero.hp_max);
-        assert(written >= 0);
-        assert((long unsigned int)written < sizeof(msg)); // buffer is too small
-
-        screen_cur_set_single(player->connfd, UI_HP_Y, 0);
-        screen_print_single(player->connfd, msg, written);
-    }
 }
 
 void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], int xp){
@@ -721,6 +697,43 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
             screen_print_single(player_receiver->connfd, christmas_lights_effect_off, sizeof(christmas_lights_effect_off));
         }
     }
+}
+
+void player_draw_ui(struct player *player){
+
+    switch(player->et){
+        case ET_HERO_HUMAN:
+            break;
+        case ET_HERO_BOT:
+        case ET_MINION:
+        case ET_TOWER:
+            return;
+    }
+
+    // draw hp
+
+    static int hp_before;
+    static int hp_before_initialised = 0;
+
+    if(!hp_before_initialised){
+        hp_before_initialised = 1;
+        hp_before = player->hp + 1; // must be anything but the actual hp so that the UI gets updated when this gets run for the first time
+    }
+
+    if(hp_before != player->hp){
+        hp_before = player->hp;
+
+        assert(player->hp          < 9999);
+        assert(player->hero.hp_max < 9999);
+        char msg[20];
+        int written = snprintf(msg, sizeof(msg), "HP: %4d / %4d", player->hp, player->hero.hp_max);
+        assert(written >= 0);
+        assert((long unsigned int)written < sizeof(msg)); // buffer is too small
+
+        screen_cur_set_single(player->connfd, UI_HP_Y, 0);
+        screen_print_single(player->connfd, msg, written);
+    }
+
 }
 
 /////////////
