@@ -1,5 +1,11 @@
 
-// TODO
+// TODO high priority
+//
+// da dobavq alarak
+//
+// otborite da se razli4avat po-lesno (razli4ni cvetove?)
+
+// TODO less than high priority
 //
 // 2 butona za ataka
 //
@@ -7,11 +13,7 @@
 //
 // local multiplayer
 //
-// da dobavq alarak
-//
 // hotjoin ako ima botove?
-//
-// da napravq ne6to za razli4nite otbori da sa v razli4ni cvetove
 
 #include <stdio.h>
 #include <string.h>
