@@ -694,6 +694,7 @@ void player_draw_ui(struct player *player){
     static int hp_before    = INT_MIN / 2;
     static int level_before = INT_MIN / 2;
     static int xp_before    = INT_MIN / 2;
+    static int help_drawn_before = 0;
 
     int hp_updated = hp_before != player->hp;
     hp_before = player->hp;
@@ -704,7 +705,10 @@ void player_draw_ui(struct player *player){
     int xp_updated = xp_before != player->xp;
     xp_before = player->xp;
 
-    int anything_updated = hp_updated || level_updated || xp_updated;
+    int help_updated = !help_drawn_before;
+    help_drawn_before = 1;
+
+    int anything_updated = hp_updated || level_updated || xp_updated || help_updated;
 
     // set UI color
 
@@ -760,13 +764,9 @@ void player_draw_ui(struct player *player){
 
     ui_y += 1;
 
-    // draw help - we don't need to include this in the static variables above since this will only get drawn once (and the ui color will already be set since something else would have been updated)
+    // draw help
 
-    static int help_drawn = 0;
-
-    if(!help_drawn){
-        help_drawn = 1;
-
+    if(help_updated){
         screen_cur_set_single(player->connfd, ui_y, 0);
 
         char help_msg[180];
