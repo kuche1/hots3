@@ -15,6 +15,10 @@
 //
 // make it so that the anticheat works in `bursts`
 
+// INFO
+//
+// reverse effect is now not used by anyone
+
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>

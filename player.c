@@ -36,8 +36,8 @@ void player_init_mem(struct player *player){
 
     player->health_color = "";
     player->health_color_len = 0;
-    player->team_color = "";
-    player->team_color_len = 0;
+    // player->team_color = "";
+    // player->team_color_len = 0;
     player->level_color = "";
     player->level_color_len = 0;
     player->christmas_lights_on = 0;
@@ -71,15 +71,15 @@ void player_init(struct player *player, int team, enum entity_type entity_type, 
     player->sock_len = sock_len;
 
     player->team = team;
-    if(player->team){
-        static char team_color[] = EFFECT_NO_INVERSE_REVERSE;
-        player->team_color       = team_color;
-        player->team_color_len   = sizeof(team_color);
-    }else{
-        static char team_color[] = EFFECT_INVERSE_REVERSE;
-        player->team_color       = team_color;
-        player->team_color_len   = sizeof(team_color);
-    }
+    // if(player->team){
+    //     static char team_color[] = EFFECT_NO_INVERSE_REVERSE;
+    //     player->team_color       = team_color;
+    //     player->team_color_len   = sizeof(team_color);
+    // }else{
+    //     static char team_color[] = EFFECT_INVERSE_REVERSE;
+    //     player->team_color       = team_color;
+    //     player->team_color_len   = sizeof(team_color);
+    // }
 
     player->et = entity_type;
     switch(player->et){
@@ -523,25 +523,27 @@ void player_receive_damage(struct player *player, int amount, struct player play
 
 void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]){
 
-    static char health_state_palette[HEALTH_STATES][20]; // 0=healthy last=lowhp
+    static char health_state_palette[HEALTH_STATES*2][20]; // idx_0=healthy idx_last=lowhp // once for each team
     static int health_state_palette_generated = 0;
 
     if(!health_state_palette_generated){
         health_state_palette_generated = 1;
 
-        for(
-            int color_idx=0;
-            (long unsigned int)color_idx < LENOF(health_state_palette);
-            color_idx++
-        ){
+        for(int team=0; team<=1; ++team){
+            int color_idx_ofs = HEALTH_STATES * team;
 
-            int red = (255 * color_idx) / LENOF(health_state_palette);
-            int green = 255 - red;
-            int blue = 0;
+            for(int color_idx=0; color_idx < HEALTH_STATES; color_idx++){
+                // indicate HP
+                int green = 255 - (255 * color_idx) / HEALTH_STATES;
+                // indicate team
+                int red = 255 * team;
+                int blue = 255 - red;
 
-            int written = snprintf(health_state_palette[color_idx], sizeof(health_state_palette[color_idx]), "\033[38;2;%d;%d;%dm", red, green, blue);
-            assert(written >= 0);
-            assert((long unsigned int)written < sizeof(health_state_palette[color_idx])); // buffer is too small
+                int written = snprintf(health_state_palette[color_idx+color_idx_ofs], sizeof(health_state_palette[color_idx+color_idx_ofs]), "\033[38;2;%d;%d;%dm", red, green, blue);
+                assert(written >= 0);
+                assert((long unsigned int)written < sizeof(health_state_palette[color_idx+color_idx_ofs])); // buffer is too small
+            }
+
         }
     }
 
@@ -553,9 +555,9 @@ void player_recalculate_health_state(struct player *player, struct player player
     int health_state_idx = (HEALTH_STATES-1) - health_state_idx_reversed;
 
     assert(health_state_idx >= 0);
-    assert((long unsigned int)health_state_idx < LENOF(health_state_palette));
+    assert(health_state_idx < HEALTH_STATES);
 
-    player->health_color = health_state_palette[health_state_idx];
+    player->health_color = health_state_palette[health_state_idx + (HEALTH_STATES*player->team)];
     player->health_color_len = strlen(player->health_color);
 
     if(old_color != player->health_color){
@@ -663,7 +665,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
 
-        screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
+        // screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
 
         if(player->christmas_lights_on){
             // sample effect used for various shits
