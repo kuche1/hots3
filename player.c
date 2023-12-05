@@ -688,19 +688,30 @@ void player_draw_ui(struct player *player){
 
     int ui_y = MAP_Y + 1;
 
+    // static variables for previous values (they have to be here so that we can check if we need to clear the screen for the hud color)
+
+    // make sure those values are something unreachable so that the UI gets updated when this function gets run for the first time
+    static int hp_before    = INT_MIN / 2;
+    static int level_before = INT_MIN / 2;
+    static int xp_before    = INT_MIN / 2;
+
+    int hp_updated = hp_before != player->hp;
+    int level_updated = level_before != player->level;
+    int xp_updated = xp_before != player->xp;
+
+    int anything_updated = hp_updated || level_updated || xp_updated;
+
     // set UI color
 
-    { // TODO not optimal since we're not checking if anything has actually changed
-        char color[] = COL_GREEN_DARK;
+    if(anything_updated){
+        char color[] = UI_COLOR;
         screen_cur_set_single(player->connfd, ui_y, 0);
         screen_print_single(player->connfd, color, sizeof(color));
     }
 
     // draw hp
 
-    static int hp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
-
-    if(hp_before != player->hp){
+    if(hp_updated){
         hp_before = player->hp;
 
         assert(player->hp          < 9999);
@@ -718,9 +729,7 @@ void player_draw_ui(struct player *player){
 
     // draw level
 
-    static int level_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
-
-    if(level_before != player->level){
+    if(level_updated){
         level_before = player->level;
 
         assert(player->level < 99);
@@ -737,9 +746,7 @@ void player_draw_ui(struct player *player){
 
     // draw xp
 
-    static int xp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
-
-    if(xp_before != player->xp){
+    if(xp_updated){
         xp_before = player->xp;
 
         assert(player->xp < 99);
@@ -754,7 +761,7 @@ void player_draw_ui(struct player *player){
 
     ui_y += 1;
 
-    // draw help
+    // draw help - we don't need to include this in the static variables above since this will only get drawn once (and the ui color will already be set since something else would have been updated)
 
     static int help_drawn = 0;
 
