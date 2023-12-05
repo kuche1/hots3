@@ -2,6 +2,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "color.h"
+
 // networking
 
 #define PORT 32793
@@ -38,27 +40,6 @@
 #define LEVELS_LOST_ON_DEATH 0
 #define XP_IS_LOST_ON_DEATH 1 // yes or no
 
-// bot parameters
-
-// reactions
-#define BOT_REACTION_TIME_MS 300
-#define MINION_REACTION_TIME_MS 700
-#define TOWER_REACTION_TIME_MS 1400
-// b-line or random movement
-#define BOT_WILLPOWER     4
-#define BOT_SCHIZOPHRENIA 5
-#define MINION_WILLPOWER      9
-#define MINION_SCHIZOPHRENIA 10
-#define TOWER_WILLPOWER     1
-#define TOWER_SCHIZOPHRENIA 1
-// human wave or encirclement
-#define BOT_HUMAN_WAVE_NUMERATOR  2
-#define BOT_HUMAN_WAVE_DENOMINTOR 4
-#define MINION_HUMAN_WAVE_NUMERATOR  5
-#define MINION_HUMAN_WAVE_DENOMINTOR 6
-#define TOWER_HUMAN_WAVE_NUMERATOR  1
-#define TOWER_HUMAN_WAVE_DENOMINTOR 1
-
 // map parameters
 
 #define MAP_Y 24
@@ -85,5 +66,30 @@
 #define KEY_BASIC_ATTACK_2 'h'
 // heal ability
 #define KEY_HEAL_ABILITY 'k'
+
+// UI
+
+#define UI_COLOR COL_GREEN_DARK
+
+// bot parameters
+
+// reactions
+#define BOT_REACTION_TIME_MS 300
+#define MINION_REACTION_TIME_MS 700
+#define TOWER_REACTION_TIME_MS 1400
+// b-line or random movement
+#define BOT_WILLPOWER     4
+#define BOT_SCHIZOPHRENIA 5
+#define MINION_WILLPOWER      9
+#define MINION_SCHIZOPHRENIA 10
+#define TOWER_WILLPOWER     1
+#define TOWER_SCHIZOPHRENIA 1
+// human wave or encirclement
+#define BOT_HUMAN_WAVE_NUMERATOR  2
+#define BOT_HUMAN_WAVE_DENOMINTOR 4
+#define MINION_HUMAN_WAVE_NUMERATOR  5
+#define MINION_HUMAN_WAVE_DENOMINTOR 6
+#define TOWER_HUMAN_WAVE_NUMERATOR  1
+#define TOWER_HUMAN_WAVE_DENOMINTOR 1
 
 #endif

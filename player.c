@@ -688,6 +688,14 @@ void player_draw_ui(struct player *player){
 
     int ui_y = MAP_Y + 1;
 
+    // set UI color
+
+    { // TODO not optimal since we're not checking if anything has actually changed
+        char color[] = COL_GREEN_DARK;
+        screen_cur_set_single(player->connfd, ui_y, 0);
+        screen_print_single(player->connfd, color, sizeof(color));
+    }
+
     // draw hp
 
     static int hp_before = INT_MIN / 2; // make sure this is something unreachable so that the UI gets updated when this gets run for the first time
