@@ -534,7 +534,7 @@ void player_recalculate_health_state(struct player *player, struct player player
 
             for(int color_idx=0; color_idx < HEALTH_STATES; color_idx++){
                 // indicate HP
-                int green = 255 - (255 * color_idx) / HEALTH_STATES;
+                int green = 200 - ((200 * color_idx) / HEALTH_STATES);
                 // indicate team
                 int red = 255 * team;
                 int blue = 255 - red;
