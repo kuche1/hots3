@@ -73,13 +73,6 @@
 #define TOWER_SPAWN_Y 3
 #define TOWER_SPAWN_X (TOWER_SPAWN_Y * 2)
 
-// UI
-
-#define UI_HP_Y (MAP_Y+1)
-#define UI_LEVEL_Y (UI_HP_Y+1)
-#define UI_XP_Y (UI_LEVEL_Y+1)
-#define UI_HELP_Y (UI_XP_Y+1)
-
 // keybinds
 
 // keybind movement

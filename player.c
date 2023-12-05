@@ -533,17 +533,21 @@ void player_recalculate_health_state(struct player *player, struct player player
             int color_idx_ofs = HEALTH_STATES * team;
 
             for(int color_idx=0; color_idx < HEALTH_STATES; color_idx++){
-                // indicate HP
-                int green = 200 - ((200 * color_idx) / HEALTH_STATES);
                 // indicate team
-                int red  = 25 + (230 *  team);
-                int blue = 25 + (230 * !team);
+                int red = 0;
+                int green = 0;
+                int blue = 0;
                 if(team){
+                    red = 255;
+                    green = (200 * color_idx) / HEALTH_STATES;
                     blue = 0;
                 }else{
                     red = 0;
+                    green = 65 + (190 * color_idx) / HEALTH_STATES;
+                    blue = 255;
                 }
 
+                // draw
                 int written = snprintf(health_state_palette[color_idx+color_idx_ofs], sizeof(health_state_palette[color_idx+color_idx_ofs]), "\033[38;2;%d;%d;%dm", red, green, blue);
                 assert(written >= 0);
                 assert((long unsigned int)written < sizeof(health_state_palette[color_idx+color_idx_ofs])); // buffer is too small
