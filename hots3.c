@@ -1,11 +1,11 @@
 
-// TODO high priority
+// TODO requested by clients
 //
 // da dobavq alarak
 //
-// otborite da se razli4avat po-lesno (razli4ni cvetove?)
+// otborite da sa razli4ni cvetove (ili ne6to koeto 6te gi napravi da se razli4ava6 po-lesno?)
 
-// TODO less than high priority
+// TODO
 //
 // 2 butona za ataka
 //
