@@ -15,6 +15,8 @@
 //
 // da napravq UI-a da se risuva otdelno (pak s check-ovete ako tova ili onova e razli4no, posibly v nova funkciq)
 // i da ostavq map-a da se 4ertae v realtime
+//
+// allah
 
 // INFO
 //
