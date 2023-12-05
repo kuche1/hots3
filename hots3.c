@@ -12,6 +12,8 @@
 // local multiplayer
 //
 // hotjoin ako ima botove?
+//
+// make it so that the anticheat works in `bursts`
 
 #include <stdio.h>
 #include <string.h>
