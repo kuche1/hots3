@@ -749,7 +749,7 @@ void player_draw_ui(struct player *player){
     if(!help_drawn){
         help_drawn = 1;
 
-        screen_cur_set_single(player->connfd, UI_HELP_Y, 0);
+        screen_cur_set_single(player->connfd, ui_y, 0);
 
         char help_msg[180];
         int written = snprintf(help_msg, sizeof(help_msg),
