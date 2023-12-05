@@ -314,7 +314,6 @@ int main(int argc, char **argv){
     }
 
     // I don't do any uninitialisations cuz I'm nasty like that
-    // (the auto restart script will take care)
 
     return 0;
 }
