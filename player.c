@@ -469,7 +469,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
     }
 
     if(amount > 0){
-        // if being damaged
+        // if being damaged reduce damage based on level
         amount /= player->level;
     }
 
@@ -508,7 +508,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
         screen_print_empty_tile(players);
         player->x = -1;
         player->y = -1;
-    
+
         // exit
 
         return;
