@@ -22,6 +22,8 @@
 // da napi6a v hud-a sredniq level na 2ta otbora
 //
 // !ne6to za anticheat-a
+//
+// da se izpisva na hud-a average level-a na otborite
 
 // INFO
 //
