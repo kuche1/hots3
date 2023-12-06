@@ -136,7 +136,7 @@ void hero_init_varian(struct hero *hero){
 void hero_init_valla(struct hero *hero){
     hero->model = 'v';
 
-    hero->hp_max = (hero->hp_max * 6) / 10;
+    hero->hp_max = (hero->hp_max * 8) / 10;
 
     hero->basic_attack_distance += 1;
 }
@@ -144,9 +144,9 @@ void hero_init_valla(struct hero *hero){
 void hero_init_stiches(struct hero *hero){
     hero->model = 'S';
 
-    hero->hp_max = (hero->hp_max * 15) / 10;
+    hero->hp_max = (hero->hp_max * 13) / 10;
 
-    hero->legpower = 3;
+    hero->legpower = 4;
     hero->weight   = 7;
 }
 
@@ -172,7 +172,7 @@ void hero_init_minion(struct hero *hero){
 
     hero->hp_max = hero->hp_max / 10;
 
-    hero->basic_attack_damage = hero->basic_attack_damage / 4;
+    hero->basic_attack_damage = hero->basic_attack_damage / 3;
 
     hero->legpower =  7;
     hero->weight   = 10;
