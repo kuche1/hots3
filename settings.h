@@ -12,7 +12,8 @@
 
 // anti hacking
 
-#define ACTION_INTERVAL_MS 40
+#define ANTICHEAT_BURST_INTERVAL_MS 160
+#define ANTICHEAT_BURST_ACTIONS 4
 
 // game parameters
 

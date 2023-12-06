@@ -51,7 +51,9 @@ void player_init_mem(struct player *player){
     player->level = 0;
     player->xp = 0;
     player->died_at_ms = 0;
-    player->last_action_at_ms = 0;
+
+    player->actions_since_last_burst = 0;
+    player->last_action_limit_reached_at_ms = 0;
 
     player->team = 0;
     player->et = ET_MINION;
@@ -277,11 +279,7 @@ void player_select_hero(struct player *player){
 
 void player_select_action(struct player *player, struct player players[PLAYERS_MAX]){
 
-    long long now = get_time_ms();
-
-    if(player->last_action_at_ms + ACTION_INTERVAL_MS > now){
-        return;
-    }
+    // select action
 
     char action;
 
@@ -306,12 +304,29 @@ void player_select_action(struct player *player, struct player players[PLAYERS_M
             break;
     }
 
+    // drop action if cheating
+
+    long long now = get_time_ms();
+
+    if(player->actions_since_last_burst >= ANTICHEAT_BURST_ACTIONS){
+        if(player->last_action_limit_reached_at_ms + ANTICHEAT_BURST_INTERVAL_MS > now){
+            return;
+        }else{
+            player->last_action_limit_reached_at_ms = now;
+            player->actions_since_last_burst -= ANTICHEAT_BURST_ACTIONS;
+        }
+    }
+
+    // execute action
+
     int request_was_valid = player_process_action(player, action, players);
     if(!request_was_valid){
         return;
     }
 
-    player->last_action_at_ms = now;
+    // update anticheat
+
+    player->actions_since_last_burst += 1;
 }
 
 // returns 1 when player REQUESTED ANYTHING VALID, not when anything was actuallydone

@@ -36,7 +36,10 @@ struct player {
     int level;
     int xp;
     long long died_at_ms;
-    long long last_action_at_ms;
+
+    // anticheat
+    int actions_since_last_burst;
+    long long last_action_limit_reached_at_ms;
 
     // other
     int team;
