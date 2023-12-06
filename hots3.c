@@ -2,6 +2,10 @@
 // TODO requested by clients
 //
 // da dobavq alarak
+//
+// da bufna heal-a na kulite
+//
+// nov geroi: stg hammer
 
 // TODO
 //
@@ -17,6 +21,31 @@
 // i da ostavq map-a da se 4ertae v realtime
 //
 // allah
+//
+// da opravq hud-a da ne se za4erkva randomly
+//
+// da opravq hud-a da ne e 4eren (itemite ne se draw-vat purviq put)
+//
+// da dam pove4e reaction time na geroite (i na drugi ne6ta?)
+//
+// da reduce-na VAC?
+//
+// da napi6a v hud-a sredniq level na 2ta otbora
+//
+// ?nerf varian
+//
+// !buff bot heroes+
+//
+// !ne6to za anticheat-a
+//
+// ?kulite po-blizko do spawn-a
+// ?kulite po-golqm range
+//
+// ?nerf stiches
+//
+// ?increase spawn
+//
+// ?increase minion damage
 
 // INFO
 //
