@@ -35,6 +35,6 @@ void map_mark_tile_as_passable(int y, int x);
 
 struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x);
 
-// struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x);
+struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x);
 
 #endif
