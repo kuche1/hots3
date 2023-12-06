@@ -148,20 +148,22 @@ struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS
         struct direction_and_distance dnd_down  = map_pathfind_depth_1(players, start_y, start_x,   dest_y+1, dest_x);
     map_mark_tile_as_passable(start_y, start_x);
 
-    struct direction_and_distance closest_dnd = dnd_left;
-    closest_dnd.direction = D_LEFT;
+    struct direction_and_distance closest_dnd = {
+        .direction = D_LEFT,
+        .distance = dnd_left.distance,
+    };
 
     if(dnd_right.distance < closest_dnd.distance){
-        closest_dnd = dnd_right;
         closest_dnd.direction = D_RIGHT;
+        closest_dnd.distance = dnd_right.distance;
     }
     if(dnd_up.distance < closest_dnd.distance){
-        closest_dnd = dnd_up;
         closest_dnd.direction = D_UP;
+        closest_dnd.distance = dnd_up.distance;
     }
     if(dnd_down.distance < closest_dnd.distance){
-        closest_dnd = dnd_down;
         closest_dnd.direction = D_DOWN;
+        closest_dnd.distance = dnd_down.distance;
     }
 
     if(closest_dnd.distance == INT_MAX){
