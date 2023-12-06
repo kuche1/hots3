@@ -3,7 +3,7 @@
 //
 // da dobavq alarak
 //
-// nov geroi: stg hammer
+// nov geroi: stg hammer (moje da dobavq ne6to kato toggle_christmas_lights za da opi6a dali e kleknala)
 
 // TODO
 //
