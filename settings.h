@@ -21,7 +21,7 @@
 
 #define PLAYERS_REQUIRED 8 // more like heroes_required
 
-#define RESPAWN_TIME_MS 23e3
+#define RESPAWN_TIME_MS 25e3
 #define MINION_SPAWN_INTERVAL_MS 2100
 
 #define HEALTH_STATES 8 // clarity vs bandwidth (and style)
