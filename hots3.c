@@ -22,6 +22,8 @@
 // ?da atakuva6 nai-slabiq do teb
 //
 // ?auto attack
+//
+// ?da display-va respawn timer
 
 // INFO
 //
