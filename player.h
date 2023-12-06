@@ -41,6 +41,12 @@ struct player {
     int actions_since_last_burst;
     long long last_action_limit_reached_at_ms;
 
+    // UI
+    int ui_hp;
+    int ui_level;
+    int ui_xp;
+    int ui_help;
+
     // other
     int team;
     enum entity_type et;

@@ -55,6 +55,12 @@ void player_init_mem(struct player *player){
     player->actions_since_last_burst = 0;
     player->last_action_limit_reached_at_ms = 0;
 
+    // make sure those values are something unreachable so that the UI gets updated for the first time
+    player->ui_hp = INT_MIN / 2;
+    player->ui_level = INT_MIN / 2;
+    player->ui_xp = INT_MIN / 2;
+    player->ui_help = 0;
+
     player->team = 0;
     player->et = ET_MINION;
 
@@ -703,25 +709,19 @@ void player_draw_ui(struct player *player){
 
     int ui_y = MAP_Y + 1;
 
-    // static variables for previous values (they have to be here so that we can check if we need to clear the screen for the hud color)
+    // check if an ui element needs to be updated
 
-    // make sure those values are something unreachable so that the UI gets updated when this function gets run for the first time
-    static int hp_before    = INT_MIN / 2;
-    static int level_before = INT_MIN / 2;
-    static int xp_before    = INT_MIN / 2;
-    static int help_drawn_before = 0;
+    int hp_updated = player->ui_hp != player->hp;
+    player->ui_hp = player->hp;
 
-    int hp_updated = hp_before != player->hp;
-    hp_before = player->hp;
+    int level_updated = player->ui_level != player->level;
+    player->ui_level = player->level;
 
-    int level_updated = level_before != player->level;
-    level_before = player->level;
+    int xp_updated = player->ui_xp != player->xp;
+    player->ui_xp = player->xp;
 
-    int xp_updated = xp_before != player->xp;
-    xp_before = player->xp;
-
-    int help_updated = !help_drawn_before;
-    help_drawn_before = 1;
+    int help_updated = !player->ui_help;
+    player->ui_help = 1;
 
     int anything_updated = hp_updated || level_updated || xp_updated || help_updated;
 
