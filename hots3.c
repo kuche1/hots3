@@ -15,7 +15,7 @@
 //
 // da opravq hud-a da ne se za4erkva randomly
 //
-// da opravq hud-a da ne e 4eren (itemite ne se draw-vat purviq put)
+// da opravq hud-a da ne e 4eren (itemite ne se draw-vat purviq put) [TOVA E TAKA ZA6TOTO POLZVAM 1 STATIC VAR VMESTO PO 1 ZA VSEKI IGRA4]
 //
 // da napi6a v hud-a sredniq level na 2ta otbora
 //
