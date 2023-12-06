@@ -24,6 +24,10 @@
 // !ne6to za anticheat-a
 //
 // da se izpisva na hud-a average level-a na otborite
+//
+// ?da atakuva6 nai-slabiq do teb
+//
+// ?auto attack
 
 // INFO
 //
