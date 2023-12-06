@@ -7,6 +7,8 @@
 
 #include "settings.h"
 
+static int unpassable_tiles[MAP_Y][MAP_X] = {0};
+
 int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
 
     if((pos_y < 0) || (pos_x < 0)){
@@ -14,6 +16,10 @@ int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
     }
 
     if((pos_y >= MAP_Y) || (pos_x >= MAP_X)){
+        return 0;
+    }
+
+    if(unpassable_tiles[pos_y][pos_x]){
         return 0;
     }
 
@@ -53,6 +59,16 @@ struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player pl
 
 int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x){
     return abs(start_y - dest_y) + abs(start_x - dest_x);
+}
+
+void map_mark_tile_as_unpassable(int y, int x){
+    unpassable_tiles[y][x] += 1;
+    assert(unpassable_tiles[y][x] <= 1);
+}
+
+void map_mark_tile_as_passable(int y, int x){
+    unpassable_tiles[y][x] -= 1;
+    assert(unpassable_tiles[y][x] >= 0);
 }
 
 struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
@@ -123,6 +139,36 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
 
 }
 
-// enum direction map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
-//     enum direction_choice_left
-// }
+struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+
+    map_mark_tile_as_unpassable(start_y, start_x);
+        struct direction_and_distance dnd_left  = map_pathfind_depth_1(players, start_y, start_x-1, dest_y,   dest_x);
+        struct direction_and_distance dnd_right = map_pathfind_depth_1(players, start_y, start_x+1, dest_y,   dest_x);
+        struct direction_and_distance dnd_up    = map_pathfind_depth_1(players, start_y, start_x,   dest_y-1, dest_x);
+        struct direction_and_distance dnd_down  = map_pathfind_depth_1(players, start_y, start_x,   dest_y+1, dest_x);
+    map_mark_tile_as_passable(start_y, start_x);
+
+    struct direction_and_distance closest_dnd = dnd_left;
+    closest_dnd.direction = D_LEFT;
+
+    if(dnd_right.distance < closest_dnd.distance){
+        closest_dnd = dnd_right;
+        closest_dnd.direction = D_RIGHT;
+    }
+    if(dnd_up.distance < closest_dnd.distance){
+        closest_dnd = dnd_up;
+        closest_dnd.direction = D_UP;
+    }
+    if(dnd_down.distance < closest_dnd.distance){
+        closest_dnd = dnd_down;
+        closest_dnd.direction = D_DOWN;
+    }
+
+    if(closest_dnd.distance == INT_MAX){
+        closest_dnd.direction = D_NONE;
+    }else{
+        closest_dnd.distance += 1;
+    }
+
+    return closest_dnd;
+}
