@@ -13,15 +13,11 @@
 //
 // hotjoin ako ima botove?
 //
-// make it so that the anticheat works in `bursts`
-//
 // da opravq hud-a da ne se za4erkva randomly
 //
 // da opravq hud-a da ne e 4eren (itemite ne se draw-vat purviq put)
 //
 // da napi6a v hud-a sredniq level na 2ta otbora
-//
-// !ne6to za anticheat-a
 //
 // da se izpisva na hud-a average level-a na otborite
 //
