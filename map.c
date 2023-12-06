@@ -55,7 +55,7 @@ int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x){
     return abs(start_y - dest_y) + abs(start_x - dest_x);
 }
 
-enum direction map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
     struct map_get_empty_tiles_near_return tiles = map_get_empty_tiles_near(players, start_y, start_x);
 
     enum direction available[4];
@@ -80,7 +80,7 @@ enum direction map_pathfind_depth_1(struct player players[PLAYERS_MAX], int star
 
 
     int closest_distance = INT_MAX;
-    int closest_direction = D_NONE;
+    enum direction closest_direction = D_NONE;
 
     for(int available_idx=0; available_idx<available_len; ++available_idx){
         enum direction direction = available[available_idx];
@@ -114,6 +114,15 @@ enum direction map_pathfind_depth_1(struct player players[PLAYERS_MAX], int star
         }
     }
 
-    return closest_direction;
+    struct direction_and_distance dnd = {
+        .direction = closest_direction,
+        .distance = closest_distance,
+    };
+
+    return dnd;
 
 }
+
+// enum direction map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+//     enum direction_choice_left
+// }
