@@ -174,3 +174,50 @@ struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS
 
     return closest_dnd;
 }
+
+struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, int depth){
+
+    assert(depth >= 1);
+
+    switch(depth){
+        case 1:
+            return map_pathfind_depth_1(players, start_y, start_x, dest_y, dest_x);
+        case 2:
+            return map_pathfind_depth_2(players, start_y, start_x, dest_y, dest_x);
+    }
+
+    // do the job
+
+    map_mark_tile_as_unpassable(start_y, start_x);
+        struct direction_and_distance dnd_left  = map_pathfind_depth(players, start_y, start_x-1, dest_y,   dest_x, depth-1);
+        struct direction_and_distance dnd_right = map_pathfind_depth(players, start_y, start_x+1, dest_y,   dest_x, depth-1);
+        struct direction_and_distance dnd_up    = map_pathfind_depth(players, start_y, start_x,   dest_y-1, dest_x, depth-1);
+        struct direction_and_distance dnd_down  = map_pathfind_depth(players, start_y, start_x,   dest_y+1, dest_x, depth-1);
+    map_mark_tile_as_passable(start_y, start_x);
+
+    struct direction_and_distance closest_dnd = {
+        .direction = D_LEFT,
+        .distance = dnd_left.distance,
+    };
+
+    if(dnd_right.distance < closest_dnd.distance){
+        closest_dnd.direction = D_RIGHT;
+        closest_dnd.distance = dnd_right.distance;
+    }
+    if(dnd_up.distance < closest_dnd.distance){
+        closest_dnd.direction = D_UP;
+        closest_dnd.distance = dnd_up.distance;
+    }
+    if(dnd_down.distance < closest_dnd.distance){
+        closest_dnd.direction = D_DOWN;
+        closest_dnd.distance = dnd_down.distance;
+    }
+
+    if(closest_dnd.distance == INT_MAX){
+        closest_dnd.direction = D_NONE;
+    }else{
+        closest_dnd.distance += 1;
+    }
+
+    return closest_dnd;
+}
