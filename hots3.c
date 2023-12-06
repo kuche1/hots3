@@ -3,8 +3,6 @@
 //
 // da dobavq alarak
 //
-// da bufna heal-a na kulite
-//
 // nov geroi: stg hammer
 
 // TODO
@@ -34,11 +32,8 @@
 //
 // ?nerf varian
 //
-// !buff bot heroes+
-//
 // !ne6to za anticheat-a
 //
-// ?kulite po-blizko do spawn-a
 // ?kulite po-golqm range
 //
 // ?nerf stiches
@@ -46,6 +41,8 @@
 // ?increase spawn
 //
 // ?increase minion damage
+//
+// ?buff valla
 
 // INFO
 //

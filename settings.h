@@ -74,9 +74,9 @@
 // bot parameters
 
 // reactions
-#define BOT_REACTION_TIME_MS 300
-#define MINION_REACTION_TIME_MS 700
-#define TOWER_REACTION_TIME_MS 1400
+#define BOT_REACTION_TIME_MS 200
+#define MINION_REACTION_TIME_MS 600
+#define TOWER_REACTION_TIME_MS 1300
 // b-line or random movement
 #define BOT_WILLPOWER     4
 #define BOT_SCHIZOPHRENIA 5

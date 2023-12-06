@@ -185,11 +185,11 @@ void hero_init_tower(struct hero *hero){
 
     hero->hp_max = (hero->hp_max * 30) / 10;
 
-    hero->basic_attack_distance += 4;
+    hero->basic_attack_distance += 5;
     hero->basic_attack_damage = (base_attack * 25) / 10;
 
     hero->heal_ability_range = 1;
-    hero->heal_ability_amount = base_attack / 3;
+    hero->heal_ability_amount = (base_attack * 2) / 3;
 
     hero->legpower = 0;
     hero->weight = 1;
