@@ -170,7 +170,7 @@ struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS
             dnd_left.distance = INT_MAX;
         }
 
-        if(map_is_tile_empty(players, start_y,   start_x+1)){
+        if(map_is_tile_empty(players, start_y,   start_x+1)){ // TODO! what if it turns out the the target is here
             dnd_right = map_pathfind_depth_1(players, start_y,   start_x+1, dest_y, dest_x);
         }else{
             dnd_right.direction = D_NONE;

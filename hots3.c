@@ -26,6 +26,7 @@
 // ?da display-va respawn timer
 //
 // !da napravq pathfinding-a da izbira random posoka kogato ima nqkolko posoki s su6tiq koeficient
+// !pathfindinga o6te sukva
 
 // INFO
 //
