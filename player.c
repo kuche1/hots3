@@ -38,8 +38,6 @@ void player_init_mem(struct player *player){
     player->health_color_len = 0;
     // player->team_color = "";
     // player->team_color_len = 0;
-    player->level_color = "";
-    player->level_color_len = 0;
     player->christmas_lights_on = 0;
 
     hero_init_mem(&player->hero);
@@ -595,16 +593,6 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
     while(player->xp >= XP_FOR_LEVEL_UP){
         player->xp -= XP_FOR_LEVEL_UP;
         player->level += 1;
-        
-        if((player->level & 1) == (LEVEL_ON_SPAWN & 1)){
-            static char level_color[] = EFFECT_NO_STRIKETHROUGH;
-            player->level_color       = level_color;
-            player->level_color_len   = sizeof(level_color);
-        }else{
-            static char level_color[] = EFFECT_STRIKETHROUGH;
-            player->level_color       = level_color;
-            player->level_color_len   = sizeof(level_color);
-        }
 
         // restore hp
 
@@ -653,8 +641,6 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         struct player *player_receiver = &players[player_idx];
 
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
-
-        screen_print_single(player_receiver->connfd, player->level_color, player->level_color_len);
 
         screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
 

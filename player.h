@@ -21,8 +21,6 @@ struct player {
     int health_color_len;
     char *team_color;
     int team_color_len;
-    char *level_color;
-    int level_color_len;
     int christmas_lights_on;
 
     // selected character stats
