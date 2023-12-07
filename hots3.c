@@ -32,6 +32,8 @@
 // ?auto attack
 //
 // ?da display-va respawn timer
+//
+// da napravq da moje character-a ti da e UTF-8 character (i da proverqvam dali naistna e UTF-8 ili nqkolko ASCII char-a)
 
 // INFO
 //

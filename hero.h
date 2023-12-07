@@ -35,6 +35,7 @@ void hero_init_varian(struct hero *hero);
 void hero_init_valla(struct hero *hero);
 void hero_init_stiches(struct hero *hero);
 void hero_init_lili(struct hero *hero);
+void hero_init_alarak(struct hero *hero);
 // special
 void hero_init_minion(struct hero *hero);
 void hero_init_tower(struct hero *hero);

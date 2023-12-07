@@ -7,7 +7,7 @@
 #include "screen.h"
 #include "networking.h"
 
-#define NUMBER_OF_HEROES 5
+#define NUMBER_OF_HEROES 6
 
 /////////////
 ///////////// initialisations
@@ -26,6 +26,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         "stiches\n\r\thigher hp\n\r\tslower\n\r",
         "lili\n\r\tlower hp\n\r\tlower damage\n\r\tcan heal\n\r",
         // "minion\n\r\tpiece of shit stats\n\r\tgood for mindgames\n\r",
+        "alarak\n\r\tlower hp\n\r\thigher damage\n\r"
     };
 
     void (*choices_fnc[NUMBER_OF_HEROES])(struct hero *) = {
@@ -35,6 +36,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         hero_init_stiches,
         hero_init_lili,
         // hero_init_minion,
+        hero_init_alarak,
     };
 
     switch(entity_type){
@@ -112,10 +114,10 @@ void hero_draw_single(struct hero *hero, int connfd){
 void hero_init_regular_guy(struct hero *hero){
     hero->model = 'B';
 
-    hero->hp_max = 560;
+    hero->hp_max = 1120;
 
     hero->basic_attack_distance = 1;
-    hero->basic_attack_damage = 6;
+    hero->basic_attack_damage = 12;
 
     hero->heal_ability_range = 0;
     hero->heal_ability_amount = 0;
@@ -163,6 +165,14 @@ void hero_init_lili(struct hero *hero){
     hero->heal_ability_amount = (base_attack * 6) / 10;
 }
 
+void hero_init_alarak(struct hero *hero){
+    hero->model = 'A';
+
+    hero->hp_max = (hero->hp_max * 8) / 10;
+
+    hero->basic_attack_damage = (hero->basic_attack_damage * 12) / 10;
+}
+
 /////////////
 ///////////// special
 /////////////
@@ -186,7 +196,7 @@ void hero_init_tower(struct hero *hero){
     hero->hp_max = (hero->hp_max * 30) / 10;
 
     hero->basic_attack_distance += 5;
-    hero->basic_attack_damage = (base_attack * 25) / 10;
+    hero->basic_attack_damage = (base_attack * 30) / 10;
 
     hero->heal_ability_range = 1;
     hero->heal_ability_amount = (base_attack * 2) / 3;
