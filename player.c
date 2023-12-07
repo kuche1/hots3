@@ -959,7 +959,7 @@ static int player_bot_select_action(struct player *player, struct player players
 
     // move to closest target
 
-    struct direction_and_distance dnd = map_pathfind_depth_1(players, player->y, player->x, target->y, target->x);
+    struct direction_and_distance dnd = map_pathfind_depth(players, player->y, player->x, target->y, target->x, 1);
 
     switch(dnd.direction){
         case D_NONE:
