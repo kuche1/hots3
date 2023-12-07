@@ -11,6 +11,12 @@
 
 // TODO
 //
+// !da optimiziram pathfinding-a
+//
+// da napravq hp-to da e za4erknato ako e <=0
+
+// TODO low priority or old
+//
 // da napravq kulite da sa za4erknati i levelup da e underline
 //
 // local multiplayer
@@ -19,17 +25,11 @@
 //
 // da napi6a v hud-a sredniq level na 2ta otbora
 //
-// da se izpisva na hud-a average level-a na otborite
-//
 // ?da atakuva6 nai-slabiq do teb
 //
 // ?auto attack
 //
 // ?da display-va respawn timer
-//
-// !da optimiziram pathfinding-a
-//
-// da napravq hp-to da e za4erknato ako e <=0
 
 // INFO
 //
