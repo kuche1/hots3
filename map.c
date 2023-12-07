@@ -169,6 +169,7 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
 }
 
 struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+    // TODO optimise by checking if a given path has already been analysed
 
     map_mark_tile_as_unpassable(start_y, start_x);
         // TODO what if the starting position is a wall
