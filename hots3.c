@@ -24,6 +24,8 @@
 // ?auto attack
 //
 // ?da display-va respawn timer
+//
+// !da optimiziram pathfinding-a
 
 // INFO
 //
