@@ -87,10 +87,21 @@ void map_mark_tile_as_passable(int y, int x){
 
 struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
 
-    // if the destination is a solid object and we are touching it
-    // return
     {
         int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
+
+        // if we have already reached the destination
+
+        if(dist <= 0){
+            struct direction_and_distance dnd = {
+                .direction = D_NONE,
+                .distance = dist,
+            };
+            return dnd;
+        }
+
+        // if the destination is a solid object and we are touching it
+
         if(dist <= 1){
             if(!map_is_tile_empty(players, dest_y, dest_x)){
                 struct direction_and_distance dnd = {
