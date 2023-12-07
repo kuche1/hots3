@@ -36,8 +36,6 @@ void player_init_mem(struct player *player){
 
     player->health_color = "";
     player->health_color_len = 0;
-    // player->team_color = "";
-    // player->team_color_len = 0;
     player->christmas_lights_on = 0;
 
     hero_init_mem(&player->hero);
@@ -77,15 +75,6 @@ void player_init(struct player *player, int team, enum entity_type entity_type, 
     player->sock_len = sock_len;
 
     player->team = team;
-    // if(player->team){
-    //     static char team_color[] = EFFECT_NO_INVERSE_REVERSE;
-    //     player->team_color       = team_color;
-    //     player->team_color_len   = sizeof(team_color);
-    // }else{
-    //     static char team_color[] = EFFECT_INVERSE_REVERSE;
-    //     player->team_color       = team_color;
-    //     player->team_color_len   = sizeof(team_color);
-    // }
 
     player->et = entity_type;
     switch(player->et){
@@ -643,8 +632,6 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
 
         screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
-
-        // screen_print_single(player_receiver->connfd, player->team_color, player->team_color_len);
 
         if(player->christmas_lights_on){
             // sample effect used for various shits
