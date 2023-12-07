@@ -85,7 +85,7 @@ void map_mark_tile_as_passable(int y, int x){
     assert(unpassable_tiles[y][x] >= 0);
 }
 
-struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, enum check_start check_start){
 
     {
         int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
@@ -110,6 +110,24 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
                 };
                 return dnd;
             }
+        }
+
+        // if the starting position is invalid
+        // and the flag for checking the start position is set
+        // (at the very beginning this will be equal to the player that tried to pathfind)
+
+        switch(check_start){
+            case DONT_CHECK_START:
+                break;
+            case CHECK_START:
+                if(!map_is_tile_empty(players, start_y, start_x)){
+                    struct direction_and_distance dnd = {
+                        .direction = D_NONE,
+                        .distance = INT_MAX,
+                    };
+                    return dnd;
+                }
+                break;
         }
     }
 
@@ -164,44 +182,58 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
     return dnd;
 }
 
-struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, enum check_start check_start){
     // TODO optimise by checking if a given path has already been analysed
 
+    { // TODO it fucking sucks that I have to copy this
+        int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
+
+        // if we have already reached the destination
+
+        if(dist <= 0){
+            struct direction_and_distance dnd = {
+                .direction = D_NONE,
+                .distance = dist,
+            };
+            return dnd;
+        }
+
+        // if the destination is a solid object and we are touching it
+
+        if(dist <= 1){
+            if(!map_is_tile_empty(players, dest_y, dest_x)){
+                struct direction_and_distance dnd = {
+                    .direction = D_NONE,
+                    .distance = dist,
+                };
+                return dnd;
+            }
+        }
+
+        // if the starting position is invalid
+        // and the flag for checking the start position is set
+        // (at the very beginning this will be equal to the player that tried to pathfind)
+
+        switch(check_start){
+            case DONT_CHECK_START:
+                break;
+            case CHECK_START:
+                if(!map_is_tile_empty(players, start_y, start_x)){
+                    struct direction_and_distance dnd = {
+                        .direction = D_NONE,
+                        .distance = INT_MAX,
+                    };
+                    return dnd;
+                }
+                break;
+        }
+    }
+
     map_mark_tile_as_unpassable(start_y, start_x);
-
-        struct direction_and_distance dnd_left;
-        struct direction_and_distance dnd_right;
-        struct direction_and_distance dnd_up;
-        struct direction_and_distance dnd_down;
-
-        if(map_is_tile_empty(players, start_y,   start_x-1)){ // this check could possibly be done in the `depth_1` function, but let's do it here for now
-            dnd_left = map_pathfind_depth_1(players, start_y,   start_x-1, dest_y, dest_x);
-        }else{
-            dnd_left.direction = D_NONE;
-            dnd_left.distance = INT_MAX;
-        }
-
-        if(map_is_tile_empty(players, start_y,   start_x+1)){ // TODO! what if it turns out the the target is here
-            dnd_right = map_pathfind_depth_1(players, start_y,   start_x+1, dest_y, dest_x);
-        }else{
-            dnd_right.direction = D_NONE;
-            dnd_right.distance = INT_MAX;
-        }
-
-        if(map_is_tile_empty(players, start_y-1, start_x)){
-            dnd_up = map_pathfind_depth_1(players, start_y-1, start_x, dest_y, dest_x);
-        }else{
-            dnd_up.direction = D_NONE;
-            dnd_up.distance = INT_MAX;
-        }
-
-        if(map_is_tile_empty(players, start_y+1, start_x)){
-            dnd_down = map_pathfind_depth_1(players, start_y+1, start_x, dest_y, dest_x);
-        }else{
-            dnd_down.direction = D_NONE;
-            dnd_down.distance = INT_MAX;
-        }
-
+        struct direction_and_distance dnd_left  = map_pathfind_depth_1(players, start_y,   start_x-1, dest_y, dest_x, CHECK_START);
+        struct direction_and_distance dnd_right = map_pathfind_depth_1(players, start_y,   start_x+1, dest_y, dest_x, CHECK_START);
+        struct direction_and_distance dnd_up    = map_pathfind_depth_1(players, start_y-1, start_x,   dest_y, dest_x, CHECK_START);
+        struct direction_and_distance dnd_down  = map_pathfind_depth_1(players, start_y+1, start_x,   dest_y, dest_x, CHECK_START);
     map_mark_tile_as_passable(start_y, start_x);
 
     struct direction_and_distance closest_dnd = {
@@ -231,56 +263,68 @@ struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS
     return closest_dnd;
 }
 
-struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, int depth){
+struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, enum check_start check_start, int depth){
+
+    { // TODO it fucking sucks that I have to copy this
+        int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
+
+        // if we have already reached the destination
+
+        if(dist <= 0){
+            struct direction_and_distance dnd = {
+                .direction = D_NONE,
+                .distance = dist,
+            };
+            return dnd;
+        }
+
+        // if the destination is a solid object and we are touching it
+
+        if(dist <= 1){
+            if(!map_is_tile_empty(players, dest_y, dest_x)){
+                struct direction_and_distance dnd = {
+                    .direction = D_NONE,
+                    .distance = dist,
+                };
+                return dnd;
+            }
+        }
+
+        // if the starting position is invalid
+        // and the flag for checking the start position is set
+        // (at the very beginning this will be equal to the player that tried to pathfind)
+
+        switch(check_start){
+            case DONT_CHECK_START:
+                break;
+            case CHECK_START:
+                if(!map_is_tile_empty(players, start_y, start_x)){
+                    struct direction_and_distance dnd = {
+                        .direction = D_NONE,
+                        .distance = INT_MAX,
+                    };
+                    return dnd;
+                }
+                break;
+        }
+    }
 
     assert(depth >= 1);
 
     switch(depth){
         case 1:
-            return map_pathfind_depth_1(players, start_y, start_x, dest_y, dest_x);
+            return map_pathfind_depth_1(players, start_y, start_x, dest_y, dest_x, check_start);
         case 2:
-            return map_pathfind_depth_2(players, start_y, start_x, dest_y, dest_x);
+            return map_pathfind_depth_2(players, start_y, start_x, dest_y, dest_x, check_start);
     }
 
     // do the job
 
     map_mark_tile_as_unpassable(start_y, start_x);
-
-        // TODO this copy-pasting sucks
-
-        struct direction_and_distance dnd_left;
-        struct direction_and_distance dnd_right;
-        struct direction_and_distance dnd_up;
-        struct direction_and_distance dnd_down;
-
-        if(map_is_tile_empty(players, start_y,   start_x-1)){ // this check could possibly be done in the `depth_1` function, but let's do it here for now
-            dnd_left = map_pathfind_depth(players, start_y,   start_x-1, dest_y, dest_x, depth-1);
-        }else{
-            dnd_left.direction = D_NONE;
-            dnd_left.distance = INT_MAX;
-        }
-
-        if(map_is_tile_empty(players, start_y,   start_x+1)){
-            dnd_right = map_pathfind_depth(players, start_y,   start_x+1, dest_y, dest_x, depth-1);
-        }else{
-            dnd_right.direction = D_NONE;
-            dnd_right.distance = INT_MAX;
-        }
-
-        if(map_is_tile_empty(players, start_y-1, start_x)){
-            dnd_up = map_pathfind_depth(players, start_y-1, start_x, dest_y, dest_x, depth-1);
-        }else{
-            dnd_up.direction = D_NONE;
-            dnd_up.distance = INT_MAX;
-        }
-
-        if(map_is_tile_empty(players, start_y+1, start_x)){
-            dnd_down = map_pathfind_depth(players, start_y+1, start_x, dest_y, dest_x, depth-1);
-        }else{
-            dnd_down.direction = D_NONE;
-            dnd_down.distance = INT_MAX;
-        }
-
+        struct direction_and_distance dnd_left  = map_pathfind_depth(players, start_y,   start_x-1, dest_y, dest_x, CHECK_START, depth-1);
+        struct direction_and_distance dnd_right = map_pathfind_depth(players, start_y,   start_x+1, dest_y, dest_x, CHECK_START, depth-1);
+        struct direction_and_distance dnd_up    = map_pathfind_depth(players, start_y-1, start_x,   dest_y, dest_x, CHECK_START, depth-1);
+        struct direction_and_distance dnd_down  = map_pathfind_depth(players, start_y+1, start_x,   dest_y, dest_x, CHECK_START, depth-1);
     map_mark_tile_as_passable(start_y, start_x);
 
     struct direction_and_distance closest_dnd = {
