@@ -100,6 +100,17 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
         }
     }
 
+    // // if the starting position is solid
+    // // give up
+    // // NOTE THAT THIS IMPLIES THAT THIS FUNCTION WILL NOT BE CALLED DIRECTLY WITH A PLAYER POSITION
+    // if(!map_is_tile_empty(players, start_y, start_x)){
+    //     struct direction_and_distance dnd = {
+    //         .direction = D_NONE,
+    //         .distance = INT_MAX,
+    //     };
+    //     return dnd;
+    // }
+
     struct map_get_empty_tiles_near_return tiles = map_get_empty_tiles_near(players, start_y, start_x);
 
     enum direction available[4];
