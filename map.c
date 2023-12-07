@@ -188,29 +188,70 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
 
     // choose best path
 
-    struct direction_and_distance closest_dnd = {
-        .direction = D_LEFT,
-        .distance = dnd_left.distance,
-    };
+    enum direction best_directions[4];
+    int best_directions_len = 0;
+    int best_direction_distance = INT_MAX;
 
-    if(dnd_right.distance < closest_dnd.distance){
-        closest_dnd.direction = D_RIGHT;
-        closest_dnd.distance = dnd_right.distance;
-    }
-    if(dnd_up.distance < closest_dnd.distance){
-        closest_dnd.direction = D_UP;
-        closest_dnd.distance = dnd_up.distance;
-    }
-    if(dnd_down.distance < closest_dnd.distance){
-        closest_dnd.direction = D_DOWN;
-        closest_dnd.distance = dnd_down.distance;
+    if(dnd_left.distance <= best_direction_distance){
+        if(dnd_left.distance < best_direction_distance){
+            best_direction_distance = dnd_left.distance;
+            best_directions_len = 0;
+        }
+        best_directions[best_directions_len++] = D_LEFT;
     }
 
-    if(closest_dnd.distance == INT_MAX){
-        closest_dnd.direction = D_NONE;
+    if(dnd_right.distance <= best_direction_distance){
+        if(dnd_right.distance < best_direction_distance){
+            best_direction_distance = dnd_right.distance;
+            best_directions_len = 0;
+        }
+        best_directions[best_directions_len++] = D_RIGHT;
+    }
+
+    if(dnd_up.distance <= best_direction_distance){
+        if(dnd_up.distance < best_direction_distance){
+            best_direction_distance = dnd_up.distance;
+            best_directions_len = 0;
+        }
+        best_directions[best_directions_len++] = D_UP;
+    }
+
+    if(dnd_down.distance <= best_direction_distance){
+        if(dnd_down.distance < best_direction_distance){
+            best_direction_distance = dnd_down.distance;
+            best_directions_len = 0;
+        }
+        best_directions[best_directions_len++] = D_DOWN;
+    }
+
+    // choose a path among the equally-long paths
+
+    if(best_directions_len <= 0){
+        struct direction_and_distance dnd = {
+            .direction = D_NONE,
+            .distance = INT_MAX,
+        };
+        return dnd;
+    }
+
+    int best_direction_idx = rand() % best_directions_len;
+    enum direction best_direction = best_directions[best_direction_idx];
+
+    // return
+
+    if(best_direction_distance == INT_MAX){
+        struct direction_and_distance dnd = {
+            .direction = D_NONE,
+            .distance = INT_MAX,
+        };
+        return dnd;
     }else{
-        closest_dnd.distance += 1;
+        struct direction_and_distance dnd = {
+            .direction = best_direction,
+            .distance = best_direction_distance + 1,
+        };
+        return dnd;
     }
 
-    return closest_dnd;
+    assert(0);
 }
