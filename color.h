@@ -31,8 +31,8 @@
 #define EFFECT_NO_UNDERLINE       {'\033', '[', '2', '4', 'm'}
 #define EFFECT_BLINK              {'\033', '[',      '5', 'm'}
 #define EFFECT_NO_BLINK           {'\033', '[', '2', '5', 'm'}
-#define EFFECT_INVERSE_REVERSE    {'\033', '[',      '7', 'm'}
-#define EFFECT_NO_INVERSE_REVERSE {'\033', '[', '2', '7', 'm'}
+#define EFFECT_INVERSE            {'\033', '[',      '7', 'm'}
+#define EFFECT_NO_INVERSE         {'\033', '[', '2', '7', 'm'}
 #define EFFECT_STRIKETHROUGH      {'\033', '[',      '9', 'm'}
 #define EFFECT_NO_STRIKETHROUGH   {'\033', '[', '2', '9', 'm'}
 
