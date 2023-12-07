@@ -113,7 +113,7 @@ static void player_init_bot(struct player *player){
     switch(player->et){
         case ET_HERO_BOT:
 
-            player->bot_action_delay_ms = BOT_REACTION_TIME_MS;
+            player->bot_action_delay_ms = HERO_BOT_REACTION_TIME_MS;
 
             player->bot_willpower = BOT_WILLPOWER;
             player->bot_schizophrenia = BOT_SCHIZOPHRENIA;
@@ -959,7 +959,7 @@ static int player_bot_select_action(struct player *player, struct player players
 
     // move to closest target
 
-    struct direction_and_distance dnd = map_pathfind_depth(players, player->y, player->x, target->y, target->x, 1);
+    struct direction_and_distance dnd = map_pathfind_depth(players, player->y, player->x, target->y, target->x, BOT_PATHFIND_DEPTH);
 
     switch(dnd.direction){
         case D_NONE:

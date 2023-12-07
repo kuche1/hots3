@@ -10,11 +10,6 @@
 #define LISTEN 5
 #define SEND_MAX_ATTEMPTS 5 // this does not take into account the size of the data
 
-// anti hacking
-
-#define ANTICHEAT_BURST_INTERVAL_MS 160
-#define ANTICHEAT_BURST_ACTIONS 4
-
 // game parameters
 
 #define PLAYERS_MAX 50 // includes minions and towers, more like entities_max
@@ -25,6 +20,11 @@
 #define MINION_SPAWN_INTERVAL_MS 2100
 
 #define HEALTH_STATES 8 // clarity vs bandwidth (and style)
+
+// anti hacking
+
+#define ANTICHEAT_BURST_INTERVAL_MS 160
+#define ANTICHEAT_BURST_ACTIONS 4
 
 // levels
 
@@ -75,7 +75,7 @@
 // bot parameters
 
 // reactions
-#define BOT_REACTION_TIME_MS 200
+#define HERO_BOT_REACTION_TIME_MS 200
 #define MINION_REACTION_TIME_MS 600
 #define TOWER_REACTION_TIME_MS 1300
 // b-line or random movement
@@ -85,5 +85,7 @@
 #define MINION_SCHIZOPHRENIA 10
 #define TOWER_WILLPOWER     1
 #define TOWER_SCHIZOPHRENIA 1
+// pathfinding
+#define BOT_PATHFIND_DEPTH 1 // TODO different depths if hero/minion
 
 #endif
