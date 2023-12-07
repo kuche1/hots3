@@ -87,95 +87,162 @@ void map_mark_tile_as_passable(int y, int x){
 
 struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
 
-    // if the target is a solid tile
-    // return if we are touching it
-    if(!map_is_tile_empty(players, dest_y, dest_x)){
+    // if the destination is a solid object and we are touching it
+    // return
+    {
         int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
         if(dist <= 1){
-            struct direction_and_distance dnd = {
-                .direction = D_NONE,
-                .distance = dist,
-            };
-            return dnd;
+            if(!map_is_tile_empty(players, dest_y, dest_x)){
+                struct direction_and_distance dnd = {
+                    .direction = D_NONE,
+                    .distance = dist,
+                };
+                return dnd;
+            }
         }
     }
 
-    // // if the starting position is solid
-    // // give up
-    // // NOTE THAT THIS IMPLIES THAT THIS FUNCTION WILL NOT BE CALLED DIRECTLY WITH A PLAYER POSITION
-    // if(!map_is_tile_empty(players, start_y, start_x)){
-    //     struct direction_and_distance dnd = {
-    //         .direction = D_NONE,
-    //         .distance = INT_MAX,
-    //     };
-    //     return dnd;
-    // }
+    int dist_left  = map_calc_dist(start_y,   start_x-1, dest_y, dest_x);
+    int dist_right = map_calc_dist(start_y,   start_x+1, dest_y, dest_x);
+    int dist_up    = map_calc_dist(start_y-1, start_x,   dest_y, dest_x);
+    int dist_down  = map_calc_dist(start_y+1, start_x,   dest_y, dest_x);
 
-    struct map_get_empty_tiles_near_return tiles = map_get_empty_tiles_near(players, start_y, start_x);
-
-    enum direction available[4];
-    int available_len = 0;
-
-    if(tiles.left){
-        available[available_len] = D_LEFT;
-        available_len += 1;
+    if(!map_is_tile_empty(players, start_y,   start_x-1)){
+        dist_left = INT_MAX;
     }
-    if(tiles.right){
-        available[available_len] = D_RIGHT;
-        available_len += 1;
+    if(!map_is_tile_empty(players, start_y,   start_x+1)){
+        dist_right = INT_MAX;
     }
-    if(tiles.up){
-        available[available_len] = D_UP;
-        available_len += 1;
+    if(!map_is_tile_empty(players, start_y-1, start_x)){
+        dist_up = INT_MAX;
     }
-    if(tiles.down){
-        available[available_len] = D_DOWN;
-        available_len += 1;
+    if(!map_is_tile_empty(players, start_y+1, start_x)){
+        dist_down = INT_MAX;
     }
 
+    int closest_dir = D_LEFT;
+    int closest_dist = dist_left;
 
-    int closest_distance = INT_MAX;
-    enum direction closest_direction = D_NONE;
-
-    for(int available_idx=0; available_idx<available_len; ++available_idx){
-        enum direction direction = available[available_idx];
-
-        int y_ofs = 0;
-        int x_ofs = 0;
-
-        switch(direction){
-            case D_LEFT:
-                x_ofs = -1;
-                break;
-            case D_RIGHT:
-                x_ofs = 1;
-                break;
-            case D_UP:
-                y_ofs = -1;
-                break;
-            case D_DOWN:
-                y_ofs = 1;
-                break;
-            case D_NONE:
-                assert(0);
-                break;
-        }
-
-        int distance = map_calc_dist(start_y+y_ofs, start_x+x_ofs, dest_y, dest_x);
-
-        if(distance < closest_distance){
-            closest_distance = distance;
-            closest_direction = direction;
-        }
+    if(dist_right < closest_dist){
+        closest_dir = D_RIGHT;
+        closest_dist = dist_right;
     }
+    if(dist_up < closest_dist){
+        closest_dir = D_UP;
+        closest_dist = dist_up;
+    }
+    if(dist_down < closest_dist){
+        closest_dir = D_DOWN;
+        closest_dist = dist_down;
+    }
+
+    if(closest_dist == INT_MAX){
+        closest_dir = D_NONE;
+    }else{
+        closest_dist += 1;
+    }
+
+    // return
 
     struct direction_and_distance dnd = {
-        .direction = closest_direction,
-        .distance = closest_distance,
+        .direction = closest_dir,
+        .distance = closest_dist,
     };
 
     return dnd;
 }
+
+// struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+
+//     // if the target is a solid tile
+//     // return if we are touching it
+//     if(!map_is_tile_empty(players, dest_y, dest_x)){
+//         int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
+//         if(dist <= 1){
+//             struct direction_and_distance dnd = {
+//                 .direction = D_NONE,
+//                 .distance = dist,
+//             };
+//             return dnd;
+//         }
+//     }
+
+//     // // if the starting position is solid
+//     // // give up
+//     // // NOTE THAT THIS IMPLIES THAT THIS FUNCTION WILL NOT BE CALLED DIRECTLY WITH A PLAYER POSITION
+//     // if(!map_is_tile_empty(players, start_y, start_x)){
+//     //     struct direction_and_distance dnd = {
+//     //         .direction = D_NONE,
+//     //         .distance = INT_MAX,
+//     //     };
+//     //     return dnd;
+//     // }
+
+//     struct map_get_empty_tiles_near_return tiles = map_get_empty_tiles_near(players, start_y, start_x);
+
+//     enum direction available[4];
+//     int available_len = 0;
+
+//     if(tiles.left){
+//         available[available_len] = D_LEFT;
+//         available_len += 1;
+//     }
+//     if(tiles.right){
+//         available[available_len] = D_RIGHT;
+//         available_len += 1;
+//     }
+//     if(tiles.up){
+//         available[available_len] = D_UP;
+//         available_len += 1;
+//     }
+//     if(tiles.down){
+//         available[available_len] = D_DOWN;
+//         available_len += 1;
+//     }
+
+
+//     int closest_distance = INT_MAX;
+//     enum direction closest_direction = D_NONE;
+
+//     for(int available_idx=0; available_idx<available_len; ++available_idx){
+//         enum direction direction = available[available_idx];
+
+//         int y_ofs = 0;
+//         int x_ofs = 0;
+
+//         switch(direction){
+//             case D_LEFT:
+//                 x_ofs = -1;
+//                 break;
+//             case D_RIGHT:
+//                 x_ofs = 1;
+//                 break;
+//             case D_UP:
+//                 y_ofs = -1;
+//                 break;
+//             case D_DOWN:
+//                 y_ofs = 1;
+//                 break;
+//             case D_NONE:
+//                 assert(0);
+//                 break;
+//         }
+
+//         int distance = map_calc_dist(start_y+y_ofs, start_x+x_ofs, dest_y, dest_x);
+
+//         if(distance < closest_distance){
+//             closest_distance = distance;
+//             closest_direction = direction;
+//         }
+//     }
+
+//     struct direction_and_distance dnd = {
+//         .direction = closest_direction,
+//         .distance = closest_distance,
+//     };
+
+//     return dnd;
+// }
 
 struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
     // TODO optimise by checking if a given path has already been analysed
