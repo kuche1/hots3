@@ -24,6 +24,8 @@
 // ?auto attack
 //
 // ?da display-va respawn timer
+//
+// !da opravq noviq pathfinding (za depth2 zaduljitelno, za pove4e ako moje)
 
 // INFO
 //

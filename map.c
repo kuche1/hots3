@@ -62,11 +62,25 @@ int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x){
 }
 
 void map_mark_tile_as_unpassable(int y, int x){
+    assert(y >= 0);
+    assert(y < MAP_Y);
+    assert(x >= 0);
+    assert(x < MAP_X);
+    // if((y < 0) || (y >= MAP_Y) || (x < 0) || (x >= MAP_X)){
+    //     return;
+    // }
     unpassable_tiles[y][x] += 1;
     assert(unpassable_tiles[y][x] <= 1);
 }
 
 void map_mark_tile_as_passable(int y, int x){
+    assert(y >= 0);
+    assert(y < MAP_Y);
+    assert(x >= 0);
+    assert(x < MAP_X);
+    // if((y < 0) || (y >= MAP_Y) || (x < 0) || (x >= MAP_X)){
+    //     return;
+    // }
     unpassable_tiles[y][x] -= 1;
     assert(unpassable_tiles[y][x] >= 0);
 }
@@ -142,10 +156,10 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
 struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
 
     map_mark_tile_as_unpassable(start_y, start_x);
-        struct direction_and_distance dnd_left  = map_pathfind_depth_1(players, start_y, start_x-1, dest_y,   dest_x);
-        struct direction_and_distance dnd_right = map_pathfind_depth_1(players, start_y, start_x+1, dest_y,   dest_x);
-        struct direction_and_distance dnd_up    = map_pathfind_depth_1(players, start_y, start_x,   dest_y-1, dest_x);
-        struct direction_and_distance dnd_down  = map_pathfind_depth_1(players, start_y, start_x,   dest_y+1, dest_x);
+        struct direction_and_distance dnd_left  = map_pathfind_depth_1(players, start_y,   start_x-1, dest_y, dest_x);
+        struct direction_and_distance dnd_right = map_pathfind_depth_1(players, start_y,   start_x+1, dest_y, dest_x);
+        struct direction_and_distance dnd_up    = map_pathfind_depth_1(players, start_y-1, start_x,   dest_y, dest_x);
+        struct direction_and_distance dnd_down  = map_pathfind_depth_1(players, start_y+1, start_x,   dest_y, dest_x);
     map_mark_tile_as_passable(start_y, start_x);
 
     struct direction_and_distance closest_dnd = {
@@ -189,10 +203,10 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
     // do the job
 
     map_mark_tile_as_unpassable(start_y, start_x);
-        struct direction_and_distance dnd_left  = map_pathfind_depth(players, start_y, start_x-1, dest_y,   dest_x, depth-1);
-        struct direction_and_distance dnd_right = map_pathfind_depth(players, start_y, start_x+1, dest_y,   dest_x, depth-1);
-        struct direction_and_distance dnd_up    = map_pathfind_depth(players, start_y, start_x,   dest_y-1, dest_x, depth-1);
-        struct direction_and_distance dnd_down  = map_pathfind_depth(players, start_y, start_x,   dest_y+1, dest_x, depth-1);
+        struct direction_and_distance dnd_left  = map_pathfind_depth(players, start_y,   start_x-1, dest_y, dest_x, depth-1);
+        struct direction_and_distance dnd_right = map_pathfind_depth(players, start_y,   start_x+1, dest_y, dest_x, depth-1);
+        struct direction_and_distance dnd_up    = map_pathfind_depth(players, start_y-1, start_x,   dest_y, dest_x, depth-1);
+        struct direction_and_distance dnd_down  = map_pathfind_depth(players, start_y+1, start_x,   dest_y, dest_x, depth-1);
     map_mark_tile_as_passable(start_y, start_x);
 
     struct direction_and_distance closest_dnd = {
