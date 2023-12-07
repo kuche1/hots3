@@ -234,10 +234,42 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
     // do the job
 
     map_mark_tile_as_unpassable(start_y, start_x);
-        struct direction_and_distance dnd_left  = map_pathfind_depth(players, start_y,   start_x-1, dest_y, dest_x, depth-1);
-        struct direction_and_distance dnd_right = map_pathfind_depth(players, start_y,   start_x+1, dest_y, dest_x, depth-1);
-        struct direction_and_distance dnd_up    = map_pathfind_depth(players, start_y-1, start_x,   dest_y, dest_x, depth-1);
-        struct direction_and_distance dnd_down  = map_pathfind_depth(players, start_y+1, start_x,   dest_y, dest_x, depth-1);
+
+        // TODO this copy-pasting sucks
+
+        struct direction_and_distance dnd_left;
+        struct direction_and_distance dnd_right;
+        struct direction_and_distance dnd_up;
+        struct direction_and_distance dnd_down;
+
+        if(map_is_tile_empty(players, start_y,   start_x-1)){ // this check could possibly be done in the `depth_1` function, but let's do it here for now
+            dnd_left = map_pathfind_depth(players, start_y,   start_x-1, dest_y, dest_x, depth-1);
+        }else{
+            dnd_left.direction = D_NONE;
+            dnd_left.distance = INT_MAX;
+        }
+
+        if(map_is_tile_empty(players, start_y,   start_x+1)){
+            dnd_right = map_pathfind_depth(players, start_y,   start_x+1, dest_y, dest_x, depth-1);
+        }else{
+            dnd_right.direction = D_NONE;
+            dnd_right.distance = INT_MAX;
+        }
+
+        if(map_is_tile_empty(players, start_y-1, start_x)){
+            dnd_up = map_pathfind_depth(players, start_y-1, start_x, dest_y, dest_x, depth-1);
+        }else{
+            dnd_up.direction = D_NONE;
+            dnd_up.distance = INT_MAX;
+        }
+
+        if(map_is_tile_empty(players, start_y+1, start_x)){
+            dnd_down = map_pathfind_depth(players, start_y+1, start_x, dest_y, dest_x, depth-1);
+        }else{
+            dnd_down.direction = D_NONE;
+            dnd_down.distance = INT_MAX;
+        }
+
     map_mark_tile_as_passable(start_y, start_x);
 
     struct direction_and_distance closest_dnd = {
