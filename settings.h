@@ -86,6 +86,6 @@
 #define TOWER_WILLPOWER     1
 #define TOWER_SCHIZOPHRENIA 1
 // pathfinding
-#define BOT_PATHFIND_DEPTH 1 // TODO different depths if hero/minion
+#define BOT_PATHFIND_DEPTH 1 // TODO different depths if hero/minion // as of 2023.12.07 setting this to 11 causes somewhat noticable lag
 
 #endif
