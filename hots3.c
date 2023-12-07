@@ -13,7 +13,7 @@
 //
 // hotjoin ako ima botove?
 //
-// da opravq hud-a da ne se za4erkva randomly
+// !da opravq hud-a da ne se za4erkva randomly
 //
 // da napi6a v hud-a sredniq level na 2ta otbora
 //
