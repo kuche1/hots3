@@ -1,9 +1,13 @@
 
 // TODO requested by clients
 //
-// da dobavq alarak
+// [2023-11-30] da dobavq alarak
 //
-// nov geroi: stg hammer (moje da dobavq ne6to kato toggle_christmas_lights za da opi6a dali e kleknala)
+// [2023-12-05] nov geroi: stg hammer (moje da dobavq ne6to kato toggle_christmas_lights za da opi6a dali e kleknala)
+
+// TODO important bugs
+//
+// da opravq hud-a da ne se za4erkva randomly
 
 // TODO
 //
@@ -12,8 +16,6 @@
 // local multiplayer
 //
 // hotjoin ako ima botove?
-//
-// !da opravq hud-a da ne se za4erkva randomly
 //
 // da napi6a v hud-a sredniq level na 2ta otbora
 //
