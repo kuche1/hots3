@@ -1,8 +1,6 @@
 
 // TODO requested by clients
 //
-// [2023-11-30] da dobavq alarak
-//
 // [2023-12-05] nov geroi: stg hammer (moje da dobavq ne6to kato toggle_christmas_lights za da opi6a dali e kleknala)
 
 // TODO important bugs
