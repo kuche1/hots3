@@ -32,6 +32,8 @@
 // ?da display-va respawn timer
 //
 // da napravq da moje character-a ti da e UTF-8 character (i da proverqvam dali naistna e UTF-8 ili nqkolko ASCII char-a)
+//
+// add cat pic from https://github.com/kuche1/hots3/pull/2 (we can convert the image to ASCII characters and send them to the client)
 
 // INFO
 //
