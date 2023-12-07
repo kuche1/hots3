@@ -4,8 +4,6 @@
 // [2023-12-05] nov geroi: stg hammer (moje da dobavq ne6to kato toggle_christmas_lights za da opi6a dali e kleknala)
 
 // TODO important bugs
-//
-// da opravq hud-a da ne se za4erkva randomly
 
 // TODO
 //
