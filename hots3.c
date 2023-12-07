@@ -14,6 +14,8 @@
 // !da optimiziram pathfinding-a
 //
 // da napravq hp-to da e za4erknato ako e <=0
+//
+// da mahna shit za4erkvaneto kato digne6 level (bezpolezno e)
 
 // TODO low priority or old
 //
