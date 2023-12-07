@@ -102,6 +102,7 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
         }
     }
 
+    // we could optimise this a bit (see `depth_2`)
     int dist_left  = map_calc_dist(start_y,   start_x-1, dest_y, dest_x);
     int dist_right = map_calc_dist(start_y,   start_x+1, dest_y, dest_x);
     int dist_up    = map_calc_dist(start_y-1, start_x,   dest_y, dest_x);
