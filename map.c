@@ -86,6 +86,22 @@ void map_mark_tile_as_passable(int y, int x){
 }
 
 struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
+
+    // check if we're already "touching" the destination
+    // this will only work if you're trying to find a path to a player (or a wall)
+    // otherwise we'll have to add some more login
+    {
+        int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
+        if(dist <= 1){
+            struct direction_and_distance dnd = {
+                .direction = D_NONE,
+                .distance = dist,
+            };
+            return dnd;
+        }
+
+    }
+
     struct map_get_empty_tiles_near_return tiles = map_get_empty_tiles_near(players, start_y, start_x);
 
     enum direction available[4];
