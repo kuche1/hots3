@@ -25,7 +25,7 @@
 //
 // ?da display-va respawn timer
 //
-// !da opravq noviq pathfinding (za depth2 zaduljitelno, za pove4e ako moje)
+// !da napravq pathfinding-a da izbira random posoka kogato ima nqkolko posoki s su6tiq koeficient
 
 // INFO
 //
