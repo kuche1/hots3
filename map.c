@@ -171,6 +171,7 @@ struct direction_and_distance map_pathfind_depth_1(struct player players[PLAYERS
 struct direction_and_distance map_pathfind_depth_2(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x){
 
     map_mark_tile_as_unpassable(start_y, start_x);
+        // TODO what if the starting position is a wall
         struct direction_and_distance dnd_left  = map_pathfind_depth_1(players, start_y,   start_x-1, dest_y, dest_x);
         struct direction_and_distance dnd_right = map_pathfind_depth_1(players, start_y,   start_x+1, dest_y, dest_x);
         struct direction_and_distance dnd_up    = map_pathfind_depth_1(players, start_y-1, start_x,   dest_y, dest_x);
