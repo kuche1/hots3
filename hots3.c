@@ -14,6 +14,8 @@
 // da mahna shit za4erkvaneto kato digne6 level (bezpolezno e)
 //
 // da polzvam po-dobra indikaciq za tova 4e ti si player-a (ne samo bold)
+//
+// kulite da sa inverse
 
 // TODO low priority or old
 //
@@ -36,10 +38,6 @@
 // add cat pic from https://github.com/kuche1/hots3/pull/2 (we can convert the image to ASCII characters and send them to the client)
 //
 // only apply level effect if certain amount of levels above average
-
-// INFO
-//
-// reverse effect is now not used by anyone
 
 #include <stdio.h>
 #include <string.h>
