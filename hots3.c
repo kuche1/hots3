@@ -12,6 +12,8 @@
 // da napravq kato se spawnne6 da blinkva6 do momenta v koito natisne6 ne6to (i samo ti da vijda6 tova)
 //
 // da napravq botovete da polzvat po-adekvatna funkciq za namiraneto na distanciqta do target-a
+//
+// da napravq botovete da retreat-vat
 
 // TODO low priority or old
 //
