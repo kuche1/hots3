@@ -400,7 +400,7 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_MA
             continue;
         }
 
-        int distance = abs(player->x - other_player->x) + abs(player->y - other_player->y);
+        int distance = map_calc_dist(player->y, player->x, other_player->y, other_player->x);
         if(distance < closest_distance){
             closest_distance = distance;
             closest_player = other_player;
