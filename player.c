@@ -382,8 +382,8 @@ static int player_process_action(struct player *player, char action, struct play
 }
 
 void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]){
+
     struct player *target = NULL;
-    int closest_distance = INT_MAX;
 
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *other_player = &players[player_idx];
@@ -401,9 +401,10 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_MA
         }
 
         int distance = map_calc_dist(player->y, player->x, other_player->y, other_player->x);
-        if(distance < closest_distance){
-            closest_distance = distance;
-            target = other_player;
+        if(distance <= player->hero.basic_attack_distance){
+            if((target == NULL) || (other_player->hp < target->hp)){
+                target = other_player;
+            }
         }
     }
 
@@ -411,11 +412,9 @@ void player_basic_attack(struct player *player, struct player players[PLAYERS_MA
         return;
     }
 
-    if(closest_distance <= player->hero.basic_attack_distance){
-        int damage = player->hero.basic_attack_damage * player->level;
-        player_receive_damage(target, damage, players);
-        player_toggle_christmas_lights(player, players); // indicate that an attack was performed
-    }
+    int damage = player->hero.basic_attack_damage * player->level;
+    player_receive_damage(target, damage, players);
+    player_toggle_christmas_lights(player, players); // indicate that an attack was performed
 }
 
 void player_heal_ability(struct player *player, struct player players[PLAYERS_MAX]){
