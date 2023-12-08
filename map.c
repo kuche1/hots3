@@ -4,10 +4,11 @@
 #include <stdio.h>
 #include <limits.h>
 #include <assert.h>
+#include <string.h>
 
 #include "settings.h"
 
-static int unpassable_tiles[MAP_Y][MAP_X] = {0};
+static int tiles_pathfind_coeff[MAP_Y][MAP_X] = {{INT_MIN}}; // this should be overwritten
 
 int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
 
@@ -16,10 +17,6 @@ int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
     }
 
     if((pos_y >= MAP_Y) || (pos_x >= MAP_X)){
-        return 0;
-    }
-
-    if(unpassable_tiles[pos_y][pos_x]){
         return 0;
     }
 
@@ -61,33 +58,39 @@ int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x){
     return abs(start_y - dest_y) + abs(start_x - dest_x);
 }
 
-void map_mark_tile_as_unpassable(int y, int x){
-    assert(y >= 0);
-    assert(y < MAP_Y);
-    assert(x >= 0);
-    assert(x < MAP_X);
-    // if((y < 0) || (y >= MAP_Y) || (x < 0) || (x >= MAP_X)){
-    //     return;
-    // }
-    unpassable_tiles[y][x] += 1;
-    assert(unpassable_tiles[y][x] <= 1);
+void map_clear_pathfind_data(void){
+    memset(tiles_pathfind_coeff, -1, sizeof(tiles_pathfind_coeff));
 }
 
-void map_mark_tile_as_passable(int y, int x){
+void map_mark_pathfind_tile_coeff(int y, int x, int coeff){
     assert(y >= 0);
     assert(y < MAP_Y);
     assert(x >= 0);
     assert(x < MAP_X);
-    // if((y < 0) || (y >= MAP_Y) || (x < 0) || (x >= MAP_X)){
-    //     return;
-    // }
-    unpassable_tiles[y][x] -= 1;
-    assert(unpassable_tiles[y][x] >= 0);
+    tiles_pathfind_coeff[y][x] = coeff;
+}
+
+int map_is_tile_coeff_ok(struct player players[PLAYERS_MAX], int pos_y, int pos_x, int caller_coeff){
+    if((pos_y < 0) || (pos_x < 0)){
+        return 0;
+    }
+
+    if((pos_y >= MAP_Y) || (pos_x >= MAP_X)){
+        return 0;
+    }
+
+    if(tiles_pathfind_coeff[pos_y][pos_x] >= caller_coeff){
+        return 0;
+    }
+
+    if(!map_is_tile_empty(players, pos_y, pos_x)){
+        return 0;
+    }
+
+    return 1;
 }
 
 struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, enum check_start check_start, int depth){
-
-    // TODO optimise by checking if a given path has already been analysed
 
     {
         int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
@@ -122,7 +125,7 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
             case DONT_CHECK_START:
                 break;
             case CHECK_START:
-                if(!map_is_tile_empty(players, start_y, start_x)){
+                if(!map_is_tile_coeff_ok(players, start_y, start_x, depth)){
                     struct direction_and_distance dnd = {
                         .direction = D_NONE,
                         .distance = INT_MAX,
@@ -135,7 +138,15 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
 
     // do the job
 
-    map_mark_tile_as_unpassable(start_y, start_x);
+    switch(check_start){
+        case DONT_CHECK_START:
+            map_clear_pathfind_data();
+            break;
+        case CHECK_START:
+            break;
+    }
+
+    map_mark_pathfind_tile_coeff(start_y, start_x, depth);\
 
         struct direction_and_distance dnd_left;
         struct direction_and_distance dnd_right;
@@ -148,28 +159,28 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
             case 1:
                 dnd_left.direction = D_NONE;
                 dnd_left.distance = INT_MAX;
-                if(map_is_tile_empty(players, start_y,   start_x-1)){
+                if(map_is_tile_coeff_ok(players, start_y,   start_x-1, depth-1)){
                     dnd_left.direction = D_LEFT;
                     dnd_left.distance = map_calc_dist(start_y,   start_x-1, dest_y, dest_x);
                 }
 
                 dnd_right.direction = D_NONE;
                 dnd_right.distance = INT_MAX;
-                if(map_is_tile_empty(players, start_y,   start_x+1)){
+                if(map_is_tile_coeff_ok(players, start_y,   start_x+1, depth-1)){
                     dnd_right.direction = D_RIGHT;
                     dnd_right.distance = map_calc_dist(start_y,   start_x+1, dest_y, dest_x);
                 }
 
                 dnd_up.direction = D_NONE;
                 dnd_up.distance = INT_MAX;
-                if(map_is_tile_empty(players, start_y-1,   start_x)){
+                if(map_is_tile_coeff_ok(players, start_y-1,   start_x, depth-1)){
                     dnd_up.direction = D_UP;
                     dnd_up.distance = map_calc_dist(start_y-1,   start_x, dest_y, dest_x);
                 }
 
                 dnd_down.direction = D_NONE;
                 dnd_down.distance = INT_MAX;
-                if(map_is_tile_empty(players, start_y+1,   start_x)){
+                if(map_is_tile_coeff_ok(players, start_y+1,   start_x, depth-1)){
                     dnd_down.direction = D_DOWN;
                     dnd_down.distance = map_calc_dist(start_y+1,   start_x, dest_y, dest_x);
                 }
@@ -184,7 +195,13 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
                 break;
         }
 
-    map_mark_tile_as_passable(start_y, start_x);
+    switch(check_start){
+        case DONT_CHECK_START:
+            map_clear_pathfind_data();
+            break;
+        case CHECK_START:
+            break;
+    }
 
     // choose best path
 

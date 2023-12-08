@@ -29,13 +29,14 @@ struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player pl
 
 int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x);
 
-void map_mark_tile_as_unpassable(int y, int x);
-void map_mark_tile_as_passable(int y, int x);
-
 enum check_start{
     DONT_CHECK_START = 0,
     CHECK_START,
 };
+
+void map_clear_pathfind_data(void);
+void map_mark_pathfind_tile_coeff(int y, int x, int coeff);
+int map_is_tile_coeff_ok(struct player players[PLAYERS_MAX], int pos_y, int pos_x, int caller_coeff);
 
 struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, enum check_start check_start, int depth);
 
