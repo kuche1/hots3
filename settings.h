@@ -82,6 +82,6 @@
 // pathfinding
 #define BOT_PATHFIND_DEPTH 1
 #define MINION_PATHFIND_DEPTH 1
-#define TOWER_PATHFIND_DEPTH 1
+#define TOWER_PATHFIND_DEPTH 1 // TODO? make this 0
 
 #endif
