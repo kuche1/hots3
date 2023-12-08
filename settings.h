@@ -68,7 +68,7 @@
 
 // bot parameters
 
-// reactions
+// reaction time
 #define HERO_BOT_REACTION_TIME_MS 200
 #define MINION_REACTION_TIME_MS 500
 #define TOWER_REACTION_TIME_MS 1300
