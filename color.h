@@ -39,4 +39,9 @@
 // this is not the most appropriate place of all but it will be fine for now
 #define RESET_WITH_SPACE {'\033', '[', '0', 'm', ' '}
 
+// this is stupid but it saves bandwidth
+
+#define EFFECT_BOLD_UNDERLINE_STRIKETHROUGH {'\033', '[', '1', ';', '4', ';', '9', 'm'}
+#define EFFECT_NO_BOLD_UNDERLINE_STRIKETHROUGH {'\033', '[', '2', '2', ';', '2', '4', ';', '2', '9', 'm'} // this will also diable dim/faint
+
 #endif
