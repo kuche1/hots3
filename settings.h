@@ -2,8 +2,6 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "color.h"
-
 // networking
 
 #define PORT 32793

@@ -14,7 +14,7 @@
 #include "map.h"
 #include "hero.h"
 #include "util.h"
-#include "color.h"
+#include "shader.h"
 
 /////////////
 ///////////// private
@@ -635,7 +635,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         if(player->christmas_lights_on){
             // sample effect used for various shits
-            static char christmas_lights_effect_on[] = EFFECT_ITALIC;
+            static char christmas_lights_effect_on[] = SHADER_CHRISTMAS_LIGHTS_ON;
             screen_print_single(player_receiver->connfd, christmas_lights_effect_on, sizeof(christmas_lights_effect_on));
         }
 
@@ -654,7 +654,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         if(player->christmas_lights_on){
             // sample effect used for various shits
-            static char christmas_lights_effect_off[] = EFFECT_NO_ITALIC;
+            static char christmas_lights_effect_off[] = SHADER_CHRISTMAS_LIGHTS_OFF;
             screen_print_single(player_receiver->connfd, christmas_lights_effect_off, sizeof(christmas_lights_effect_off));
         }
     }
