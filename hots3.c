@@ -12,6 +12,8 @@
 // da napravq kato se spawnne6 da blinkva6 do momenta v koito natisne6 ne6to (i samo ti da vijda6 tova)
 //
 // da napravq botovete da polzvat po-adekvatna funkciq za namiraneto na distanciqta do target-a
+//
+// da napravq attack target-a da e enemy-to s nai-malko HP (tova 6te improve-ne i kulite i 6te napravi minionite da sa po-polezni)
 
 // TODO low priority or old
 //
