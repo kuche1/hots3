@@ -10,6 +10,8 @@
 // da napravq botovete da polzvat po-adekvatna funkciq za namiraneto na distanciqta do target-a
 //
 // da napravq botovete da retreat-vat
+//
+// da dobavq steni
 
 // TODO low priority or old
 //
