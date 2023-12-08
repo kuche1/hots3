@@ -11,6 +11,7 @@
 // da razdelq funkciqta za namirane na distanciq na 2 - 1 za raw i 1 za pathfinding
 //
 // da napravq botovete da retreat-vat
+// workaround dokato go implementna tova e vseki otbor da ima po 1 lili (possibly 2)
 //
 // da dobavq steni
 
