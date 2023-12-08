@@ -13,8 +13,6 @@
 
 // TODO low priority or old
 //
-// da napravq kulite da sa za4erknati i levelup da e underline
-//
 // local multiplayer
 //
 // hotjoin ako ima botove?
