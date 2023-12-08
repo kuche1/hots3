@@ -14,8 +14,8 @@
 
 #define PLAYERS_REQUIRED 8 // more like heroes_required
 
-#define RESPAWN_TIME_MS 25e3
-#define MINION_SPAWN_INTERVAL_MS 2100
+#define RESPAWN_TIME_MS 26e3
+#define MINION_SPAWN_INTERVAL_MS 2000
 
 #define HEALTH_STATES 8 // clarity vs bandwidth (and style)
 
@@ -70,7 +70,7 @@
 
 // reactions
 #define HERO_BOT_REACTION_TIME_MS 200
-#define MINION_REACTION_TIME_MS 600
+#define MINION_REACTION_TIME_MS 500
 #define TOWER_REACTION_TIME_MS 1300
 // b-line or random movement
 #define BOT_WILLPOWER     4
