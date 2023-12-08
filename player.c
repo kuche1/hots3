@@ -692,7 +692,7 @@ void player_draw_ui(struct player *player){
     // set UI color
 
     if(anything_updated){
-        char color[] = UI_COLOR;
+        char color[] = SHADER_UI;
         screen_cur_set_single(player->connfd, ui_y, 0);
         screen_print_single(player->connfd, color, sizeof(color));
     }

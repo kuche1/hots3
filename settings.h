@@ -66,10 +66,6 @@
 // heal ability
 #define KEY_HEAL_ABILITY 'k'
 
-// UI
-
-#define UI_COLOR COL_GREEN_DARK
-
 // bot parameters
 
 // reactions
