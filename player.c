@@ -170,15 +170,46 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
 
     if(is_tower){
 
-        int pos_ys[TOWERS_PER_TEAM] = {TOWER_SPAWN_Y, TOWER_SPAWN_Y,   TOWER_SPAWN_Y,   TOWER_SPAWN_Y*3, TOWER_SPAWN_Y*2, TOWER_SPAWN_Y*5, TOWER_SPAWN_Y*3};
-        int pos_xs[TOWERS_PER_TEAM] = {TOWER_SPAWN_X, TOWER_SPAWN_X*3, TOWER_SPAWN_X*5, TOWER_SPAWN_X,   TOWER_SPAWN_X*2, TOWER_SPAWN_X,   TOWER_SPAWN_X*3};
+        int pos_ys[NUMBER_OF_TOWERS];
+        int pos_xs[NUMBER_OF_TOWERS];
+        int pos_idx = 0;
+
+        for(int layer=0; layer<TOWER_LAYERS; ++layer){
+            int y = 1;
+            int x = (layer*2) + 1;
+
+            pos_ys[pos_idx] = TOWER_SPAWN_Y * y;
+            pos_xs[pos_idx] = TOWER_SPAWN_X * x;
+            pos_idx += 1;
+        }
+
+        for(int layer=1; layer<TOWER_LAYERS; ++layer){
+            int y = layer + 1;
+            int x = y;
+
+            pos_ys[pos_idx] = TOWER_SPAWN_Y * y;
+            pos_xs[pos_idx] = TOWER_SPAWN_X * x;
+            pos_idx += 1;
+        }
+
+        for(int layer=1; layer<TOWER_LAYERS; ++layer){
+            int y = (layer*2) + 1;
+            int x = 1;
+
+            pos_ys[pos_idx] = TOWER_SPAWN_Y * y;
+            pos_xs[pos_idx] = TOWER_SPAWN_X * x;
+            pos_idx += 1;
+        }
+
+        assert(pos_idx == NUMBER_OF_TOWERS);
+
 
         int y = 0;
         int x = 0;
 
         int empty_spot_found = 0;
 
-        for(int idx=0; idx<TOWERS_PER_TEAM; ++idx){
+        for(int idx=0; idx<NUMBER_OF_TOWERS; ++idx){
             y = pos_ys[idx];
             x = pos_xs[idx];
 

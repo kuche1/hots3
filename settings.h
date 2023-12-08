@@ -49,8 +49,9 @@
 #define MINION_SPAWN_AREA_Y 3
 #define MINION_SPAWN_AREA_X (MINION_SPAWN_AREA_Y * 2)
 
-#define TOWERS_PER_TEAM 7
-#define TOWER_SPAWN_Y 3
+#define TOWER_LAYERS 3
+#define NUMBER_OF_TOWERS (TOWER_LAYERS + ((TOWER_LAYERS-1) * (3-1))) // make it less hardcoded at some point
+#define TOWER_SPAWN_Y 3 // how close/distant towers are from each other
 #define TOWER_SPAWN_X (TOWER_SPAWN_Y * 2)
 
 // keybinds

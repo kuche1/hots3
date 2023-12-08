@@ -140,7 +140,7 @@ int main(int argc, char **argv){
     // spawn towers
 
     for(int team=0; team<=1; ++team){
-        for(int tower_idx=0; tower_idx<TOWERS_PER_TEAM; ++tower_idx){
+        for(int tower_idx=0; tower_idx<NUMBER_OF_TOWERS; ++tower_idx){
             struct player *tower = generate_new_entity(players);
             assert(tower); // entity limit reached
 
