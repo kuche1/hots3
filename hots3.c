@@ -9,7 +9,7 @@
 //
 // !da optimiziram pathfinding-a
 //
-// da napravq hp-to da e za4erknato ako e <=0
+// da napravq kato se spawnne6 da blinkva6 do momenta v koito natisne6 ne6to (i samo ti da vijda6 tova)
 
 // TODO low priority or old
 //

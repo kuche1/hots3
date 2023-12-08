@@ -729,7 +729,18 @@ void player_draw_ui(struct player *player){
         assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
         screen_cur_set_single(player->connfd, ui_y, 0);
+
+        if(!player->alive){
+            char shader_dead_on[]  = SHADER_UI_DEAD_ON;
+            screen_print_single(player->connfd, shader_dead_on, sizeof(shader_dead_on));
+        }
+
         screen_print_single(player->connfd, msg, written);
+
+        if(!player->alive){
+            char shader_dead_off[]  = SHADER_UI_DEAD_ON;
+            screen_print_single(player->connfd, shader_dead_off, sizeof(shader_dead_off));
+        }
     }
 
     ui_y += 1;
