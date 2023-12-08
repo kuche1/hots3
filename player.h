@@ -20,6 +20,7 @@ struct player {
     char *health_color;
     int health_color_len;
     int christmas_lights_on;
+    int spawn_effect_on;
 
     // selected character stats
     struct hero hero;

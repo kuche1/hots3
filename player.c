@@ -37,6 +37,7 @@ void player_init_mem(struct player *player){
     player->health_color = "";
     player->health_color_len = 0;
     player->christmas_lights_on = 0;
+    player->spawn_effect_on = 0;
 
     hero_init_mem(&player->hero);
 
@@ -249,6 +250,8 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     assert(player->level >= 1); // otherwise the level color will not be initialised
 
     // draw
+
+    player->spawn_effect_on = 1;
 
     player_draw(player, players);
 }
@@ -653,6 +656,11 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
             // indicate that this is the player itself
             static char player_is_self_color[] = SHADER_PLAYER_IS_SELF_ON;
             screen_print_single(player_receiver->connfd, player_is_self_color, sizeof(player_is_self_color));
+
+            if(player->spawn_effect_on){
+                static char shader[] = SHADER_PLAYER_SPAWN_EFFECT_ON;
+                screen_print_single(player_receiver->connfd, shader, sizeof(shader));
+            }
         }
 
         if(is_tower){
@@ -670,6 +678,12 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
         if(player_receiver == player){
             static char player_is_self_color_off[] = SHADER_PLAYER_IS_SELF_OFF;
             screen_print_single(player_receiver->connfd, player_is_self_color_off, sizeof(player_is_self_color_off));
+
+            if(player->spawn_effect_on){
+                player->spawn_effect_on = 0;
+                static char shader[] = SHADER_PLAYER_SPAWN_EFFECT_OFF;
+                screen_print_single(player_receiver->connfd, shader, sizeof(shader));
+            }
         }
 
         if(player->christmas_lights_on){
