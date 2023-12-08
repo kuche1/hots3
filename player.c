@@ -64,6 +64,7 @@ void player_init_mem(struct player *player){
     player->bot_action_delay_ms = 1e3;
     player->bot_willpower = 1;
     player->bot_schizophrenia = 1;
+    player->bot_pathfind_depth = 1;
 
     player->bot_last_action_at_ms = 0;
 }
@@ -105,6 +106,7 @@ static void player_init_bot(struct player *player){
 
             player->bot_willpower = BOT_WILLPOWER;
             player->bot_schizophrenia = BOT_SCHIZOPHRENIA;
+            player->bot_pathfind_depth = BOT_PATHFIND_DEPTH;
 
             break;
 
@@ -114,6 +116,7 @@ static void player_init_bot(struct player *player){
 
             player->bot_willpower = MINION_WILLPOWER;
             player->bot_schizophrenia = MINION_SCHIZOPHRENIA;
+            player->bot_pathfind_depth = MINION_PATHFIND_DEPTH;
 
             break;
         
@@ -123,6 +126,7 @@ static void player_init_bot(struct player *player){
 
             player->bot_willpower = TOWER_WILLPOWER;
             player->bot_schizophrenia = TOWER_SCHIZOPHRENIA;
+            player->bot_pathfind_depth = TOWER_PATHFIND_DEPTH;
 
             break;
         
@@ -977,7 +981,7 @@ static int player_bot_select_action(struct player *player, struct player players
 
     // move to closest target
 
-    struct direction_and_distance dnd = map_pathfind_depth(players, player->y, player->x, target->y, target->x, DONT_CHECK_START, BOT_PATHFIND_DEPTH);
+    struct direction_and_distance dnd = map_pathfind_depth(players, player->y, player->x, target->y, target->x, DONT_CHECK_START, target->bot_pathfind_depth);
 
     switch(dnd.direction){
         case D_NONE:
