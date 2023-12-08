@@ -7,6 +7,7 @@ enum entity_type{
     ET_HERO_BOT,
     ET_MINION,
     ET_TOWER,
+    ET_WALL,
 };
 
 #endif

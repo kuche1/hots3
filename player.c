@@ -85,6 +85,7 @@ void player_init(struct player *player, int team, enum entity_type entity_type, 
         case ET_HERO_BOT:
         case ET_MINION:
         case ET_TOWER:
+        case ET_WALL:
             player_init_bot(player);
             break;
     }
@@ -100,6 +101,12 @@ static void player_init_bot(struct player *player){
     player->bot_last_action_at_ms = 0;
 
     switch(player->et){
+        case ET_HERO_HUMAN:
+
+            assert(0);
+
+            break;
+
         case ET_HERO_BOT:
 
             player->bot_action_delay_ms = HERO_BOT_REACTION_TIME_MS;
@@ -130,11 +137,13 @@ static void player_init_bot(struct player *player){
 
             break;
         
-        case ET_HERO_HUMAN:
+        case ET_WALL:
 
-            assert(0);
+            player->bot_action_delay_ms = WALL_REACTION_TIME_MS;
 
-            break;
+            player->bot_willpower       = WALL_WILLPOWER;
+            player->bot_schizophrenia   = WALL_SCHIZOPHRENIA;
+            player->bot_pathfind_depth  = WALL_PATHFIND_DEPTH;
     }
 }
 
@@ -148,6 +157,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
     int spawn_area_x = 0;
 
     int is_tower = 0;
+    int is_wall = 0;
 
     switch(player->et){
         case ET_HERO_HUMAN:
@@ -163,6 +173,10 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         
         case ET_TOWER:
             is_tower = 1;
+            break;
+        
+        case ET_WALL:
+            is_wall = 1;
             break;
     }
 
@@ -231,6 +245,45 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         player->y = y;
         player->x = x;
         
+    }else if(is_wall){
+
+        for(int ent_idx=0; ent_idx<PLAYERS_MAX; ++ent_idx){
+            struct player *entity = &players[ent_idx];
+            if(!entity->alive){
+                continue;
+            }
+            if(entity->team != player->team){
+                continue;
+            }
+            switch(entity->et){
+                case ET_HERO_HUMAN:
+                case ET_HERO_BOT:
+                case ET_MINION:
+                case ET_WALL:
+                    continue;
+                case ET_TOWER:
+                    break;
+            }
+            for(int y=-1; y<=1; y+=2){
+                for(int x=-1; x<=1; x+=2){
+                    int pos_y = y + entity->y;
+                    int pos_x = x + entity->x;
+
+                    if(map_is_tile_empty(players, pos_y, pos_x)){
+                        player->y = pos_y;
+                        player->x = pos_x;
+                        goto wall_spawn_found;
+                    }
+                }
+            }
+        }
+
+        exit(ERR_COULD_NOT_SPAWN_WALL);
+
+        wall_spawn_found:
+
+        printf("spawned wall\n"); // otherwise I get comptime error for using the label
+
     }else{
 
         int spawn_attempts_left = 50;
@@ -305,25 +358,16 @@ void player_select_action(struct player *player, struct player players[PLAYERS_M
 
     char action;
 
-    switch(player->et){
-        case ET_HERO_HUMAN:
-            {
-                int bytes = net_recv_1B(player->connfd, &action);
-                if(bytes <= 0){
-                    return;
-                }
-            }
-            break;
-        case ET_HERO_BOT:
-        case ET_MINION:
-        case ET_TOWER:
-            {
-                int skip = player_bot_select_action(player, players, &action);
-                if(skip){
-                    return;
-                }
-            }
-            break;
+    if(player->connfd >= 0){
+        int bytes = net_recv_1B(player->connfd, &action);
+        if(bytes <= 0){
+            return;
+        }
+    }else{
+        int skip = player_bot_select_action(player, players, &action);
+        if(skip){
+            return;
+        }
     }
 
     // drop action if cheating
@@ -528,7 +572,8 @@ void player_receive_damage(struct player *player, int amount, struct player play
                     break;
                 case ET_MINION:
                 case ET_TOWER:
-                    if(!MINIONS_AND_TOWERS_CAN_LEVEL_UP){
+                case ET_WALL:
+                    if(!MINIONS_AND_STRUCTURES_CAN_LEVEL_UP){
                         continue;
                     }
                     break;
@@ -630,7 +675,8 @@ void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], i
                 restore_hp = 1;
                 break;
             case ET_TOWER:
-                restore_hp = TOWERS_RESTORE_HP_ON_LEVEL_UP;
+            case ET_WALL:
+                restore_hp = STRUCTURES_RESTORE_HP_ON_LEVEL_UP;
                 break;
         }
 
@@ -671,6 +717,7 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
             case ET_HERO_HUMAN:
             case ET_HERO_BOT:
             case ET_MINION:
+            case ET_WALL:
                 break;
             case ET_TOWER:
                 is_tower = 1;
@@ -731,13 +778,8 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
 void player_draw_ui(struct player *player){
 
-    switch(player->et){
-        case ET_HERO_HUMAN:
-            break;
-        case ET_HERO_BOT:
-        case ET_MINION:
-        case ET_TOWER:
-            return;
+    if(player->connfd < 0){
+        return;
     }
 
     int ui_y = MAP_Y + 1;

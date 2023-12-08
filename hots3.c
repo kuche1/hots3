@@ -156,6 +156,23 @@ int main(int argc, char **argv){
         }
     }
 
+    // spawn walls
+
+    for(int team=0; team<=1; ++team){
+        for(int idx=0; idx<NUMBER_OF_WALLS; ++idx){
+            struct player *wall = generate_new_entity(players);
+            assert(wall); // entity limit reached
+
+            enum entity_type et = ET_WALL;
+            int connfd = -1;
+            struct sockaddr_in sock = {0};
+            int sock_len = 0;
+
+            player_init(wall, team, et, connfd, sock, sock_len);
+            player_spawn(wall, players);
+        }
+    }
+
     // spawn players
 
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
@@ -167,6 +184,7 @@ int main(int argc, char **argv){
                 break;
             case ET_MINION:
             case ET_TOWER:
+            case ET_WALL:
                 break;
         }
     }
@@ -203,6 +221,7 @@ int main(int argc, char **argv){
                         break;
                     case ET_MINION:
                     case ET_TOWER:
+                    case ET_WALL:
                         break;
                 }
             }

@@ -40,6 +40,9 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
     };
 
     switch(entity_type){
+        case ET_HERO_HUMAN:
+            break;
+
         case ET_HERO_BOT:
             {
                 void (*choice)(struct hero *) = choices_fnc[rand() % NUMBER_OF_HEROES];
@@ -55,8 +58,9 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
             hero_init_tower(hero);
             return;
         
-        case ET_HERO_HUMAN:
-            break;
+        case ET_WALL:
+            hero_init_wall(hero);
+            return;
     }
 
     char msg_select_hero[] = "\nSelect a hero and press enter:\n";
@@ -195,7 +199,7 @@ void hero_init_tower(struct hero *hero){
 
     hero->hp_max = (hero->hp_max * 30) / 10;
 
-    hero->basic_attack_distance += 5;
+    hero->basic_attack_distance += 6;
     hero->basic_attack_damage = (base_attack * 30) / 10;
 
     hero->heal_ability_range = 1;

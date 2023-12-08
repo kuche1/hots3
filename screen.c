@@ -27,6 +27,7 @@ void screen_switch_to_draw_mode_single(struct player *player){
         case ET_HERO_BOT:
         case ET_MINION:
         case ET_TOWER:
+        case ET_WALL:
             return;
     }
 
