@@ -641,14 +641,14 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
 
         if(player_receiver == player){
             // indicate that this is the player itself
-            static char player_is_self_color[] = EFFECT_BOLD_UNDERLINE_STRIKETHROUGH;
+            static char player_is_self_color[] = SHADER_PLAYER_IS_SELF_ON;
             screen_print_single(player_receiver->connfd, player_is_self_color, sizeof(player_is_self_color));
         }
 
         hero_draw_single(&player->hero, player_receiver->connfd);
 
         if(player_receiver == player){
-            static char player_is_self_color_off[] = EFFECT_NO_BOLD_UNDERLINE_STRIKETHROUGH;
+            static char player_is_self_color_off[] = SHADER_PLAYER_IS_SELF_OFF;
             screen_print_single(player_receiver->connfd, player_is_self_color_off, sizeof(player_is_self_color_off));
         }
 
