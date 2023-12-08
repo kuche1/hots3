@@ -10,12 +10,12 @@
 
 // game parameters
 
-#define PLAYERS_MAX 90 // includes minions, towers, walls... more like entities_max
+#define PLAYERS_MAX 120 // includes minions, towers, walls... more like entities_max
 
 #define HEROES_REQUIRED 8
 
 #define RESPAWN_TIME_MS 26e3
-#define MINION_SPAWN_INTERVAL_MS 1800
+#define MINION_SPAWN_INTERVAL_MS 1600
 
 #define HEALTH_STATES 8 // clarity vs bandwidth (and style)
 
@@ -86,8 +86,8 @@
 #define WALL_WILLPOWER     1
 #define WALL_SCHIZOPHRENIA 1
 // pathfinding
-#define BOT_PATHFIND_DEPTH 2
-#define MINION_PATHFIND_DEPTH 1
+#define BOT_PATHFIND_DEPTH 3
+#define MINION_PATHFIND_DEPTH 2
 #define TOWER_PATHFIND_DEPTH 0
 #define WALL_PATHFIND_DEPTH 0
 
