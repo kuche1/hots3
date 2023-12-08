@@ -35,6 +35,8 @@
 // kogato nqkoi connect-ne kum survura go pita kolko bota iska, koi map, ...
 //
 // pole za chat (za sega moje i da e samo 1 red)
+//
+// add vision and use the dim effect for whatever you last saw
 
 #include <stdio.h>
 #include <string.h>

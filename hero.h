@@ -39,5 +39,6 @@ void hero_init_alarak(struct hero *hero);
 // special
 void hero_init_minion(struct hero *hero);
 void hero_init_tower(struct hero *hero);
+void hero_init_wall(struct hero *hero);
 
 #endif

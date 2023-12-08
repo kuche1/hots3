@@ -204,3 +204,15 @@ void hero_init_tower(struct hero *hero){
     hero->legpower = 0;
     hero->weight = 1;
 }
+
+void hero_init_wall(struct hero *hero){
+    hero->model = 'W';
+
+    hero->hp_max = (hero->hp_max * 15) / 10;
+
+    hero->basic_attack_distance = 0;
+    hero->basic_attack_damage = 0;
+
+    hero->legpower = 0;
+    hero->weight = 1;
+}
