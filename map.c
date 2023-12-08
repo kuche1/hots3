@@ -59,7 +59,7 @@ int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x){
 }
 
 void map_clear_pathfind_data(void){
-    memset(tiles_pathfind_coeff, -1, sizeof(tiles_pathfind_coeff));
+    memset(tiles_pathfind_coeff, -1, sizeof(tiles_pathfind_coeff)); // this just so happens to work because `-1` is really just 0b11111...
 }
 
 void map_mark_pathfind_tile_coeff(int y, int x, int coeff){
