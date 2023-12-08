@@ -629,6 +629,17 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
         struct player *player_receiver = &players[player_idx];
 
+        int is_tower = 0;
+        switch(player->et){
+            case ET_HERO_HUMAN:
+            case ET_HERO_BOT:
+            case ET_MINION:
+                break;
+            case ET_TOWER:
+                is_tower = 1;
+                break;
+        }
+
         screen_cur_set_single(player_receiver->connfd, player->y, player->x);
 
         screen_print_single(player_receiver->connfd, player->health_color, player->health_color_len);
@@ -645,7 +656,17 @@ void player_draw(struct player *player, struct player players[PLAYERS_MAX]){
             screen_print_single(player_receiver->connfd, player_is_self_color, sizeof(player_is_self_color));
         }
 
+        if(is_tower){
+            static char shader[] = SHADER_TOWER_ON;
+            screen_print_single(player_receiver->connfd, shader, sizeof(shader));
+        }
+
         hero_draw_single(&player->hero, player_receiver->connfd);
+
+        if(is_tower){
+            static char shader[] = SHADER_TOWER_OFF;
+            screen_print_single(player_receiver->connfd, shader, sizeof(shader));
+        }
 
         if(player_receiver == player){
             static char player_is_self_color_off[] = SHADER_PLAYER_IS_SELF_OFF;

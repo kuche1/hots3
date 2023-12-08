@@ -61,8 +61,8 @@
 #define KEY_MOVE_UP 'w'
 #define KEY_MOVE_DOWN 's'
 // basic attack
-#define KEY_BASIC_ATTACK_1 'j'
-#define KEY_BASIC_ATTACK_2 'h'
+#define KEY_BASIC_ATTACK_1 'h'
+#define KEY_BASIC_ATTACK_2 'j'
 // heal ability
 #define KEY_HEAL_ABILITY 'k'
 
