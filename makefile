@@ -2,10 +2,12 @@
 # info
 # https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
 
-COMPILER=gcc
+COMPILER := gcc
+
+# for debug add `-g`
 #COMPILER_FLAGS=-std=c99 -pedantic -Werror -Wextra -Wall -static # you can't have both `-static` and `-fsanitize=address`
-COMPILER_FLAGS=-std=c99 -pedantic -Werror -Wextra -Wall -fsanitize=address
-CC=${COMPILER} ${COMPILER_FLAGS}
+COMPILER_FLAGS := -std=c99 -pedantic -Werror -Wextra -Wall -fsanitize=address
+CC := ${COMPILER} ${COMPILER_FLAGS}
 
 .PHONY: build
 build: hots3

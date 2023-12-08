@@ -979,9 +979,15 @@ static int player_bot_select_action(struct player *player, struct player players
 
     assert(target != NULL);
 
+    // if unable to move
+
+    if(player->hero.legpower <= 0){
+        return 1;
+    }
+
     // move to closest target
 
-    struct direction_and_distance dnd = map_pathfind_depth(players, player->y, player->x, target->y, target->x, DONT_CHECK_START, target->bot_pathfind_depth);
+    struct direction_and_distance dnd = map_pathfind_depth(players, player->y, player->x, target->y, target->x, DONT_CHECK_START, player->bot_pathfind_depth);
 
     switch(dnd.direction){
         case D_NONE:
