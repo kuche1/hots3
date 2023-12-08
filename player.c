@@ -942,6 +942,62 @@ static int player_bot_select_action(struct player *player, struct player players
         }
     }
 
+    // // find if already in range of a healer
+
+    // int already_in_range_of_a_healer = 0;
+
+    // if((player->hero.heal_ability_range > 0) && (player->hero.heal_ability_amount > 0)){
+    //     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+    //         struct player *other_player = &players[player_idx];
+    //         if(player == other_player){
+    //             continue;
+    //         }
+    //         if(!other_player->alive){
+    //             continue;
+    //         }
+    //         if(player->team != other_player->team){
+    //             continue;
+    //         }
+    //         if((other_player->hero.heal_ability_range <= 0) && (other_player->hero.heal_ability_amount <= 0)){
+    //             continue;
+    //         }
+
+    //         int dist = map_calc_dist(player->y, player->x, other_player->y, other_player->x);
+    //         if(dist <= other_player->hero.heal_ability_range){
+    //             already_in_range_of_a_healer = 1;
+    //             break;
+    //         }
+    //     }
+    // }
+
+    // // only attempt to find a healer if not already in range of one
+
+    // struct player *best_healer = NULL;
+
+    // if(!already_in_range_of_a_healer){
+
+    //     for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+    //         struct player *other_player = &players[player_idx];
+    //         if(player == other_player){
+    //             continue;
+    //         }
+    //         if(!other_player->alive){
+    //             continue;
+    //         }
+    //         if(player->team != other_player->team){
+    //             continue;
+    //         }
+    //         if((other_player->hero.heal_ability_range <= 0) || (other_player->hero.heal_ability_amount <= 0)){
+    //             continue;
+    //         }
+
+    //         if((best_healer == NULL) || (best_healer->hero.heal_ability_amount < other_player->hero.heal_ability_amount)){
+    //             best_healer = other_player;
+    //         }
+    //     }
+    
+    // }
+
     // heal or attack if in range
 
     int heal_in_rage    = closest_damaged_ally_dist <= player->hero.heal_ability_range;
