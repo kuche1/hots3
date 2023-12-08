@@ -8,6 +8,7 @@
 // TODO
 //
 // da napravq botovete da polzvat po-adekvatna funkciq za namiraneto na distanciqta do target-a
+// da razdelq funkciqta za namirane na distanciq na 2 - 1 za raw i 1 za pathfinding
 //
 // da napravq botovete da retreat-vat
 //
