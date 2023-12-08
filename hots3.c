@@ -10,8 +10,6 @@
 // !da optimiziram pathfinding-a
 //
 // da napravq hp-to da e za4erknato ako e <=0
-//
-// kulite da sa inverse
 
 // TODO low priority or old
 //
