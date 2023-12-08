@@ -58,7 +58,7 @@ int main(int argc, char **argv){
 
     int number_of_bot_players = atoi(argv[1]);
     assert(number_of_bot_players != 0);
-    if(number_of_bot_players >= PLAYERS_REQUIRED){
+    if(number_of_bot_players >= HEROES_REQUIRED){
         printf("ERROR: number of bot players is too high\n");
         return ERR_BAD_COMMAND_LINE_ARGS;
     }
@@ -86,15 +86,15 @@ int main(int argc, char **argv){
 
     int team = 0;
 
-    assert(PLAYERS_REQUIRED <= PLAYERS_MAX);
-    while(players_len < PLAYERS_REQUIRED){
+    assert(HEROES_REQUIRED <= PLAYERS_MAX);
+    while(players_len < HEROES_REQUIRED){
 
         enum entity_type et = ET_HERO_HUMAN;
         int connfd = -1;
         struct sockaddr_in sock;
         unsigned int sock_len = sizeof(sock);
 
-        printf("established connections %d of %d\n", players_len, PLAYERS_REQUIRED);
+        printf("established connections %d of %d\n", players_len, HEROES_REQUIRED);
     
         if(players_len < number_of_bot_players){
             et = ET_HERO_BOT;
