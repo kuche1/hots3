@@ -89,7 +89,7 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
 
     // TODO optimise by checking if a given path has already been analysed
 
-    { // TODO it fucking sucks that I have to copy this
+    {
         int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
 
         // if we have already reached the destination
