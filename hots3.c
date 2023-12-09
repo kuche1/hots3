@@ -14,6 +14,8 @@
 // workaround dokato go implementna tova e vseki otbor da ima po 1 lili (possibly 2)
 //
 // da dobavq steni
+//
+// kogato nqkoi connect-ne kum survura go pita kolko bota iska, koi map, ...
 
 // TODO low priority or old
 //
@@ -32,8 +34,6 @@
 // add cat pic from https://github.com/kuche1/hots3/pull/2 (we can convert the image to ASCII characters and send them to the client)
 //
 // only apply level effect if certain amount of levels above average
-//
-// kogato nqkoi connect-ne kum survura go pita kolko bota iska, koi map, ...
 //
 // pole za chat (za sega moje i da e samo 1 red)
 //
