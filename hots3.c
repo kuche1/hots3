@@ -78,6 +78,23 @@ int main(int argc, char **argv){
         }
     }
 
+    // ask for game settings from the first person who connected
+
+    // {
+    //     printf("waiting for connection from \"admin\"\n");
+
+    //     struct sockaddr_in sock;
+    //     unsigned int sock_len = sizeof(sock);
+
+    //     int connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
+    //     assert(connfd >= 0);
+
+    //     char msg_enter_number_of_bots[] = "enter number of bots: ";
+    //     net_send_single(connfd, msg_enter_number_of_bots, sizeof(msg_enter_number_of_bots));
+
+    //     printf("got game settings from admin\n");
+    // }
+
     // lobby
 
     struct player players[PLAYERS_MAX];
