@@ -50,19 +50,12 @@
 #include "screen.h"
 #include "util.h"
 
-int main(int argc, char **argv){
+int main(int argc, char **argv __attribute__((unused))){
 
     // command line args
 
-    if(argc != 2){
-        printf("You need to specify exactly 1 arguments - number of bot players\n");
-        return ERR_BAD_COMMAND_LINE_ARGS;
-    }
-
-    int number_of_bot_players = atoi(argv[1]);
-    assert(number_of_bot_players != 0);
-    if(number_of_bot_players >= HEROES_REQUIRED){
-        printf("ERROR: number of bot players is too high\n");
+    if(argc != 1){
+        printf("You need to specify exactly 0 arguments\n");
         return ERR_BAD_COMMAND_LINE_ARGS;
     }
 
@@ -78,24 +71,7 @@ int main(int argc, char **argv){
         }
     }
 
-    // ask for game settings from the first person who connected
-
-    // {
-    //     printf("waiting for connection from \"admin\"\n");
-
-    //     struct sockaddr_in sock;
-    //     unsigned int sock_len = sizeof(sock);
-
-    //     int connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
-    //     assert(connfd >= 0);
-
-    //     char msg_enter_number_of_bots[] = "enter number of bots: ";
-    //     net_send_single(connfd, msg_enter_number_of_bots, sizeof(msg_enter_number_of_bots));
-
-    //     printf("got game settings from admin\n");
-    // }
-
-    // lobby
+    // init players mem
 
     struct player players[PLAYERS_MAX];
     int players_len = 0;
@@ -104,37 +80,65 @@ int main(int argc, char **argv){
         player_init_mem(player);
     }
 
-    int team = 0;
+    // lobby
 
-    assert(HEROES_REQUIRED <= PLAYERS_MAX);
-    while(players_len < HEROES_REQUIRED){
+    {
 
-        enum entity_type et = ET_HERO_HUMAN;
-        int connfd = -1;
-        struct sockaddr_in sock;
-        unsigned int sock_len = sizeof(sock);
+        int number_of_bot_players = -1;
 
-        printf("established connections %d of %d\n", players_len, HEROES_REQUIRED);
-    
-        if(players_len < number_of_bot_players){
-            et = ET_HERO_BOT;
-            printf("bot connected\n");
-        }else{
-            connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
-            if(connfd < 0){
-                printf("player could not connect\n");
-                continue;
+        int team = 0;
+
+        assert(HEROES_REQUIRED <= PLAYERS_MAX);
+        while(players_len < HEROES_REQUIRED){
+
+            enum entity_type et = ET_HERO_HUMAN;
+            int connfd = -1;
+            struct sockaddr_in sock;
+            unsigned int sock_len = sizeof(sock);
+
+            printf("established connections %d of %d\n", players_len, HEROES_REQUIRED);
+        
+            if(players_len < number_of_bot_players){
+                et = ET_HERO_BOT;
+                printf("bot connected\n");
+            }else{
+                connfd = accept(sockfd, (struct sockaddr *) &sock, &sock_len);
+                if(connfd < 0){
+                    printf("player could not connect\n");
+                    continue;
+                }
+                printf("player connected\n");
+
+                // get settings
+
+                if(number_of_bot_players < 0){
+                    char msg_enter_number_of_bots[70];
+                    int written = snprintf(msg_enter_number_of_bots, sizeof(msg_enter_number_of_bots), "number of heroes required: %d\nenter number of bots (1 char): ", HEROES_REQUIRED);
+                    assert(written >= 0);
+                    assert((long unsigned int)written < sizeof(msg_enter_number_of_bots)); // buffer is too small
+                    net_send_single(connfd, msg_enter_number_of_bots, sizeof(msg_enter_number_of_bots));
+
+                    char choice_char;
+                    int received = net_recv_1B(connfd, &choice_char);
+                    assert(received == 1);
+                    int choice_int = choice_char - '0';
+                    assert(choice_int >= 0);
+                    assert(choice_int <= 9);
+
+                    number_of_bot_players = choice_int;
+                    number_of_bot_players += 1; // compensate for the current connection
+                }
             }
-            printf("player connected\n");
+
+            printf("initialising player...\n");
+            struct player *player = &players[players_len];
+            player_init(player, team, et, connfd, sock, sock_len);
+            printf("init done\n");
+
+            team = !team;
+            players_len += 1;
         }
 
-        printf("initialising player...\n");
-        struct player *player = &players[players_len];
-        player_init(player, team, et, connfd, sock, sock_len);
-        printf("init done\n");
-
-        team = !team;
-        players_len += 1;
     }
 
     // change to draw mode
