@@ -532,7 +532,7 @@ void player_heal_ability(struct player *player, struct player players[PLAYERS_MA
     }
 
     if(heal_target != NULL){
-        int heal = (player->hero.heal_ability_amount * player->level) / LEVEL_ON_SPAWN;
+        int heal = player->hero.heal_ability_amount;
         player_receive_damage(heal_target, -heal, players);
         player_toggle_christmas_lights(player, players); // indicate that a heal was performed
     }
