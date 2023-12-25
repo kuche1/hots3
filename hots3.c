@@ -42,6 +42,8 @@
 // TODO new features
 //
 // teach bots how to retreat
+//
+// player models that are not just a single character
 
 #include <stdio.h>
 #include <string.h>
