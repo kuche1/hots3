@@ -39,6 +39,10 @@
 //
 // add vision and use the dim effect for whatever you last saw
 
+// TODO new features
+//
+// teach bots how to retreat
+
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>

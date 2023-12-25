@@ -901,8 +901,6 @@ void player_draw_ui(struct player *player){
 
 static int player_bot_select_action(struct player *player, struct player players[PLAYERS_MAX], char *action){
 
-    // TODO teach bots how to retreat
-
     // do nothing if dead
 
     if(!player->alive){
