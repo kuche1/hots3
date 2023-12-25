@@ -44,6 +44,7 @@
 // teach bots how to retreat
 //
 // player models that are not just a single character
+// this is going to be difficult for utf-8 characters as no monospace font coveres them all and some of them will fallback to a non-monospace font
 
 #include <stdio.h>
 #include <string.h>
