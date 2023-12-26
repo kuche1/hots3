@@ -48,6 +48,8 @@
 //
 // convert images to ascii characters and send them to clients
 // you can later use this to create characters icons (and possibly animations) to use in the character selection screen and in-game
+//
+// show character model in character selection screen
 
 #include <stdio.h>
 #include <string.h>
