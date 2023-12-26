@@ -99,7 +99,9 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         break;
     }
 
-    char msg_done[] = "hero selected\n";
+    // PRINT CAT HERE
+
+    char msg_done[] = "hero selected\nwaiting for other players to ready up...\n";
     screen_print_single(connfd, msg_done, sizeof(msg_done)-1);
 }
 
