@@ -45,6 +45,9 @@
 //
 // player models that are not just a single character
 // this is going to be difficult for utf-8 characters as no monospace font coveres them all and some of them will fallback to a non-monospace font
+//
+// convert images to ascii characters and send them to clients
+// you can later use this to create characters icons (and possibly animations) to use in the character selection screen and in-game
 
 #include <stdio.h>
 #include <string.h>
