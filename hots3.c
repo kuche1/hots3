@@ -25,7 +25,7 @@
 //
 // da napi6a v hud-a sredniq level na 2ta otbora
 //
-// ?auto attack
+// ?auto attack (but what about auto move)
 //
 // ?da display-va respawn timer
 //
