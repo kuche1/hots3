@@ -48,6 +48,7 @@
 //
 // convert images to ascii characters and send them to clients (can use `ascii-image-converter --color --complex img.jpg > img-as-text`)
 // you can later use this to create characters icons (and possibly animations) to use in the character selection screen and in-game
+// also try swapping the background and foreground colors (the result seems to look much better)
 //
 // show character model in character selection screen
 //
