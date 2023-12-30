@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 
 #include "screen.h"
 #include "networking.h"
@@ -99,8 +100,38 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         break;
     }
 
-    // PRINT CAT HERE
+    // send lobby ready pic
+    for(;;){
+        FILE *fd = NULL;
 
+        for(;;){
+            char *path = "images/lobby-ready.txt";
+
+            fd = fopen(path, "rb");
+            if(!fd){
+                printf("ERROR: could not open file `%s`\n", path);
+                break;
+            }
+
+            for(;;){
+                char buf[512];
+                int red = fread(buf, 1, sizeof(buf), fd);
+                printf("++++++++++++ red=%d\n", red);
+                if(red <= 0){
+                    break;
+                }
+                screen_print_single(connfd, buf, red);
+            }
+
+            break;
+        }
+
+        fclose(fd);
+
+        break;
+    }
+
+    // send lobby ready text
     char msg_done[] = "hero selected\nwaiting for other players to ready up...\n";
     screen_print_single(connfd, msg_done, sizeof(msg_done)-1);
 }
