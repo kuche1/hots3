@@ -147,6 +147,7 @@ static void player_init_bot(struct player *player){
     }
 }
 
+// TODO use `pos_y` and `pos_x` when calling this function, when it makes sense
 void player_spawn(struct player *player, struct player players[PLAYERS_MAX], int pos_y, int pos_x){
 
     player->died_at_ms = 0;
