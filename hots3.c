@@ -53,6 +53,8 @@
 // show character model in character selection screen
 //
 // add projectiles (that move, static, that auto aim)
+//
+// possibility to change maps
 
 #include <stdio.h>
 #include <string.h>
