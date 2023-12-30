@@ -46,9 +46,9 @@
 // player models that are not just a single character
 // this is going to be difficult for utf-8 characters as no monospace font coveres them all and some of them will fallback to a non-monospace font
 //
-// convert images to ascii characters and send them to clients (can use `ascii-image-converter --color --complex img.jpg > img-as-text`)
-// you can later use this to create characters icons (and possibly animations) to use in the character selection screen and in-game
-// also try swapping the background and foreground colors (the result seems to look much better)
+// [done] convert images to ascii characters and send them to clients (can use `ascii-image-converter --color --complex img.jpg > img-as-text`)
+// [not done] you can later use this to create characters icons (and possibly animations) to use in the character selection screen and in-game
+// [not done] also try swapping the background and foreground colors (the result seems to look much better)
 //
 // show character model in character selection screen
 //
