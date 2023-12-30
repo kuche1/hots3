@@ -66,6 +66,7 @@
 #include "settings.h"
 #include "screen.h"
 #include "util.h"
+#include "map.h"
 
 int main(int argc, char **argv __attribute__((unused))){
 
@@ -178,6 +179,33 @@ int main(int argc, char **argv __attribute__((unused))){
         screen_print(players, "|", 1);
     }
 
+    // // load custom map
+
+    // {
+    //     int walls_x[] = {
+    //         2,
+    //     };
+
+    //     int walls_y[] = {
+    //         2,
+    //     };
+
+    //     int walls_team[] = {
+    //         0,
+    //     };
+
+    //     int walls_x_len    = sizeof(walls_x) / sizeof(*walls_x);
+    //     int walls_y_len    = sizeof(walls_y) / sizeof(*walls_y);
+    //     int walls_team_len = sizeof(walls_team) / sizeof(*walls_team);
+
+    //     map_load(
+    //         walls_x, walls_x_len,
+    //         walls_y, walls_y_len,
+    //         walls_team, walls_team_len,
+    //         players
+    //     );
+    // }
+
     // spawn towers
 
     for(int team=0; team<=1; ++team){
@@ -191,7 +219,7 @@ int main(int argc, char **argv __attribute__((unused))){
             int sock_len = 0;
 
             player_init(tower, team, et, connfd, sock, sock_len);
-            player_spawn(tower, players);
+            player_spawn(tower, players, -1, -1);
         }
     }
 
@@ -208,7 +236,7 @@ int main(int argc, char **argv __attribute__((unused))){
             int sock_len = 0;
 
             player_init(wall, team, et, connfd, sock, sock_len);
-            player_spawn(wall, players);
+            player_spawn(wall, players, -1, -1);
         }
     }
 
@@ -219,7 +247,7 @@ int main(int argc, char **argv __attribute__((unused))){
         switch(player->et){
             case ET_HERO_HUMAN:
             case ET_HERO_BOT:
-                player_spawn(player, players);
+                player_spawn(player, players, -1, -1);
                 break;
             case ET_MINION:
             case ET_TOWER:
@@ -254,7 +282,7 @@ int main(int argc, char **argv __attribute__((unused))){
                     case ET_HERO_BOT:
                         if(!player->alive){
                             if(player->died_at_ms + RESPAWN_TIME_MS <= now){
-                                player_spawn(player, players);
+                                player_spawn(player, players, -1, -1);
                             }
                         }
                         break;
@@ -288,7 +316,7 @@ int main(int argc, char **argv __attribute__((unused))){
                     int sock_len = 0;
 
                     player_init(minion, team, et, connfd, sock, sock_len);
-                    player_spawn(minion, players);
+                    player_spawn(minion, players, -1, -1);
 
                     // give the minion the average level of all alive players
 

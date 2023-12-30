@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "settings.h"
+#include "util.h"
 
 static int tiles_pathfind_coeff[MAP_Y][MAP_X] = {{INT_MIN}}; // this should be overwritten
 
@@ -57,6 +58,10 @@ struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player pl
 int map_calc_dist(int start_y, int start_x, int dest_y, int dest_x){
     return abs(start_y - dest_y) + abs(start_x - dest_x);
 }
+
+/////////////
+///////////// closely related to pathfinding
+/////////////
 
 void map_clear_pathfind_data(void){
     memset(tiles_pathfind_coeff, -1, sizeof(tiles_pathfind_coeff)); // this just so happens to work because `-1` is really just 0b11111...
@@ -271,4 +276,43 @@ struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_M
     }
 
     assert(0);
+}
+
+/////////////
+///////////// map loading
+/////////////
+
+void map_load(
+    int *walls_x, int walls_x_len,
+    int *walls_y, int walls_y_len,
+    int *walls_team, int walls_team_len,
+    struct player players[PLAYERS_MAX]
+){
+
+    assert(walls_x_len == walls_y_len);
+    assert(walls_y_len == walls_team_len);
+    int len = walls_x_len;
+
+    for(int wall_idx=0; wall_idx<len; ++wall_idx){
+        int x = walls_x[wall_idx];
+        int y = walls_y[wall_idx];
+        int team = walls_team[wall_idx];
+
+        if(!map_is_tile_empty(players, y, x)){
+            exit(ERR_CANT_SPAWN_WALL_SINCE_SPOT_IS_ALREADY_TAKEN); // probably duplicate walls or there are already players spawned there
+        }
+
+        struct player *wall = generate_new_entity(players);
+        if(!wall){
+            exit(ERR_CANT_SPAWN_WALL_SINCE_ENTITY_LIMIT_REACHED);
+        }
+
+        enum entity_type et = ET_WALL;
+        int connfd = -1;
+        struct sockaddr_in sock = {0};
+        int sock_len = 0;
+
+        player_init(wall, team, et, connfd, sock, sock_len);
+        player_spawn(wall, players, y, x);
+    }
 }

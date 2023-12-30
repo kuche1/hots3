@@ -116,7 +116,6 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
             for(;;){
                 char buf[512];
                 int red = fread(buf, 1, sizeof(buf), fd);
-                printf("++++++++++++ red=%d\n", red);
                 if(red <= 0){
                     break;
                 }

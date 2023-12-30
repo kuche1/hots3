@@ -147,7 +147,7 @@ static void player_init_bot(struct player *player){
     }
 }
 
-void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
+void player_spawn(struct player *player, struct player players[PLAYERS_MAX], int pos_y, int pos_x){
 
     player->died_at_ms = 0;
 
@@ -247,42 +247,49 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX]){
         
     }else if(is_wall){
 
-        for(int ent_idx=0; ent_idx<PLAYERS_MAX; ++ent_idx){
-            struct player *entity = &players[ent_idx];
-            if(!entity->alive){
-                continue;
-            }
-            if(entity->team != player->team){
-                continue;
-            }
-            switch(entity->et){
-                case ET_HERO_HUMAN:
-                case ET_HERO_BOT:
-                case ET_MINION:
-                case ET_WALL:
+        if((pos_y < 0) || (pos_x < 0)){
+            for(int ent_idx=0; ent_idx<PLAYERS_MAX; ++ent_idx){
+                struct player *entity = &players[ent_idx];
+                if(!entity->alive){
                     continue;
-                case ET_TOWER:
-                    break;
-            }
-            for(int y=-1; y<=1; y+=2){
-                for(int x=-1; x<=1; x+=2){
-                    int pos_y = y + entity->y;
-                    int pos_x = x + entity->x;
+                }
+                if(entity->team != player->team){
+                    continue;
+                }
+                switch(entity->et){
+                    case ET_HERO_HUMAN:
+                    case ET_HERO_BOT:
+                    case ET_MINION:
+                    case ET_WALL:
+                        continue;
+                    case ET_TOWER:
+                        break;
+                }
+                for(int y=-1; y<=1; y+=2){
+                    for(int x=-1; x<=1; x+=2){
+                        int pos_y = y + entity->y;
+                        int pos_x = x + entity->x;
 
-                    if(map_is_tile_empty(players, pos_y, pos_x)){
-                        player->y = pos_y;
-                        player->x = pos_x;
-                        goto wall_spawn_found;
+                        if(map_is_tile_empty(players, pos_y, pos_x)){
+                            player->y = pos_y;
+                            player->x = pos_x;
+                            goto wall_spawn_found;
+                        }
                     }
                 }
             }
+
+            exit(ERR_COULD_NOT_SPAWN_WALL);
+
+            wall_spawn_found:
+
+            printf("generated a wall\n"); // otherwise I get comptime error for using the label
+
+        }else{
+            // use predetermined location
+            player->y = pos_y;
+            player->x = pos_x;
         }
-
-        exit(ERR_COULD_NOT_SPAWN_WALL);
-
-        wall_spawn_found:
-
-        printf("spawned wall\n"); // otherwise I get comptime error for using the label
 
     }else{
 
