@@ -846,9 +846,9 @@ void player_draw_ui(struct player *player){
     // draw level
 
     if(level_updated){
-        assert(player->level < 99);
-        char msg[10];
-        int written = snprintf(msg, sizeof(msg), "Level: %02d", player->level);
+        assert(player->level < 999);
+        char msg[11];
+        int written = snprintf(msg, sizeof(msg), "Level: %03d", player->level);
         assert(written >= 0);
         assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
