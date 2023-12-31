@@ -132,8 +132,8 @@ int main(int argc, char **argv __attribute__((unused))){
                 // get settings
 
                 if(number_of_bot_players < 0){
-                    char msg_enter_number_of_bots[70];
-                    int written = snprintf(msg_enter_number_of_bots, sizeof(msg_enter_number_of_bots), "number of heroes required: %d\nenter number of bots (1 char): ", HEROES_REQUIRED);
+                    char msg_enter_number_of_bots[80];
+                    int written = snprintf(msg_enter_number_of_bots, sizeof(msg_enter_number_of_bots), "number of heroes required: %d\nenter number of bots (1 char) (example: 7): ", HEROES_REQUIRED);
                     assert(written >= 0);
                     assert((long unsigned int)written < sizeof(msg_enter_number_of_bots)); // buffer is too small
                     net_send_single(connfd, msg_enter_number_of_bots, sizeof(msg_enter_number_of_bots));

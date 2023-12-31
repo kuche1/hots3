@@ -284,7 +284,7 @@ void player_spawn(struct player *player, struct player players[PLAYERS_MAX], int
 
             wall_spawn_found:
 
-            printf("generated a wall\n"); // otherwise I get comptime error for using the label
+            ; // NOP; otherwise I get comptime error for using the label
 
         }else{
             // use predetermined location
