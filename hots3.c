@@ -291,41 +291,17 @@ int main(int argc, char **argv __attribute__((unused))){
             int32_t walls_team[MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS];
             int walls_team_len = 0;
 
-            // {
-            //     for(;;){
-            //         int read = fread(walls_x+walls_x_len, sizeof(*walls_x), MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS-walls_x_len, f_walls_x);
-            //         walls_x_len += read;
-            //         if(read <= 0){
-            //             break;
-            //         }
-            //     }
-            // }
             read_file_into_buffer(f_walls_x, (char *)walls_x, &walls_x_len, LENOF(walls_x), sizeof(*walls_x));
-
-            // {
-            //     for(;;){
-            //         int read = fread(walls_y+walls_y_len, sizeof(*walls_y), MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS-walls_y_len, f_walls_y);
-            //         walls_y_len += read;
-            //         if(read <= 0){
-            //             break;
-            //         }
-            //     }
-            // }
             read_file_into_buffer(f_walls_y, (char *)walls_y, &walls_y_len, LENOF(walls_y), sizeof(*walls_y));
-
-            // {
-            //     for(;;){
-            //         int read = fread(walls_team+walls_team_len, sizeof(*walls_team), MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS-walls_team_len, f_walls_team);
-            //         walls_team_len += read;
-            //         if(read <= 0){
-            //             break;
-            //         }
-            //     }
-            // }
             read_file_into_buffer(f_walls_team, (char *)walls_team, &walls_team_len, LENOF(walls_team), sizeof(*walls_team));
 
             assert(walls_x_len == walls_y_len);
             assert(walls_y_len == walls_team_len);
+
+            // debug
+            printf("walls_x[0] == %d\n", walls_x[0]);
+            printf("walls_y[0] == %d\n", walls_y[0]);
+            printf("walls_team[0] == %d\n", walls_team[0]);
 
             map_load(
                 walls_x, walls_x_len,
