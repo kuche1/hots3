@@ -36,3 +36,24 @@ struct player * generate_new_entity(struct player players[PLAYERS_MAX]){
 
     return NULL;
 }
+
+void read_file_into_buffer(FILE *fd, char *buf, int *arg_p_buf_len, int buf_maxlen, int buf_elem_size){
+    int buf_len = *arg_p_buf_len;
+
+    for(;;){
+        int read = fread(
+            buf + (buf_elem_size * buf_len),
+            buf_elem_size,
+            buf_maxlen - buf_len,
+            fd
+        );
+
+        if(read <= 0){
+            break;
+        }
+
+        buf_len += read;
+    }
+
+    *arg_p_buf_len = buf_len;
+}

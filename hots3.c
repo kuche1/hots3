@@ -100,6 +100,8 @@ int main(int argc, char **argv __attribute__((unused))){
 
     // lobby
 
+    char setting_map_name[512] = {0};
+
     {
 
         int number_of_bot_players = -1;
@@ -145,6 +147,36 @@ int main(int argc, char **argv __attribute__((unused))){
 
                     number_of_bot_players = choice_int;
                     number_of_bot_players += 1; // compensate for the current connection
+                }
+
+                if(!strcmp(setting_map_name, "")){ // strings are equal
+
+                    // I don't show any of the maps IDs and I use 1 char for IDs cuz I'm lazy like that
+
+                    for(;;){
+
+                        char msg[] = "enter ID of map (example: 0): ";
+                        net_send_single(connfd, msg, sizeof(msg));
+
+                        char map_id;
+                        int received = net_recv_1B(connfd, &map_id);
+                        assert(received == 1);
+
+                        char full_name[] = {0, 0};
+                        full_name[0] = map_id;
+                        full_name[1] = 0;
+
+                        if(!map_custom_map_exists(full_name)){
+                            char msg[] = "map does not exist\n";
+                            net_send_single(connfd, msg, sizeof(msg));
+                            continue;
+                        }
+
+                        assert(sizeof(setting_map_name) >= sizeof(full_name));
+                        memcpy(setting_map_name, full_name, sizeof(full_name));
+
+                        break;
+                    }
                 }
             }
 
@@ -205,6 +237,108 @@ int main(int argc, char **argv __attribute__((unused))){
     //         players
     //     );
     // }
+
+    {
+        FILE *f_walls_x    = NULL;
+        FILE *f_walls_y    = NULL;
+        FILE *f_walls_team = NULL;
+
+        // I'm savage
+
+        {
+            char path[512];
+            int written = snprintf(path, sizeof(path), "maps/%s/walls_x", setting_map_name);
+            assert(written >= 0);
+            assert((long unsigned int)written < sizeof(path)); // buffer is too small
+
+            f_walls_x = fopen(path, "rb");
+            if(!f_walls_x){
+                exit(ERR_CANT_OPEN_FILE_CONTAINING_CUSTOM_MAP_DATA);
+            }
+        }
+
+        {
+            char path[512];
+            int written = snprintf(path, sizeof(path), "maps/%s/walls_y", setting_map_name);
+            assert(written >= 0);
+            assert((long unsigned int)written < sizeof(path)); // buffer is too small
+
+            f_walls_y = fopen(path, "rb");
+            if(!f_walls_y){
+                exit(ERR_CANT_OPEN_FILE_CONTAINING_CUSTOM_MAP_DATA);
+            }
+        }
+
+        {
+            char path[512];
+            int written = snprintf(path, sizeof(path), "maps/%s/walls_team", setting_map_name);
+            assert(written >= 0);
+            assert((long unsigned int)written < sizeof(path)); // buffer is too small
+
+            f_walls_team = fopen(path, "rb");
+            if(!f_walls_team){
+                exit(ERR_CANT_OPEN_FILE_CONTAINING_CUSTOM_MAP_DATA);
+            }
+        }
+
+        {
+            int32_t walls_x[MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS];
+            int walls_x_len = 0;
+
+            int32_t walls_y[MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS];
+            int walls_y_len = 0;
+
+            int32_t walls_team[MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS];
+            int walls_team_len = 0;
+
+            // {
+            //     for(;;){
+            //         int read = fread(walls_x+walls_x_len, sizeof(*walls_x), MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS-walls_x_len, f_walls_x);
+            //         walls_x_len += read;
+            //         if(read <= 0){
+            //             break;
+            //         }
+            //     }
+            // }
+            read_file_into_buffer(f_walls_x, (char *)walls_x, &walls_x_len, LENOF(walls_x), sizeof(*walls_x));
+
+            // {
+            //     for(;;){
+            //         int read = fread(walls_y+walls_y_len, sizeof(*walls_y), MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS-walls_y_len, f_walls_y);
+            //         walls_y_len += read;
+            //         if(read <= 0){
+            //             break;
+            //         }
+            //     }
+            // }
+            read_file_into_buffer(f_walls_y, (char *)walls_y, &walls_y_len, LENOF(walls_y), sizeof(*walls_y));
+
+            // {
+            //     for(;;){
+            //         int read = fread(walls_team+walls_team_len, sizeof(*walls_team), MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS-walls_team_len, f_walls_team);
+            //         walls_team_len += read;
+            //         if(read <= 0){
+            //             break;
+            //         }
+            //     }
+            // }
+            read_file_into_buffer(f_walls_team, (char *)walls_team, &walls_team_len, LENOF(walls_team), sizeof(*walls_team));
+
+            assert(walls_x_len == walls_y_len);
+            assert(walls_y_len == walls_team_len);
+
+            map_load(
+                walls_x, walls_x_len,
+                walls_y, walls_y_len,
+                walls_team, walls_team_len,
+                players
+            );
+        }
+
+        fclose(f_walls_x);
+        fclose(f_walls_y);
+        fclose(f_walls_team);
+    }
 
     // spawn towers
 

@@ -51,4 +51,6 @@ void map_load(
     struct player players[PLAYERS_MAX]
 );
 
+int map_custom_map_exists(char *name);
+
 #endif

@@ -5,6 +5,7 @@
 #include <limits.h>
 #include <assert.h>
 #include <string.h>
+#include <dirent.h>
 
 #include "settings.h"
 #include "util.h"
@@ -315,4 +316,21 @@ void map_load(
         player_init(wall, team, et, connfd, sock, sock_len);
         player_spawn(wall, players, y, x);
     }
+}
+
+int map_custom_map_exists(char *name){
+    char path[512];
+    int written = snprintf(path, sizeof(path), "maps/%s", name);
+    assert(written >= 0);
+    assert((long unsigned int)written < sizeof(path)); // buffer is too small
+
+    DIR* dir = opendir(path);
+    if (dir) {
+        // it exists
+        closedir(dir);
+        return 1;
+    }
+
+    // it does not exist
+    return 0;
 }

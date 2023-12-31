@@ -56,6 +56,8 @@
 
 #define NUMBER_OF_WALLS (NUMBER_OF_TOWERS * 4)
 
+#define MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS 40
+
 // keybinds
 
 // keybind movement
