@@ -284,15 +284,14 @@ int main(int argc, char **argv __attribute__((unused))){
         {
             int32_t walls_x[MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS];
             int walls_x_len = 0;
+            read_file_into_buffer(f_walls_x, (char *)walls_x, &walls_x_len, LENOF(walls_x), sizeof(*walls_x));
 
             int32_t walls_y[MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS];
             int walls_y_len = 0;
+            read_file_into_buffer(f_walls_y, (char *)walls_y, &walls_y_len, LENOF(walls_y), sizeof(*walls_y));
 
             int32_t walls_team[MAX_NUMBER_OF_WALLS_FOR_CUSTOM_MAPS];
             int walls_team_len = 0;
-
-            read_file_into_buffer(f_walls_x, (char *)walls_x, &walls_x_len, LENOF(walls_x), sizeof(*walls_x));
-            read_file_into_buffer(f_walls_y, (char *)walls_y, &walls_y_len, LENOF(walls_y), sizeof(*walls_y));
             read_file_into_buffer(f_walls_team, (char *)walls_team, &walls_team_len, LENOF(walls_team), sizeof(*walls_team));
 
             assert(walls_x_len == walls_y_len);
