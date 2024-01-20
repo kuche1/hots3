@@ -54,7 +54,7 @@
 //
 // add projectiles (that move, static, that auto aim)
 //
-// possibility to change maps
+// give maps (or the "admin" player) the ability to offset team balance (minion spawns) so that zombie mod is possible
 
 #include <stdio.h>
 #include <string.h>
