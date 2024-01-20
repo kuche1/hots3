@@ -15,7 +15,7 @@ struct hero{
     int basic_attack_distance;
     int basic_attack_damage;
 
-    // movement - the change for the move action to work will be `legpower / weight`
+    // movement - the chance for the move action to work will be `legpower / weight`
     int legpower;
     int weight;
 
