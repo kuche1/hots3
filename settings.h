@@ -24,6 +24,11 @@
 #define ANTICHEAT_BURST_INTERVAL_MS 160
 #define ANTICHEAT_BURST_ACTIONS 4
 
+// ballance
+
+#define BULLET_MOVE_INTERVAL_MS 500
+#define BULLET_DMG 5
+
 // levels
 
 #define LEVEL_ON_SPAWN 7
@@ -66,10 +71,15 @@
 #define KEY_MOVE_UP 'w'
 #define KEY_MOVE_DOWN 's'
 // basic attack
-#define KEY_BASIC_ATTACK_1 'h'
-#define KEY_BASIC_ATTACK_2 'j'
+#define KEY_BASIC_ATTACK_1 'b'
+#define KEY_BASIC_ATTACK_2 'n'
 // heal ability
-#define KEY_HEAL_ABILITY 'k'
+#define KEY_HEAL_ABILITY 'm'
+// shooting
+#define KEY_SHOOT_LEFT 'j'
+#define KEY_SHOOT_RIGHT 'l'
+#define KEY_SHOOT_UP 'i'
+#define KEY_SHOOT_DOWN 'k'
 
 // bot parameters
 

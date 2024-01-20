@@ -83,6 +83,7 @@ int main(int argc, char **argv __attribute__((unused))){
     struct sockaddr_in servaddr;
 
     {
+        printf("trying to start server on port %d\n", PORT);
         int err;
         if((err = create_server(&sockfd, &servaddr, PORT, LISTEN))){
             return err;

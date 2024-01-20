@@ -20,5 +20,5 @@ run: hots3
 clean:
 	rm hots3
 
-hots3: makefile hots3.c settings.h networking.c networking.h player.c player.h screen.c screen.h map.c map.h hero.c hero.h util.c util.h color.h entity_type.h shader.h
+hots3: makefile hots3.c settings.h networking.c networking.h player.c player.h screen.c screen.h map.c map.h hero.c hero.h util.c util.h color.h entity_type.h shader.h bullet.c bullet.h
 	${CC} ${CC_FLAGS} $(filter %.c,$^) -o hots3

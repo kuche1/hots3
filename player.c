@@ -403,7 +403,7 @@ void player_select_action(struct player *player, struct player players[PLAYERS_M
     player->actions_since_last_burst += 1;
 }
 
-// returns 1 when player REQUESTED ANYTHING VALID, not when anything was actuallydone
+// returns 1 when player REQUESTED ANYTHING VALID, not when anything was actually done
 static int player_process_action(struct player *player, char action, struct player players[PLAYERS_MAX]){
 
     if(!player->alive){
@@ -465,6 +465,40 @@ static int player_process_action(struct player *player, char action, struct play
         player_heal_ability(player, players);
         return 1;
     }
+
+    // // shoot
+
+    // {
+    //     int delta_y = 0;
+    //     int delta_x = 0;
+
+    //     if(action == KEY_SHOOT_LEFT){
+    //         delta_x = -1;
+    //     }else if(action == KEY_SHOOT_RIGHT){
+    //         delta_x = 1;
+    //     }else if(action == KEY_SHOOT_UP){
+    //         delta_y = -1;
+    //     }else if(action == KEY_SHOOT_DOWN){
+    //         delta_y = 1;
+    //     }
+
+    //     if((delta_y != 0) || (delta_x != 0)){
+    //         struct player *bullet = generate_new_entity(players);
+    //         if(!bullet){ // entity limit reached
+    //             printf("ERROR: entity limit reached; cannot spawn bullet\n");
+    //             return 0;
+    //         }
+
+    //         int succ = bullet_init(
+    //             bullet,
+    //             player->team, BULLET_MOVE_INTERVAL_MS, BULLET_DMG, delta_y, delta_x,
+    //             player->y + delta_y, player->x + delta_x
+    //         )
+
+    //         if(!succ){ // spot not empty
+    //             return 0;
+    //         }
+    // }
 
     // nothing
 
@@ -878,19 +912,19 @@ void player_draw_ui(struct player *player){
     if(help_updated){
         screen_cur_set_single(player->connfd, ui_y, 0);
 
-        char help_msg[180];
+        char help_msg[380];
         int written = snprintf(help_msg, sizeof(help_msg),
-            "--------------------\n\r"
-            "Controls:\n\r"
-            "%c - move up\n\r"
-            "%c - move down\n\r"
-            "%c - move left\n\r"
-            "%c - move right\n\r"
-            "%c - basic attack\n\r"
-            "%c - basic attack\n\r"
-            "%c - heal ability (not all heroes have one)\n\r"
+            "-----------------------------------------------------------\n\r"
+            "Movement: |Abilities:                    |Shooting:       |\n\r" // looks like it's misaligned but it's not because `%c` is 1 char long
+            "%c - up    |%c - basic attack              |%c - shoot left  |\n\r"
+            "%c - down  |%c - basic attack              |%c - shoot right |\n\r"
+            "%c - left  |%c - heal (not all heroes can) |%c - shoot up    |\n\r"
+            "%c - right |                              |%c - shoot down  |\n\r"
             ,
-            KEY_MOVE_UP, KEY_MOVE_DOWN, KEY_MOVE_LEFT, KEY_MOVE_RIGHT, KEY_BASIC_ATTACK_1, KEY_BASIC_ATTACK_2, KEY_HEAL_ABILITY
+            KEY_MOVE_UP,    KEY_BASIC_ATTACK_1, KEY_SHOOT_LEFT,
+            KEY_MOVE_DOWN,  KEY_BASIC_ATTACK_2, KEY_SHOOT_RIGHT,
+            KEY_MOVE_LEFT,  KEY_HEAL_ABILITY,   KEY_SHOOT_UP,
+            KEY_MOVE_RIGHT,                     KEY_SHOOT_DOWN
         );
 
         assert(written >= 0);
