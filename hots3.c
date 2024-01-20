@@ -92,9 +92,9 @@ int main(int argc, char **argv __attribute__((unused))){
 
     // init players mem
 
-    struct player players[PLAYERS_MAX];
+    struct player players[ENTITIES_MAX];
     int players_len = 0;
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         player_init_mem(player);
     }
@@ -109,7 +109,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
         int team = 0;
 
-        assert(HEROES_REQUIRED <= PLAYERS_MAX);
+        assert(HEROES_REQUIRED <= ENTITIES_MAX);
         while(players_len < HEROES_REQUIRED){
 
             enum entity_type et = ET_HERO_HUMAN;
@@ -352,7 +352,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
     // spawn players
 
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         switch(player->et){
             case ET_HERO_HUMAN:
@@ -376,7 +376,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
         // process input
 
-        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+        for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
             struct player *player = &players[player_idx];
             player_select_action(player, players);
         }
@@ -385,7 +385,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
         {
             long long now = get_time_ms();
-            for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+            for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
                 struct player *player = &players[player_idx];
                 switch(player->et){
                     case ET_HERO_HUMAN:
@@ -433,7 +433,7 @@ int main(int argc, char **argv __attribute__((unused))){
                     int average_level = 0;
                     int average_level_count = 0;
 
-                    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+                    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
                         struct player *player = &players[player_idx];
                         if(!player->alive){
                             continue;
@@ -457,7 +457,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
         // draw ui
 
-        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+        for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
             struct player *player = &players[player_idx];
             player_draw_ui(player);
         }
@@ -466,7 +466,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
         int players_alive[2] = {0};
 
-        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+        for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
             struct player *player = &players[player_idx];
 
             if(player->alive){
@@ -504,7 +504,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
         int cur_x = sizeof(msg_team_members)-1;
 
-        for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+        for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
             struct player *player = &players[player_idx];
 
             if(player->team == winning_team){

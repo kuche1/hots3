@@ -13,9 +13,9 @@ long long get_time_ms(void){
     return now_ms;
 }
 
-struct player * generate_new_entity(struct player players[PLAYERS_MAX]){
+struct player * generate_new_entity(struct player players[ENTITIES_MAX]){
 
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
 
         if(player->alive){

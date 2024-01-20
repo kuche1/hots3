@@ -60,8 +60,8 @@ void net_send_single(int connfd, char *data, int data_len){
     assert(data_len <= 0); // not all data could be sent
 }
 
-void net_send(struct player players[PLAYERS_MAX], char *data, int data_len){
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+void net_send(struct player players[ENTITIES_MAX], char *data, int data_len){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
 
         if(player->et){

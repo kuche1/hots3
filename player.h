@@ -62,18 +62,18 @@ struct player {
 void player_init_mem(struct player *player);
 void player_init(struct player *player, int team, enum entity_type entity_type, int connfd, struct sockaddr_in sock, int sock_len);
 void player_select_hero(struct player *player);
-void player_spawn(struct player *player, struct player players[PLAYERS_MAX], int pos_y, int pos_x);
+void player_spawn(struct player *player, struct player players[ENTITIES_MAX], int pos_y, int pos_x);
 // actions
-void player_select_action(struct player *player, struct player players[PLAYERS_MAX]);
-void player_basic_attack(struct player *player, struct player players[PLAYERS_MAX]);
-void player_heal_ability(struct player *player, struct player players[PLAYERS_MAX]);
+void player_select_action(struct player *player, struct player players[ENTITIES_MAX]);
+void player_basic_attack(struct player *player, struct player players[ENTITIES_MAX]);
+void player_heal_ability(struct player *player, struct player players[ENTITIES_MAX]);
 // deal with status
-void player_receive_damage(struct player *player, int amount, struct player players[PLAYERS_MAX]);
-void player_recalculate_health_state(struct player *player, struct player players[PLAYERS_MAX]);
-void player_gain_xp(struct player *player, struct player players[PLAYERS_MAX], int xp);
+void player_receive_damage(struct player *player, int amount, struct player players[ENTITIES_MAX]);
+void player_recalculate_health_state(struct player *player, struct player players[ENTITIES_MAX]);
+void player_gain_xp(struct player *player, struct player players[ENTITIES_MAX], int xp);
 // drawing
-void player_toggle_christmas_lights(struct player *player, struct player players[PLAYERS_MAX]);
-void player_draw(struct player *player, struct player players[PLAYERS_MAX]);
+void player_toggle_christmas_lights(struct player *player, struct player players[ENTITIES_MAX]);
+void player_draw(struct player *player, struct player players[ENTITIES_MAX]);
 void player_draw_ui(struct player *player);
 
 #endif

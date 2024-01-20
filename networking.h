@@ -9,7 +9,7 @@
 
 int create_server(int *sockfd, struct sockaddr_in *servaddr, int port, int listen);
 void net_send_single(int connfd, char *data, int data_len);
-void net_send(struct player players[PLAYERS_MAX], char *data, int data_len);
+void net_send(struct player players[ENTITIES_MAX], char *data, int data_len);
 int net_recv_1B(int connfd, char *data);
 
 #endif

@@ -10,7 +10,7 @@
 
 // game parameters
 
-#define PLAYERS_MAX 120 // includes minions, towers, walls... more like entities_max
+#define ENTITIES_MAX 120 // includes minions, towers, walls... more like entities_max
 
 #define HEROES_REQUIRED 8
 

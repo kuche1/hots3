@@ -13,8 +13,8 @@ void screen_clear_single(int connfd){
     screen_print_single(connfd, clear_cmd, sizeof(clear_cmd)-1); // ommit \0
 }
 
-void screen_clear(struct player players[PLAYERS_MAX]){
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+void screen_clear(struct player players[ENTITIES_MAX]){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         screen_clear_single(player->connfd);
     }
@@ -51,8 +51,8 @@ void screen_switch_to_draw_mode_single(struct player *player){
     }
 }
 
-void screen_switch_to_draw_mode(struct player players[PLAYERS_MAX]){
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+void screen_switch_to_draw_mode(struct player players[ENTITIES_MAX]){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         screen_switch_to_draw_mode_single(player);
     }
@@ -66,10 +66,10 @@ void screen_cur_set_single(int connfd, int pos_y, int pos_x){
     screen_print_single(connfd, msg_buf, written);
 }
 
-void screen_cur_set(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
+void screen_cur_set(struct player players[ENTITIES_MAX], int pos_y, int pos_x){
     assert(pos_y >= 0);
     assert(pos_x >= 0);
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         screen_cur_set_single(player->connfd, pos_y, pos_x);
     }
@@ -79,8 +79,8 @@ void screen_print_single(int connfd, char *msg, int msg_len){
     net_send_single(connfd, msg, msg_len);
 }
 
-void screen_print(struct player players[PLAYERS_MAX], char *msg, int msg_len){
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+void screen_print(struct player players[ENTITIES_MAX], char *msg, int msg_len){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         if(player->et){
             continue;
@@ -89,7 +89,7 @@ void screen_print(struct player players[PLAYERS_MAX], char *msg, int msg_len){
     }
 }
 
-void screen_print_empty_tile(struct player players[PLAYERS_MAX]){
+void screen_print_empty_tile(struct player players[ENTITIES_MAX]){
     static char empty_tile[] = RESET_WITH_SPACE;
     screen_print(players, empty_tile, sizeof(empty_tile));
 }

@@ -12,7 +12,7 @@
 
 static int tiles_pathfind_coeff[MAP_Y][MAP_X] = {{INT_MIN}}; // this should be overwritten
 
-int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
+int map_is_tile_empty(struct player players[ENTITIES_MAX], int pos_y, int pos_x){
 
     if((pos_y < 0) || (pos_x < 0)){
         return 0;
@@ -22,7 +22,7 @@ int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
         return 0;
     }
 
-    for(int player_idx=0; player_idx < PLAYERS_MAX; ++player_idx){
+    for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
         struct player *player = &players[player_idx];
         
         if(!player->alive){
@@ -37,7 +37,7 @@ int map_is_tile_empty(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
     return 1;
 }
 
-struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player players[PLAYERS_MAX], int pos_y, int pos_x){
+struct map_get_empty_tiles_near_return map_get_empty_tiles_near(struct player players[ENTITIES_MAX], int pos_y, int pos_x){
     struct map_get_empty_tiles_near_return ret = {0};
 
     if(map_is_tile_empty(players, pos_y-1, pos_x)){
@@ -76,7 +76,7 @@ void map_mark_pathfind_tile_coeff(int y, int x, int coeff){
     tiles_pathfind_coeff[y][x] = coeff;
 }
 
-int map_is_tile_coeff_ok(struct player players[PLAYERS_MAX], int pos_y, int pos_x, int caller_coeff){
+int map_is_tile_coeff_ok(struct player players[ENTITIES_MAX], int pos_y, int pos_x, int caller_coeff){
     if((pos_y < 0) || (pos_x < 0)){
         return 0;
     }
@@ -96,7 +96,7 @@ int map_is_tile_coeff_ok(struct player players[PLAYERS_MAX], int pos_y, int pos_
     return 1;
 }
 
-struct direction_and_distance map_pathfind_depth(struct player players[PLAYERS_MAX], int start_y, int start_x, int dest_y, int dest_x, enum check_start check_start, int depth){
+struct direction_and_distance map_pathfind_depth(struct player players[ENTITIES_MAX], int start_y, int start_x, int dest_y, int dest_x, enum check_start check_start, int depth){
 
     {
         int dist = map_calc_dist(start_y, start_x, dest_y, dest_x);
@@ -287,7 +287,7 @@ void map_load(
     int *walls_x, int walls_x_len,
     int *walls_y, int walls_y_len,
     int *walls_team, int walls_team_len,
-    struct player players[PLAYERS_MAX]
+    struct player players[ENTITIES_MAX]
 ){
 
     assert(walls_x_len == walls_y_len);
