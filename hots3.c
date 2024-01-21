@@ -16,6 +16,10 @@
 // da dobavq steni
 //
 // kogato nqkoi connect-ne kum survura go pita kolko bota iska, koi map, ...
+//
+// da napravq da moje6 da strelq6 nqkoi at point blank range
+//
+// add bullet inaccuracy
 
 // TODO low priority or old
 //
@@ -362,6 +366,7 @@ int main(int argc, char **argv __attribute__((unused))){
             case ET_MINION:
             case ET_TOWER:
             case ET_WALL:
+            case ET_BULLET:
                 break;
         }
     }
@@ -399,6 +404,7 @@ int main(int argc, char **argv __attribute__((unused))){
                     case ET_MINION:
                     case ET_TOWER:
                     case ET_WALL:
+                    case ET_BULLET:
                         break;
                 }
             }

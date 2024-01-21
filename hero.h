@@ -22,6 +22,9 @@ struct hero{
     // healing ability // TODO? make separate ability for healing towers
     int heal_ability_range;
     int heal_ability_amount;
+
+    // context-dependent data (example: determine bullet travel direction)
+    int context;
 };
 
 // initialisations
@@ -40,5 +43,6 @@ void hero_init_alarak(struct hero *hero);
 void hero_init_minion(struct hero *hero);
 void hero_init_tower(struct hero *hero);
 void hero_init_wall(struct hero *hero);
+void hero_init_bullet(struct hero *hero);
 
 #endif

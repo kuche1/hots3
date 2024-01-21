@@ -15,6 +15,7 @@
 #include "hero.h"
 #include "util.h"
 #include "shader.h"
+#include "entities.h"
 
 /////////////
 ///////////// private
@@ -86,6 +87,7 @@ void player_init(struct player *player, int team, enum entity_type entity_type, 
         case ET_MINION:
         case ET_TOWER:
         case ET_WALL:
+        case ET_BULLET:
             player_init_bot(player);
             break;
     }
@@ -144,6 +146,18 @@ static void player_init_bot(struct player *player){
             player->bot_willpower       = WALL_WILLPOWER;
             player->bot_schizophrenia   = WALL_SCHIZOPHRENIA;
             player->bot_pathfind_depth  = WALL_PATHFIND_DEPTH;
+
+            break;
+
+        case ET_BULLET:
+
+            player->bot_action_delay_ms = BULLET_MOVE_INTERVAL_MS;
+
+            player->bot_willpower       = BULLET_WILLPOWER;
+            player->bot_schizophrenia   = BULLET_SCHIZOPHRENIA;
+            player->bot_pathfind_depth  = BULLET_PATHFIND_DEPTH;
+
+            break;
     }
 }
 
@@ -159,6 +173,7 @@ void player_spawn(struct player *player, struct player players[ENTITIES_MAX], in
 
     int is_tower = 0;
     int is_wall = 0;
+    int is_bullet = 0;
 
     switch(player->et){
         case ET_HERO_HUMAN:
@@ -178,6 +193,10 @@ void player_spawn(struct player *player, struct player players[ENTITIES_MAX], in
         
         case ET_WALL:
             is_wall = 1;
+            break;
+
+        case ET_BULLET:
+            is_bullet = 1;
             break;
     }
 
@@ -262,6 +281,7 @@ void player_spawn(struct player *player, struct player players[ENTITIES_MAX], in
                     case ET_HERO_BOT:
                     case ET_MINION:
                     case ET_WALL:
+                    case ET_BULLET:
                         continue;
                     case ET_TOWER:
                         break;
@@ -291,6 +311,12 @@ void player_spawn(struct player *player, struct player players[ENTITIES_MAX], in
             player->y = pos_y;
             player->x = pos_x;
         }
+
+    }else if(is_bullet){
+
+        assert(map_is_tile_empty(players, pos_y, pos_x));
+        player->y = pos_y;
+        player->x = pos_x;
 
     }else{
 
@@ -357,6 +383,28 @@ void player_select_hero(struct player *player){
 }
 
 /////////////
+///////////// movement
+/////////////
+
+// returns 1 if something was in the way
+int player_move_to(struct player *player, int y_desired, int x_desired, struct player players[ENTITIES_MAX]){
+    if(!map_is_tile_empty(players, y_desired, x_desired)){
+        return 1;
+    }
+
+    if(rand() % player->hero.weight < player->hero.legpower){
+        screen_cur_set(players, player->y, player->x);
+        screen_print_empty_tile(players);
+
+        player->x = x_desired;
+        player->y = y_desired;
+        player_draw(player, players);
+    }
+
+    return 0;
+}
+
+/////////////
 ///////////// actions
 /////////////
 
@@ -410,6 +458,61 @@ static int player_process_action(struct player *player, char action, struct play
         return 0;
     }
 
+    // special logic for bullets
+
+    if(player->et == ET_BULLET){
+
+        for(int i=0; i==0; ++i){
+            int delta_y = 0;
+            int delta_x = 0;
+
+            switch(action){
+                case KEY_SHOOT_UP:
+                    delta_y = -1;
+                    break;
+                case KEY_SHOOT_DOWN:
+                    delta_y = 1;
+                    break;
+                case KEY_SHOOT_LEFT:
+                    delta_x = -1;
+                    break;
+                case KEY_SHOOT_RIGHT:
+                    delta_x = 1;
+                    break;
+            }
+
+            if(!delta_x && !delta_y){
+                break;
+            }
+
+            int pos_y = player->y + delta_y;
+            int pos_x = player->x + delta_x;
+
+            struct player *entity_at_pos = get_entity_at(pos_y, pos_x, players);
+
+            if(entity_at_pos){
+                // there's something in the way
+                if(entity_at_pos->team != player->team){
+                    // there is an enemy in the way
+                    player_basic_attack_an_entity(player, entity_at_pos, players);
+                }
+            }else{
+                // there's nothing in the way
+                int something_is_in_the_way = player_move_to(player, pos_y, pos_x, players);
+                if(!something_is_in_the_way){
+                    // we haven't reached the map border yet
+                    return 1;
+                }
+            }
+
+            // destroy bullet
+            player_kill_yourself(player, players);
+
+            return 1;
+        }
+
+    }
+
     // movement
 
     int action_is_movement = 0;
@@ -436,17 +539,7 @@ static int player_process_action(struct player *player, char action, struct play
             break;
     }
 
-    if(rand() % player->hero.weight < player->hero.legpower){
-        if(map_is_tile_empty(players, y_desired, x_desired)){
-            screen_cur_set(players, player->y, player->x);
-            screen_print_empty_tile(players);
-
-            player->x = x_desired;
-            player->y = y_desired;
-            player_draw(player, players);
-            return 1;
-        }
-    }
+    player_move_to(player, y_desired, x_desired, players); // no need to check  code
 
     if(action_is_movement){
         return 1;
@@ -466,43 +559,68 @@ static int player_process_action(struct player *player, char action, struct play
         return 1;
     }
 
-    // // shoot
+    // shoot
 
-    // {
-    //     int delta_y = 0;
-    //     int delta_x = 0;
+    {
+        int delta_y = 0;
+        int delta_x = 0;
 
-    //     if(action == KEY_SHOOT_LEFT){
-    //         delta_x = -1;
-    //     }else if(action == KEY_SHOOT_RIGHT){
-    //         delta_x = 1;
-    //     }else if(action == KEY_SHOOT_UP){
-    //         delta_y = -1;
-    //     }else if(action == KEY_SHOOT_DOWN){
-    //         delta_y = 1;
-    //     }
+        if(action == KEY_SHOOT_LEFT){
+            delta_x = -1;
+        }else if(action == KEY_SHOOT_RIGHT){
+            delta_x = 1;
+        }else if(action == KEY_SHOOT_UP){
+            delta_y = -1;
+        }else if(action == KEY_SHOOT_DOWN){
+            delta_y = 1;
+        }
 
-    //     if((delta_y != 0) || (delta_x != 0)){
-    //         struct player *bullet = generate_new_entity(players);
-    //         if(!bullet){ // entity limit reached
-    //             printf("ERROR: entity limit reached; cannot spawn bullet\n");
-    //             return 0;
-    //         }
+        if((delta_y != 0) || (delta_x != 0)){
 
-    //         int succ = bullet_init(
-    //             bullet,
-    //             player->team, BULLET_MOVE_INTERVAL_MS, BULLET_DMG, delta_y, delta_x,
-    //             player->y + delta_y, player->x + delta_x
-    //         )
+            int pos_y = player->y + delta_y;
+            int pos_x = player->x + delta_x;
 
-    //         if(!succ){ // spot not empty
-    //             return 0;
-    //         }
-    // }
+            if(!map_is_tile_empty(players, pos_y, pos_x)){ // this implies that you can't shoot point blank
+                printf("dbg: could not spawn bullet since tile was not empty\n");
+                return 1;
+            }
+
+            struct player *bullet = generate_new_entity(players);
+            if(!bullet){ // entity limit reached
+                printf("ERROR: entity limit reached; cannot spawn bullet\n");
+                return 1;
+            }
+
+            struct sockaddr_in sock = {0};
+            player_init(bullet, player->team, ET_BULLET, -1, sock, 0);
+
+            // a bit of a hack... oh well...
+            if(delta_x){
+                bullet->hero.model = '-';
+            }else if(delta_y){
+                bullet->hero.model = '|';
+            }else{
+                assert(0);
+            }
+            bullet->hero.context = action;
+
+            player_spawn(bullet, players, pos_y, pos_x);
+
+            return 1;
+        }
+    }
 
     // nothing
 
     return 0;
+}
+
+void player_basic_attack_an_entity(struct player *player, struct player *target, struct player entities[ENTITIES_MAX]){
+    assert(player->alive);
+    assert(target->alive);
+    int damage = player->hero.basic_attack_damage * player->level;
+    player_receive_damage(target, damage, entities);
+    player_toggle_christmas_lights(player, entities); // indicate that an attack was performed
 }
 
 void player_basic_attack(struct player *player, struct player players[ENTITIES_MAX]){
@@ -536,9 +654,7 @@ void player_basic_attack(struct player *player, struct player players[ENTITIES_M
         return;
     }
 
-    int damage = player->hero.basic_attack_damage * player->level;
-    player_receive_damage(target, damage, players);
-    player_toggle_christmas_lights(player, players); // indicate that an attack was performed
+    player_basic_attack_an_entity(player, target, players);
 }
 
 void player_heal_ability(struct player *player, struct player players[ENTITIES_MAX]){
@@ -580,6 +696,11 @@ void player_heal_ability(struct player *player, struct player players[ENTITIES_M
     }
 }
 
+void player_kill_yourself(struct player *player, struct player players[ENTITIES_MAX]){
+    // player_receive_damage(player, player->hp * player->level + 1, players); // TODO this fucking sucks and is dependent on the damage reduction
+    player_receive_damage(player, INT_MAX, players); // TODO this kinda sucks, perhaps we should implement piercing damage
+}
+
 /////////////
 ///////////// deal with status
 /////////////
@@ -591,7 +712,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
     }
 
     if(amount > 0){
-        // if being damaged reduce damage based on level
+        // if being damaged: reduce damage based on level
         amount /= player->level;
     }
 
@@ -601,26 +722,49 @@ void player_receive_damage(struct player *player, int amount, struct player play
 
         // reward opposite team
 
-        int team = !player->team;
+        for(int i=0; i==0; ++i){
 
-        for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-            struct player *team_member = &players[player_idx];
-            if(team_member->team != team){
-                continue;
-            }
-            switch(team_member->et){
+            int do_not_reward_enemy_team = 0;
+
+            switch(player->et){
                 case ET_HERO_HUMAN:
                 case ET_HERO_BOT:
-                    break;
                 case ET_MINION:
                 case ET_TOWER:
                 case ET_WALL:
-                    if(!MINIONS_AND_STRUCTURES_CAN_LEVEL_UP){
-                        continue;
-                    }
+                    break;
+                case ET_BULLET:
+                    do_not_reward_enemy_team = 1;
                     break;
             }
-            player_gain_xp(team_member, players, KILL_REWARD_XP);
+
+            if(do_not_reward_enemy_team){
+                break;
+            }
+
+            int team = !player->team;
+
+            for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
+                struct player *team_member = &players[player_idx];
+                if(team_member->team != team){
+                    continue;
+                }
+                switch(team_member->et){
+                    case ET_HERO_HUMAN:
+                    case ET_HERO_BOT:
+                        break;
+                    case ET_MINION:
+                    case ET_TOWER:
+                    case ET_WALL:
+                    case ET_BULLET:
+                        if(!MINIONS_AND_STRUCTURES_CAN_LEVEL_UP){
+                            continue;
+                        }
+                        break;
+                }
+                player_gain_xp(team_member, players, KILL_REWARD_XP);
+            }
+
         }
 
         // deal with dying player
@@ -718,6 +862,7 @@ void player_gain_xp(struct player *player, struct player players[ENTITIES_MAX], 
                 break;
             case ET_TOWER:
             case ET_WALL:
+            case ET_BULLET:
                 restore_hp = STRUCTURES_RESTORE_HP_ON_LEVEL_UP;
                 break;
         }
@@ -760,6 +905,7 @@ void player_draw(struct player *player, struct player players[ENTITIES_MAX]){
             case ET_HERO_BOT:
             case ET_MINION:
             case ET_WALL:
+            case ET_BULLET: // add special shader for bullets?
                 break;
             case ET_TOWER:
                 is_tower = 1;
@@ -870,7 +1016,7 @@ void player_draw_ui(struct player *player){
         screen_print_single(player->connfd, msg, written);
 
         if(!player->alive){
-            char shader_dead_off[]  = SHADER_UI_DEAD_ON;
+            char shader_dead_off[]  = SHADER_UI_DEAD_OFF;
             screen_print_single(player->connfd, shader_dead_off, sizeof(shader_dead_off));
         }
     }
@@ -941,6 +1087,7 @@ void player_draw_ui(struct player *player){
 ///////////// bot stuff
 /////////////
 
+// return 0 if anything was done
 static int player_bot_select_action(struct player *player, struct player players[ENTITIES_MAX], char *action){
 
     // do nothing if dead
@@ -960,6 +1107,15 @@ static int player_bot_select_action(struct player *player, struct player players
             return 1;
         }
     }
+
+    // if is bullet
+
+    if(player->et == ET_BULLET){
+        // TODO incorporate inaccuracy as schizophrenia
+        *action = player->hero.context; // direction is stored here
+        return 0;
+    }
+
 
     // your schizophrenia is trolling you
 

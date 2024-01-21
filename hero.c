@@ -62,6 +62,10 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         case ET_WALL:
             hero_init_wall(hero);
             return;
+        
+        case ET_BULLET:
+            hero_init_bullet(hero);
+            return;
     }
 
     char msg_select_hero[] = "\nSelect a hero and press enter:\n";
@@ -160,6 +164,8 @@ void hero_init_regular_guy(struct hero *hero){
 
     hero->legpower = 1;
     hero->weight   = 1;
+
+    hero->context = 0;
 }
 
 void hero_init_varian(struct hero *hero){
@@ -251,4 +257,18 @@ void hero_init_wall(struct hero *hero){
 
     hero->legpower = 0;
     hero->weight = 1;
+}
+
+void hero_init_bullet(struct hero *hero){
+    hero->model = 'b'; // the bullet uses `-` and `|` based on move direction (but it's set in a hacky way)
+
+    hero->hp_max = 1;
+
+    hero->basic_attack_distance = 1;
+    hero->basic_attack_damage = (hero->basic_attack_damage * 10);
+
+    hero->legpower = 1;
+    hero->weight = 1;
+
+    // we can also add healing bullets
 }

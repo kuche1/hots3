@@ -10,7 +10,7 @@
 
 // game parameters
 
-#define ENTITIES_MAX 120 // includes minions, towers, walls... more like entities_max
+#define ENTITIES_MAX 140 // includes minions, towers, walls, bullets...
 
 #define HEROES_REQUIRED 8
 
@@ -23,11 +23,6 @@
 
 #define ANTICHEAT_BURST_INTERVAL_MS 160
 #define ANTICHEAT_BURST_ACTIONS 4
-
-// ballance
-
-#define BULLET_MOVE_INTERVAL_MS 500
-#define BULLET_DMG 5
 
 // levels
 
@@ -80,6 +75,13 @@
 #define KEY_SHOOT_RIGHT 'l'
 #define KEY_SHOOT_UP 'i'
 #define KEY_SHOOT_DOWN 'k'
+
+// bullets
+
+#define BULLET_MOVE_INTERVAL_MS 200
+#define BULLET_WILLPOWER     1
+#define BULLET_SCHIZOPHRENIA 1
+#define BULLET_PATHFIND_DEPTH 0
 
 // bot parameters
 

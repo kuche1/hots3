@@ -8,6 +8,7 @@ enum entity_type{
     ET_MINION,
     ET_TOWER,
     ET_WALL,
+    ET_BULLET,
 };
 
 #endif

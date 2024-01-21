@@ -26,6 +26,7 @@ struct player * generate_new_entity(struct player players[ENTITIES_MAX]){
             case ET_MINION:
             case ET_TOWER: // if I change my mind about towers not being able to respawn I'll have to move this down
             case ET_WALL:
+            case ET_BULLET:
                 return player;
 
             case ET_HERO_HUMAN:

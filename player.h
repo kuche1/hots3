@@ -63,10 +63,14 @@ void player_init_mem(struct player *player);
 void player_init(struct player *player, int team, enum entity_type entity_type, int connfd, struct sockaddr_in sock, int sock_len);
 void player_select_hero(struct player *player);
 void player_spawn(struct player *player, struct player players[ENTITIES_MAX], int pos_y, int pos_x);
+// movement
+int player_move_to(struct player *player, int y_desired, int x_desired, struct player players[ENTITIES_MAX]);
 // actions
 void player_select_action(struct player *player, struct player players[ENTITIES_MAX]);
+void player_basic_attack_an_entity(struct player *player, struct player *target, struct player entities[ENTITIES_MAX]);
 void player_basic_attack(struct player *player, struct player players[ENTITIES_MAX]);
 void player_heal_ability(struct player *player, struct player players[ENTITIES_MAX]);
+void player_kill_yourself(struct player *player, struct player players[ENTITIES_MAX]);
 // deal with status
 void player_receive_damage(struct player *player, int amount, struct player players[ENTITIES_MAX]);
 void player_recalculate_health_state(struct player *player, struct player players[ENTITIES_MAX]);
