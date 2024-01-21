@@ -79,8 +79,8 @@
 // bullets
 
 #define BULLET_MOVE_INTERVAL_MS 200
-#define BULLET_WILLPOWER     1
-#define BULLET_SCHIZOPHRENIA 1
+#define BULLET_WILLPOWER     14
+#define BULLET_SCHIZOPHRENIA 15
 #define BULLET_PATHFIND_DEPTH 0
 
 // bot parameters

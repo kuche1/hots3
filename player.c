@@ -383,7 +383,15 @@ void player_select_hero(struct player *player){
 }
 
 /////////////
-///////////// movement
+///////////// checks
+/////////////
+
+int player_your_schizophrenia_is_trolling_you(struct player *player){
+    return !(rand() % player->bot_schizophrenia < player->bot_willpower);
+}
+
+/////////////
+///////////// actions
 /////////////
 
 // returns 1 if something was in the way
@@ -403,10 +411,6 @@ int player_move_to(struct player *player, int y_desired, int x_desired, struct p
 
     return 0;
 }
-
-/////////////
-///////////// actions
-/////////////
 
 void player_select_action(struct player *player, struct player players[ENTITIES_MAX]){
 
@@ -1111,15 +1115,43 @@ static int player_bot_select_action(struct player *player, struct player players
     // if is bullet
 
     if(player->et == ET_BULLET){
-        // TODO incorporate inaccuracy as schizophrenia
-        *action = player->hero.context; // direction is stored here
+
+        if(player_your_schizophrenia_is_trolling_you(player)){
+            // inaccuracy
+
+            char new_action[] = {KEY_SHOOT_LEFT, KEY_SHOOT_LEFT};
+
+            switch(player->hero.context){
+                case KEY_SHOOT_LEFT:
+                case KEY_SHOOT_RIGHT:
+                    new_action[0] = KEY_SHOOT_UP;
+                    new_action[1] = KEY_SHOOT_DOWN;
+                    break;
+                case KEY_SHOOT_UP:
+                case KEY_SHOOT_DOWN:
+                    new_action[0] = KEY_SHOOT_LEFT;
+                    new_action[1] = KEY_SHOOT_RIGHT;
+                    break;
+                default:
+                    assert(0);
+                    break;
+            }
+
+            int idx = rand() % 2;
+            *action = new_action[idx];
+
+        }else{
+            *action = player->hero.context; // direction is stored here
+        }
+        
         return 0;
     }
 
 
     // your schizophrenia is trolling you
 
-    if(!(rand() % player->bot_schizophrenia < player->bot_willpower)){
+    // if(!(rand() % player->bot_schizophrenia < player->bot_willpower)){
+    if(player_your_schizophrenia_is_trolling_you(player)){
         struct map_get_empty_tiles_near_return empty_tile = map_get_empty_tiles_near(players, player->y, player->x);
 
         char choices[4];
