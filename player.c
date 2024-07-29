@@ -21,16 +21,16 @@
 ///////////// private
 /////////////
 
-static int player_process_action(struct player *player, char action, struct player players[ENTITIES_MAX]);
+static int player_process_action(struct player * player, char action, struct player players[ENTITIES_MAX]);
 
-static void player_init_bot(struct player *player);
-static int player_bot_select_action(struct player *player, struct player players[ENTITIES_MAX], char *action);
+static void player_init_bot(struct player * player);
+static int player_bot_select_action(struct player * player, struct player players[ENTITIES_MAX], char *action);
 
 /////////////
 ///////////// initialising
 /////////////
 
-void player_init_mem(struct player *player){
+void player_init_mem(struct player * player){
     player->connfd = -1;
     memset(&player->sock, 0, sizeof(player->sock));
     player->sock_len = 0;
@@ -70,7 +70,7 @@ void player_init_mem(struct player *player){
     player->bot_last_action_at_ms = 0;
 }
 
-void player_init(struct player *player, int team, enum entity_type entity_type, int connfd, struct sockaddr_in sock, int sock_len){
+void player_init(struct player * player, int team, enum entity_type entity_type, int connfd, struct sockaddr_in sock, int sock_len){
     player_init_mem(player);
 
     player->connfd = connfd;
@@ -95,7 +95,7 @@ void player_init(struct player *player, int team, enum entity_type entity_type, 
     player_select_hero(player);
 }
 
-static void player_init_bot(struct player *player){
+static void player_init_bot(struct player * player){
     player->connfd = -1;
 
     assert(player->et);
@@ -162,7 +162,7 @@ static void player_init_bot(struct player *player){
 }
 
 // TODO use `pos_y` and `pos_x` when calling this function, when it makes sense
-void player_spawn(struct player *player, struct player players[ENTITIES_MAX], int pos_y, int pos_x){
+void player_spawn(struct player * player, struct player players[ENTITIES_MAX], int pos_y, int pos_x){
 
     player->died_at_ms = 0;
 
@@ -269,7 +269,7 @@ void player_spawn(struct player *player, struct player players[ENTITIES_MAX], in
 
         if((pos_y < 0) || (pos_x < 0)){
             for(int ent_idx=0; ent_idx<ENTITIES_MAX; ++ent_idx){
-                struct player *entity = &players[ent_idx];
+                struct player * entity = &players[ent_idx];
                 if(!entity->alive){
                     continue;
                 }
@@ -378,7 +378,7 @@ void player_spawn(struct player *player, struct player players[ENTITIES_MAX], in
     player_draw(player, players);
 }
 
-void player_select_hero(struct player *player){
+void player_select_hero(struct player * player){
     hero_select_player_hero(&player->hero, player->connfd, player->et);
 }
 
@@ -386,7 +386,7 @@ void player_select_hero(struct player *player){
 ///////////// checks
 /////////////
 
-int player_your_schizophrenia_is_trolling_you(struct player *player){
+int player_your_schizophrenia_is_trolling_you(struct player * player){
     return !(rand() % player->bot_schizophrenia < player->bot_willpower);
 }
 
@@ -395,7 +395,7 @@ int player_your_schizophrenia_is_trolling_you(struct player *player){
 /////////////
 
 // returns 1 if something was in the way
-int player_move_to(struct player *player, int y_desired, int x_desired, struct player players[ENTITIES_MAX]){
+int player_move_to(struct player * player, int y_desired, int x_desired, struct player players[ENTITIES_MAX]){
     if(!map_is_tile_empty(players, y_desired, x_desired)){
         return 1;
     }
@@ -412,7 +412,7 @@ int player_move_to(struct player *player, int y_desired, int x_desired, struct p
     return 0;
 }
 
-void player_select_action(struct player *player, struct player players[ENTITIES_MAX]){
+void player_select_action(struct player * player, struct player players[ENTITIES_MAX]){
 
     // select action
 
@@ -456,7 +456,7 @@ void player_select_action(struct player *player, struct player players[ENTITIES_
 }
 
 // returns 1 when player REQUESTED ANYTHING VALID, not when anything was actually done
-static int player_process_action(struct player *player, char action, struct player players[ENTITIES_MAX]){
+static int player_process_action(struct player * player, char action, struct player players[ENTITIES_MAX]){
 
     if(!player->alive){
         return 0;
@@ -492,7 +492,7 @@ static int player_process_action(struct player *player, char action, struct play
             int pos_y = player->y + delta_y;
             int pos_x = player->x + delta_x;
 
-            struct player *entity_at_pos = get_entity_at(pos_y, pos_x, players);
+            struct player * entity_at_pos = get_entity_at(pos_y, pos_x, players);
 
             if(entity_at_pos){
                 // there's something in the way
@@ -589,7 +589,7 @@ static int player_process_action(struct player *player, char action, struct play
                 return 1;
             }
 
-            struct player *bullet = generate_new_entity(players);
+            struct player * bullet = generate_new_entity(players);
             if(!bullet){ // entity limit reached
                 printf("ERROR: entity limit reached; cannot spawn bullet\n");
                 return 1;
@@ -619,7 +619,7 @@ static int player_process_action(struct player *player, char action, struct play
     return 0;
 }
 
-void player_basic_attack_an_entity(struct player *player, struct player *target, struct player entities[ENTITIES_MAX]){
+void player_basic_attack_an_entity(struct player * player, struct player * target, struct player entities[ENTITIES_MAX]){
     assert(player->alive);
     assert(target->alive);
     int damage = player->hero.basic_attack_damage * player->level;
@@ -627,12 +627,12 @@ void player_basic_attack_an_entity(struct player *player, struct player *target,
     player_toggle_christmas_lights(player, entities); // indicate that an attack was performed
 }
 
-void player_basic_attack(struct player *player, struct player players[ENTITIES_MAX]){
+void player_basic_attack(struct player * player, struct player players[ENTITIES_MAX]){
 
-    struct player *target = NULL;
+    struct player * target = NULL;
 
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *other_player = &players[player_idx];
+        struct player * other_player = &players[player_idx];
 
         if(other_player == player){
             continue;
@@ -661,11 +661,11 @@ void player_basic_attack(struct player *player, struct player players[ENTITIES_M
     player_basic_attack_an_entity(player, target, players);
 }
 
-void player_heal_ability(struct player *player, struct player players[ENTITIES_MAX]){
-    struct player *heal_target = NULL;
+void player_heal_ability(struct player * player, struct player players[ENTITIES_MAX]){
+    struct player * heal_target = NULL;
 
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *other_player = &players[player_idx];
+        struct player * other_player = &players[player_idx];
 
         if(other_player == player){
             continue;
@@ -700,7 +700,7 @@ void player_heal_ability(struct player *player, struct player players[ENTITIES_M
     }
 }
 
-void player_kill_yourself(struct player *player, struct player players[ENTITIES_MAX]){
+void player_kill_yourself(struct player * player, struct player players[ENTITIES_MAX]){
     // player_receive_damage(player, player->hp * player->level + 1, players); // TODO this fucking sucks and is dependent on the damage reduction
     player_receive_damage(player, INT_MAX, players); // TODO this kinda sucks, perhaps we should implement piercing damage
 }
@@ -709,7 +709,7 @@ void player_kill_yourself(struct player *player, struct player players[ENTITIES_
 ///////////// deal with status
 /////////////
 
-void player_receive_damage(struct player *player, int amount, struct player players[ENTITIES_MAX]){
+void player_receive_damage(struct player * player, int amount, struct player players[ENTITIES_MAX]){
 
     if(!player->alive){
         return;
@@ -749,7 +749,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
             int team = !player->team;
 
             for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-                struct player *team_member = &players[player_idx];
+                struct player * team_member = &players[player_idx];
                 if(team_member->team != team){
                     continue;
                 }
@@ -792,7 +792,7 @@ void player_receive_damage(struct player *player, int amount, struct player play
     player_recalculate_health_state(player, players);
 }
 
-void player_recalculate_health_state(struct player *player, struct player players[ENTITIES_MAX]){
+void player_recalculate_health_state(struct player * player, struct player players[ENTITIES_MAX]){
 
     static char health_state_palette[HEALTH_STATES*2][20]; // idx_0=healthy idx_last=lowhp // once for each team
     static int health_state_palette_generated = 0;
@@ -829,7 +829,7 @@ void player_recalculate_health_state(struct player *player, struct player player
 
     player->alive = player->hp > 0;
 
-    char *old_color = player->health_color;
+    char * old_color = player->health_color;
 
     int health_state_idx_reversed = ((HEALTH_STATES-1) * player->hp) / player->hero.hp_max;
     int health_state_idx = (HEALTH_STATES-1) - health_state_idx_reversed;
@@ -845,7 +845,7 @@ void player_recalculate_health_state(struct player *player, struct player player
     }
 }
 
-void player_gain_xp(struct player *player, struct player players[ENTITIES_MAX], int xp){
+void player_gain_xp(struct player * player, struct player players[ENTITIES_MAX], int xp){
     if(!player->alive){
         return;
     }
@@ -886,7 +886,7 @@ void player_gain_xp(struct player *player, struct player players[ENTITIES_MAX], 
 ///////////// drawing
 /////////////
 
-void player_toggle_christmas_lights(struct player *player, struct player players[ENTITIES_MAX]){
+void player_toggle_christmas_lights(struct player * player, struct player players[ENTITIES_MAX]){
     player->christmas_lights_on = !player->christmas_lights_on;
     player_draw(player, players);
 }
@@ -968,7 +968,7 @@ void player_draw(struct player *player, struct player players[ENTITIES_MAX]){
     }
 }
 
-void player_draw_ui(struct player *player){
+void player_draw_ui(struct player * player){
 
     if(player->connfd < 0){
         return;
@@ -1092,7 +1092,7 @@ void player_draw_ui(struct player *player){
 /////////////
 
 // return 0 if anything was done
-static int player_bot_select_action(struct player *player, struct player players[ENTITIES_MAX], char *action){
+static int player_bot_select_action(struct player * player, struct player players[ENTITIES_MAX], char *action){
 
     // do nothing if dead
 
@@ -1183,11 +1183,11 @@ static int player_bot_select_action(struct player *player, struct player players
 
     // find closest enemy
 
-    struct player *attack_target = NULL;
+    struct player * attack_target = NULL;
     int attack_target_dist = INT_MAX;
 
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *other_player = &players[player_idx];
+        struct player * other_player = &players[player_idx];
 
         if(player == other_player){
             continue;
@@ -1211,12 +1211,12 @@ static int player_bot_select_action(struct player *player, struct player players
 
     // find closest damaged ally
 
-    struct player *closest_damaged_ally = NULL;
+    struct player * closest_damaged_ally = NULL;
     int closest_damaged_ally_dist = INT_MAX;
 
     if((player->hero.heal_ability_range > 0) && (player->hero.heal_ability_amount > 0)){
         for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-            struct player *other_player = &players[player_idx];
+            struct player * other_player = &players[player_idx];
 
             if(player == other_player){
                 continue;
@@ -1249,7 +1249,7 @@ static int player_bot_select_action(struct player *player, struct player players
 
     // if((player->hero.heal_ability_range > 0) && (player->hero.heal_ability_amount > 0)){
     //     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-    //         struct player *other_player = &players[player_idx];
+    //         struct player * other_player = &players[player_idx];
     //         if(player == other_player){
     //             continue;
     //         }
@@ -1273,12 +1273,12 @@ static int player_bot_select_action(struct player *player, struct player players
 
     // // only attempt to find a healer if not already in range of one
 
-    // struct player *best_healer = NULL;
+    // struct player * best_healer = NULL;
 
     // if(!already_in_range_of_a_healer){
 
     //     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-    //         struct player *other_player = &players[player_idx];
+    //         struct player * other_player = &players[player_idx];
     //         if(player == other_player){
     //             continue;
     //         }

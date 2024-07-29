@@ -13,7 +13,7 @@
 
 #include "errors.h"
 
-int create_server(int *sockfd, struct sockaddr_in *servaddr, int port, int listen_max){
+int create_server(int * sockfd, struct sockaddr_in * servaddr, int port, int listen_max){
     *sockfd = socket(AF_INET, SOCK_STREAM, 0); 
     if(*sockfd == -1){
         return ERR_CANT_CREATE_SOCKET;
@@ -42,7 +42,7 @@ int create_server(int *sockfd, struct sockaddr_in *servaddr, int port, int liste
 
 // sending
 
-void net_send_single(int connfd, char *data, int data_len){
+void net_send_single(int connfd, char * data, int data_len){
     if(connfd < 0){
         return;
     }
@@ -60,9 +60,9 @@ void net_send_single(int connfd, char *data, int data_len){
     assert(data_len <= 0); // not all data could be sent
 }
 
-void net_send(struct player players[ENTITIES_MAX], char *data, int data_len){
+void net_send(struct player players[ENTITIES_MAX], char * data, int data_len){
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
 
         if(player->et){
             continue;
@@ -74,6 +74,6 @@ void net_send(struct player players[ENTITIES_MAX], char *data, int data_len){
 
 // receiving
 
-int net_recv_1B(int connfd, char *data){
+int net_recv_1B(int connfd, char * data){
     return read(connfd, data, 1);
 }

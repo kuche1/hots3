@@ -1,4 +1,8 @@
 
+// [new] TODO
+//
+// add action limit
+
 // TODO requested by clients
 //
 // [2023-12-05] nov geroi: stg hammer (moje da dobavq ne6to kato toggle_christmas_lights za da opi6a dali e kleknala)
@@ -12,10 +16,6 @@
 //
 // da napravq botovete da retreat-vat
 // workaround dokato go implementna tova e vseki otbor da ima po 1 lili (possibly 2)
-//
-// da dobavq steni
-//
-// kogato nqkoi connect-ne kum survura go pita kolko bota iska, koi map, ...
 //
 // da napravq da moje6 da strelq6 nqkoi at point blank range
 //
@@ -72,7 +72,7 @@
 #include "util.h"
 #include "map.h"
 
-int main(int argc, char **argv __attribute__((unused))){
+int main(int argc, char * * argv __attribute__((unused))){
 
     // command line args
 
@@ -99,7 +99,7 @@ int main(int argc, char **argv __attribute__((unused))){
     struct player players[ENTITIES_MAX];
     int players_len = 0;
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
         player_init_mem(player);
     }
 
@@ -186,7 +186,7 @@ int main(int argc, char **argv __attribute__((unused))){
             }
 
             printf("initialising player...\n");
-            struct player *player = &players[players_len];
+            struct player * player = &players[players_len];
             player_init(player, team, et, connfd, sock, sock_len);
             printf("init done\n");
 
@@ -244,9 +244,9 @@ int main(int argc, char **argv __attribute__((unused))){
     // }
 
     {
-        FILE *f_walls_x    = NULL;
-        FILE *f_walls_y    = NULL;
-        FILE *f_walls_team = NULL;
+        FILE * f_walls_x    = NULL;
+        FILE * f_walls_y    = NULL;
+        FILE * f_walls_team = NULL;
 
         // I'm savage
 
@@ -324,7 +324,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
     for(int team=0; team<=1; ++team){
         for(int tower_idx=0; tower_idx<NUMBER_OF_TOWERS; ++tower_idx){
-            struct player *tower = generate_new_entity(players);
+            struct player * tower = generate_new_entity(players);
             assert(tower); // entity limit reached
 
             enum entity_type et = ET_TOWER;
@@ -341,7 +341,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
     for(int team=0; team<=1; ++team){
         for(int idx=0; idx<NUMBER_OF_WALLS; ++idx){
-            struct player *wall = generate_new_entity(players);
+            struct player * wall = generate_new_entity(players);
             assert(wall); // entity limit reached
 
             enum entity_type et = ET_WALL;
@@ -357,7 +357,7 @@ int main(int argc, char **argv __attribute__((unused))){
     // spawn players
 
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
         switch(player->et){
             case ET_HERO_HUMAN:
             case ET_HERO_BOT:
@@ -382,7 +382,7 @@ int main(int argc, char **argv __attribute__((unused))){
         // process input
 
         for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-            struct player *player = &players[player_idx];
+            struct player * player = &players[player_idx];
             player_select_action(player, players);
         }
 
@@ -391,7 +391,7 @@ int main(int argc, char **argv __attribute__((unused))){
         {
             long long now = get_time_ms();
             for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-                struct player *player = &players[player_idx];
+                struct player * player = &players[player_idx];
                 switch(player->et){
                     case ET_HERO_HUMAN:
                     case ET_HERO_BOT:
@@ -420,7 +420,7 @@ int main(int argc, char **argv __attribute__((unused))){
 
                 // spawn if there is enough room
 
-                struct player *minion = generate_new_entity(players);
+                struct player * minion = generate_new_entity(players);
 
                 if(!minion){
                     printf("entiy limit reached, cannot spawn new minion\n");
@@ -440,7 +440,7 @@ int main(int argc, char **argv __attribute__((unused))){
                     int average_level_count = 0;
 
                     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-                        struct player *player = &players[player_idx];
+                        struct player * player = &players[player_idx];
                         if(!player->alive){
                             continue;
                         }
@@ -464,7 +464,7 @@ int main(int argc, char **argv __attribute__((unused))){
         // draw ui
 
         for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-            struct player *player = &players[player_idx];
+            struct player * player = &players[player_idx];
             player_draw_ui(player);
         }
 
@@ -473,7 +473,7 @@ int main(int argc, char **argv __attribute__((unused))){
         int players_alive[2] = {0};
 
         for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-            struct player *player = &players[player_idx];
+            struct player * player = &players[player_idx];
 
             if(player->alive){
                 players_alive[player->team] += 1;
@@ -511,7 +511,7 @@ int main(int argc, char **argv __attribute__((unused))){
         int cur_x = sizeof(msg_team_members)-1;
 
         for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-            struct player *player = &players[player_idx];
+            struct player * player = &players[player_idx];
 
             if(player->team == winning_team){
                 player->alive = 1; // TODO create `draw_raw` or something like that instead of this hack

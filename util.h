@@ -11,6 +11,6 @@
 
 long long get_time_ms(void);
 struct player * generate_new_entity(struct player players[ENTITIES_MAX]); // not the most appropriate place but it will have to do
-void read_file_into_buffer(FILE *fd, char *buf, int *arg_p_buf_len, int buf_maxlen, int buf_elem_size);
+void read_file_into_buffer(FILE * fd, char * buf, int * arg_p_buf_len, int buf_maxlen, int buf_elem_size);
 
 #endif

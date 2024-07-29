@@ -14,13 +14,13 @@
 ///////////// initialisations
 /////////////
 
-void hero_init_mem(struct hero *hero){
+void hero_init_mem(struct hero * hero){
     hero_init_regular_guy(hero);
 }
 
-void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type entity_type){
+void hero_select_player_hero(struct hero * hero, int connfd, enum entity_type entity_type){
 
-    char *choices_str[NUMBER_OF_HEROES] = {
+    char * choices_str[NUMBER_OF_HEROES] = {
         "basic bitch\n\r\tnothing special\n\r",
         "varian\n\r\tslower\n\r\thigher dmg\n\r",
         "valla\n\r\tlower hp\n\r\thigher range\n\r",
@@ -75,7 +75,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
         screen_print_single(connfd, msg_select_hero, sizeof(msg_select_hero)-1);
 
         for(long unsigned int choice_idx=0; choice_idx < NUMBER_OF_HEROES; choice_idx++){
-            char *choice = choices_str[choice_idx];
+            char * choice = choices_str[choice_idx];
 
             char choice_num_as_char = choice_idx + '0';
             screen_print_single(connfd, &choice_num_as_char, sizeof(choice_num_as_char));
@@ -106,10 +106,10 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
 
     // send lobby ready pic
     for(;;){
-        FILE *fd = NULL;
+        FILE * fd = NULL;
 
         for(;;){
-            char *path = "images/lobby-ready.txt";
+            char * path = "images/lobby-ready.txt";
 
             fd = fopen(path, "rb");
             if(!fd){
@@ -143,7 +143,7 @@ void hero_select_player_hero(struct hero *hero, int connfd, enum entity_type ent
 ///////////// drawing
 /////////////
 
-void hero_draw_single(struct hero *hero, int connfd){
+void hero_draw_single(struct hero * hero, int connfd){
     screen_print_single(connfd, &hero->model, sizeof(hero->model));
 }
 
@@ -151,7 +151,7 @@ void hero_draw_single(struct hero *hero, int connfd){
 ///////////// heroes
 /////////////
 
-void hero_init_regular_guy(struct hero *hero){
+void hero_init_regular_guy(struct hero * hero){
     hero->model = 'B';
 
     hero->hp_max = 1120;
@@ -168,7 +168,7 @@ void hero_init_regular_guy(struct hero *hero){
     hero->context = 0;
 }
 
-void hero_init_varian(struct hero *hero){
+void hero_init_varian(struct hero * hero){
     hero->model = 'V';
 
     hero->basic_attack_damage = (hero->basic_attack_damage * 13) / 10;
@@ -177,7 +177,7 @@ void hero_init_varian(struct hero *hero){
     hero->weight   = 7;
 }
 
-void hero_init_valla(struct hero *hero){
+void hero_init_valla(struct hero * hero){
     hero->model = 'v';
 
     hero->hp_max = (hero->hp_max * 8) / 10;
@@ -185,7 +185,7 @@ void hero_init_valla(struct hero *hero){
     hero->basic_attack_distance += 1;
 }
 
-void hero_init_stiches(struct hero *hero){
+void hero_init_stiches(struct hero * hero){
     hero->model = 'S';
 
     hero->hp_max = (hero->hp_max * 13) / 10;
@@ -194,7 +194,7 @@ void hero_init_stiches(struct hero *hero){
     hero->weight   = 7;
 }
 
-void hero_init_lili(struct hero *hero){
+void hero_init_lili(struct hero * hero){
     int base_attack = hero->basic_attack_damage;
 
     hero->model = 'l';
@@ -207,7 +207,7 @@ void hero_init_lili(struct hero *hero){
     hero->heal_ability_amount = (base_attack * 6) / 10;
 }
 
-void hero_init_alarak(struct hero *hero){
+void hero_init_alarak(struct hero * hero){
     hero->model = 'A';
 
     hero->hp_max = (hero->hp_max * 8) / 10;
@@ -219,7 +219,7 @@ void hero_init_alarak(struct hero *hero){
 ///////////// special
 /////////////
 
-void hero_init_minion(struct hero *hero){
+void hero_init_minion(struct hero * hero){
     hero->model = 'm';
 
     hero->hp_max = hero->hp_max / 10;
@@ -230,7 +230,7 @@ void hero_init_minion(struct hero *hero){
     hero->weight   = 10;
 }
 
-void hero_init_tower(struct hero *hero){
+void hero_init_tower(struct hero * hero){
     int base_attack = hero->basic_attack_damage;
 
     hero->model = 'T';
@@ -247,7 +247,7 @@ void hero_init_tower(struct hero *hero){
     hero->weight = 1;
 }
 
-void hero_init_wall(struct hero *hero){
+void hero_init_wall(struct hero * hero){
     hero->model = 'W';
 
     hero->hp_max = (hero->hp_max * 15) / 10;
@@ -259,7 +259,7 @@ void hero_init_wall(struct hero *hero){
     hero->weight = 1;
 }
 
-void hero_init_bullet(struct hero *hero){
+void hero_init_bullet(struct hero * hero){
     hero->model = 'b'; // the bullet uses `-` and `|` based on move direction (but it's set in a hacky way)
 
     hero->hp_max = 1;

@@ -23,7 +23,7 @@ int map_is_tile_empty(struct player players[ENTITIES_MAX], int pos_y, int pos_x)
     }
 
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
         
         if(!player->alive){
             continue;
@@ -284,9 +284,9 @@ struct direction_and_distance map_pathfind_depth(struct player players[ENTITIES_
 /////////////
 
 void map_load(
-    int *walls_x, int walls_x_len,
-    int *walls_y, int walls_y_len,
-    int *walls_team, int walls_team_len,
+    int * walls_x, int walls_x_len,
+    int * walls_y, int walls_y_len,
+    int * walls_team, int walls_team_len,
     struct player players[ENTITIES_MAX]
 ){
 
@@ -303,7 +303,7 @@ void map_load(
             exit(ERR_CANT_SPAWN_WALL_SINCE_SPOT_IS_ALREADY_TAKEN); // probably duplicate walls or there are already players spawned there
         }
 
-        struct player *wall = generate_new_entity(players);
+        struct player * wall = generate_new_entity(players);
         if(!wall){
             exit(ERR_CANT_SPAWN_WALL_SINCE_ENTITY_LIMIT_REACHED);
         }
@@ -318,13 +318,13 @@ void map_load(
     }
 }
 
-int map_custom_map_exists(char *name){
+int map_custom_map_exists(char * name){
     char path[512];
     int written = snprintf(path, sizeof(path), "maps/%s", name);
     assert(written >= 0);
     assert((long unsigned int)written < sizeof(path)); // buffer is too small
 
-    DIR* dir = opendir(path);
+    DIR * dir = opendir(path);
     if (dir) {
         // it exists
         closedir(dir);

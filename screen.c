@@ -15,12 +15,12 @@ void screen_clear_single(int connfd){
 
 void screen_clear(struct player players[ENTITIES_MAX]){
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
         screen_clear_single(player->connfd);
     }
 }
 
-void screen_switch_to_draw_mode_single(struct player *player){
+void screen_switch_to_draw_mode_single(struct player * player){
     switch(player->et){
         case ET_HERO_HUMAN:
             break;
@@ -54,7 +54,7 @@ void screen_switch_to_draw_mode_single(struct player *player){
 
 void screen_switch_to_draw_mode(struct player players[ENTITIES_MAX]){
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
         screen_switch_to_draw_mode_single(player);
     }
 }
@@ -71,18 +71,18 @@ void screen_cur_set(struct player players[ENTITIES_MAX], int pos_y, int pos_x){
     assert(pos_y >= 0);
     assert(pos_x >= 0);
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
         screen_cur_set_single(player->connfd, pos_y, pos_x);
     }
 }
 
-void screen_print_single(int connfd, char *msg, int msg_len){
+void screen_print_single(int connfd, char * msg, int msg_len){
     net_send_single(connfd, msg, msg_len);
 }
 
-void screen_print(struct player players[ENTITIES_MAX], char *msg, int msg_len){
+void screen_print(struct player players[ENTITIES_MAX], char * msg, int msg_len){
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
         if(player->et){
             continue;
         }

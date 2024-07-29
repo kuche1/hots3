@@ -45,12 +45,12 @@ struct direction_and_distance map_pathfind_depth(struct player players[ENTITIES_
 // map loading
 
 void map_load(
-    int *walls_x, int walls_x_len,
-    int *walls_y, int walls_y_len,
-    int *walls_team, int walls_team_len,
+    int * walls_x, int walls_x_len,
+    int * walls_y, int walls_y_len,
+    int * walls_team, int walls_team_len,
     struct player players[ENTITIES_MAX]
 );
 
-int map_custom_map_exists(char *name);
+int map_custom_map_exists(char * name);
 
 #endif

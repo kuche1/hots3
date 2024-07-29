@@ -16,7 +16,7 @@ long long get_time_ms(void){
 struct player * generate_new_entity(struct player players[ENTITIES_MAX]){
 
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-        struct player *player = &players[player_idx];
+        struct player * player = &players[player_idx];
 
         if(player->alive){
             continue;
@@ -38,7 +38,7 @@ struct player * generate_new_entity(struct player players[ENTITIES_MAX]){
     return NULL;
 }
 
-void read_file_into_buffer(FILE *fd, char *buf, int *arg_p_buf_len, int buf_maxlen, int buf_elem_size){
+void read_file_into_buffer(FILE * fd, char * buf, int * arg_p_buf_len, int buf_maxlen, int buf_elem_size){
     int buf_len = *arg_p_buf_len;
 
     for(;;){
