@@ -1143,7 +1143,7 @@ static int player_bot_select_action(struct player * player, struct player player
         }else{
             *action = player->hero.context; // direction is stored here
         }
-        
+
         return 0;
     }
 
