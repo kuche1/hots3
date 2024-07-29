@@ -21,7 +21,7 @@
 ///////////// private
 /////////////
 
-static int player_process_action(struct player * player, char action, struct player players[ENTITIES_MAX]);
+static long long player_process_action(struct player * player, char action, struct player players[ENTITIES_MAX]);
 
 static void player_init_bot(struct player * player);
 static int player_bot_select_action(struct player * player, struct player players[ENTITIES_MAX], char *action);
@@ -50,8 +50,8 @@ void player_init_mem(struct player * player){
     player->xp = 0;
     player->died_at_ms = 0;
 
-    player->actions_since_last_burst = 0;
-    player->last_action_limit_reached_at_ms = 0;
+    player->action_last_tick_at_ms = 0;
+    player->action_storage_ms = 0;
 
     // make sure those values are something unreachable so that the UI gets updated for the first time
     player->ui_hp = INT_MIN / 2;
@@ -414,6 +414,21 @@ int player_move_to(struct player * player, int y_desired, int x_desired, struct 
 
 void player_select_action(struct player * player, struct player players[ENTITIES_MAX]){
 
+    // update action limit
+
+    {
+        long long now = get_time_ms();
+
+        long long time_passed_ms = now - player->action_last_tick_at_ms;
+        player->action_last_tick_at_ms = now;
+
+        player->action_storage_ms += time_passed_ms;
+
+        if(player->action_storage_ms > ACTION_LIMIT_MAX_STORAGE_MS){
+            player->action_storage_ms = ACTION_LIMIT_MAX_STORAGE_MS;
+        }
+    }
+
     // select action
 
     char action;
@@ -430,33 +445,20 @@ void player_select_action(struct player * player, struct player players[ENTITIES
         }
     }
 
-    // drop action if cheating
-
-    long long now = get_time_ms();
-
-    if(player->actions_since_last_burst >= ANTICHEAT_BURST_ACTIONS){
-        if(player->last_action_limit_reached_at_ms + ANTICHEAT_BURST_INTERVAL_MS > now){
-            return;
-        }else{
-            player->last_action_limit_reached_at_ms = now;
-            player->actions_since_last_burst -= ANTICHEAT_BURST_ACTIONS;
-        }
+    // drop action if action limit reached
+    
+    if(player->action_storage_ms <= 0){
+        return;
     }
 
     // execute action
 
-    int request_was_valid = player_process_action(player, action, players);
-    if(!request_was_valid){
-        return;
-    }
-
-    // update anticheat
-
-    player->actions_since_last_burst += 1;
+    long long processed_action_cost_ms = player_process_action(player, action, players);
+    player->action_storage_ms -= processed_action_cost_ms;
 }
 
-// returns 1 when player REQUESTED ANYTHING VALID, not when anything was actually done
-static int player_process_action(struct player * player, char action, struct player players[ENTITIES_MAX]){
+// returns the cost (in ms) of the action that was executed
+static long long player_process_action(struct player * player, char action, struct player players[ENTITIES_MAX]){
 
     if(!player->alive){
         return 0;
@@ -505,15 +507,18 @@ static int player_process_action(struct player * player, char action, struct pla
                 int something_is_in_the_way = player_move_to(player, pos_y, pos_x, players);
                 if(!something_is_in_the_way){
                     // we haven't reached the map border yet
-                    return 1;
+                    return ACTION_COST_MS_BULLET_MOVE;
                 }
             }
 
             // destroy bullet
             player_kill_yourself(player, players);
 
-            return 1;
+            return ACTION_COST_MS_BULLET_MOVE;
+
         }
+
+        return 0;
 
     }
 
@@ -543,24 +548,23 @@ static int player_process_action(struct player * player, char action, struct pla
             break;
     }
 
-    player_move_to(player, y_desired, x_desired, players); // no need to check  code
-
     if(action_is_movement){
-        return 1;
+        int fail = player_move_to(player, y_desired, x_desired, players); // no need to check code
+        return !fail * ACTION_COST_MS_MOVE;
     }
 
     // basic attack
 
     if((action == KEY_BASIC_ATTACK_1) || (action == KEY_BASIC_ATTACK_2)){
-        player_basic_attack(player, players);
-        return 1;
+        int fail = player_basic_attack(player, players);
+        return !fail * ACTION_COST_MS_BASIC_ATTACK;
     }
 
     // heal ability
 
     if(action == KEY_HEAL_ABILITY){
-        player_heal_ability(player, players);
-        return 1;
+        int fail = player_heal_ability(player, players);
+        return !fail * ACTION_COST_MS_HEAL;
     }
 
     // shoot
@@ -584,15 +588,15 @@ static int player_process_action(struct player * player, char action, struct pla
             int pos_y = player->y + delta_y;
             int pos_x = player->x + delta_x;
 
-            if(!map_is_tile_empty(players, pos_y, pos_x)){ // this implies that you can't shoot point blank
+            if(!map_is_tile_empty(players, pos_y, pos_x)){ // TODO this implies that you can't shoot point blank
                 printf("dbg: could not spawn bullet since tile was not empty\n");
-                return 1;
+                return 0;
             }
 
             struct player * bullet = generate_new_entity(players);
             if(!bullet){ // entity limit reached
                 printf("ERROR: entity limit reached; cannot spawn bullet\n");
-                return 1;
+                return 0;
             }
 
             struct sockaddr_in sock = {0};
@@ -610,11 +614,11 @@ static int player_process_action(struct player * player, char action, struct pla
 
             player_spawn(bullet, players, pos_y, pos_x);
 
-            return 1;
+            return ACTION_COST_MS_SHOOT;
         }
     }
 
-    // nothing
+    // invalid action (nothing)
 
     return 0;
 }
@@ -627,7 +631,8 @@ void player_basic_attack_an_entity(struct player * player, struct player * targe
     player_toggle_christmas_lights(player, entities); // indicate that an attack was performed
 }
 
-void player_basic_attack(struct player * player, struct player players[ENTITIES_MAX]){
+// returns 0 if anything was actually attacked
+int player_basic_attack(struct player * player, struct player players[ENTITIES_MAX]){
 
     struct player * target = NULL;
 
@@ -655,13 +660,16 @@ void player_basic_attack(struct player * player, struct player players[ENTITIES_
     }
 
     if(!target){
-        return;
+        return 1;
     }
 
     player_basic_attack_an_entity(player, target, players);
+
+    return 0;
 }
 
-void player_heal_ability(struct player * player, struct player players[ENTITIES_MAX]){
+// returns 0 if anyone was healed
+int player_heal_ability(struct player * player, struct player players[ENTITIES_MAX]){
     struct player * heal_target = NULL;
 
     for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
@@ -693,11 +701,21 @@ void player_heal_ability(struct player * player, struct player players[ENTITIES_
         }
     }
 
-    if(heal_target != NULL){
-        int heal = player->hero.heal_ability_amount;
-        player_receive_damage(heal_target, -heal, players);
-        player_toggle_christmas_lights(player, players); // indicate that a heal was performed
+    if(heal_target == NULL){
+        return 1;
     }
+
+    int heal = player->hero.heal_ability_amount;
+
+    int fail = player_receive_damage(heal_target, -heal, players);
+
+    if(fail){
+        return 1;
+    }
+
+    player_toggle_christmas_lights(player, players); // indicate that a heal was performed
+
+    return 0;
 }
 
 void player_kill_yourself(struct player * player, struct player players[ENTITIES_MAX]){
@@ -709,87 +727,103 @@ void player_kill_yourself(struct player * player, struct player players[ENTITIES
 ///////////// deal with status
 /////////////
 
-void player_receive_damage(struct player * player, int amount, struct player players[ENTITIES_MAX]){
+// returns 0 if anything happened
+int player_receive_damage(struct player * player, int amount, struct player players[ENTITIES_MAX]){
 
     if(!player->alive){
-        return;
+        return 1;
+    }
+
+    if(amount == 0){
+        return 1;
     }
 
     if(amount > 0){
         // if being damaged: reduce damage based on level
         amount /= player->level;
-    }
 
-    player->hp -= amount;
+        player->hp -= amount;
 
-    if(player->hp <= 0){
+        if(player->hp <= 0){
 
-        // reward opposite team
+            // reward opposite team
 
-        for(int i=0; i==0; ++i){
+            for(int i=0; i==0; ++i){
 
-            int do_not_reward_enemy_team = 0;
+                int do_not_reward_enemy_team = 0;
 
-            switch(player->et){
-                case ET_HERO_HUMAN:
-                case ET_HERO_BOT:
-                case ET_MINION:
-                case ET_TOWER:
-                case ET_WALL:
-                    break;
-                case ET_BULLET:
-                    do_not_reward_enemy_team = 1;
-                    break;
-            }
-
-            if(do_not_reward_enemy_team){
-                break;
-            }
-
-            int team = !player->team;
-
-            for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
-                struct player * team_member = &players[player_idx];
-                if(team_member->team != team){
-                    continue;
-                }
-                switch(team_member->et){
+                switch(player->et){
                     case ET_HERO_HUMAN:
                     case ET_HERO_BOT:
-                        break;
                     case ET_MINION:
                     case ET_TOWER:
                     case ET_WALL:
+                        break;
                     case ET_BULLET:
-                        if(!MINIONS_AND_STRUCTURES_CAN_LEVEL_UP){
-                            continue;
-                        }
+                        do_not_reward_enemy_team = 1;
                         break;
                 }
-                player_gain_xp(team_member, players, KILL_REWARD_XP);
+
+                if(do_not_reward_enemy_team){
+                    break;
+                }
+
+                int team = !player->team;
+
+                for(int player_idx=0; player_idx < ENTITIES_MAX; ++player_idx){
+                    struct player * team_member = &players[player_idx];
+                    if(team_member->team != team){
+                        continue;
+                    }
+                    switch(team_member->et){
+                        case ET_HERO_HUMAN:
+                        case ET_HERO_BOT:
+                            break;
+                        case ET_MINION:
+                        case ET_TOWER:
+                        case ET_WALL:
+                        case ET_BULLET:
+                            if(!MINIONS_AND_STRUCTURES_CAN_LEVEL_UP){
+                                continue;
+                            }
+                            break;
+                    }
+                    player_gain_xp(team_member, players, KILL_REWARD_XP);
+                }
+
             }
+
+            // deal with dying player
+
+            player->alive = 0;
+            player->died_at_ms = get_time_ms();
+            screen_cur_set(players, player->y, player->x);
+            screen_print_empty_tile(players);
+            player->x = -1;
+            player->y = -1;
 
         }
 
-        // deal with dying player
-
-        player->alive = 0;
-        player->died_at_ms = get_time_ms();
-        screen_cur_set(players, player->y, player->x);
-        screen_print_empty_tile(players);
-        player->x = -1;
-        player->y = -1;
-
-        // exit
-
-        return;
+        return 0;
     }
+
+    // amount < 0
+
+    int hp_before = player->hp;
+
+    player->hp -= amount;
 
     if(player->hp > player->hero.hp_max){ // if overhealed
         player->hp = player->hero.hp_max;
     }
 
-    player_recalculate_health_state(player, players);
+    int hp_changed = hp_before != player->hp;
+
+    if(hp_changed){
+        player_recalculate_health_state(player, players);
+    }
+
+    return !hp_changed;
 }
 
 void player_recalculate_health_state(struct player * player, struct player players[ENTITIES_MAX]){
@@ -981,6 +1015,8 @@ void player_draw_ui(struct player * player){
     int hp_updated = player->ui_hp != player->hp;
     player->ui_hp = player->hp;
 
+    int actions_updated = 1; // no need to check, this will pretty much always need updating
+
     int level_updated = player->ui_level != player->level;
     player->ui_level = player->level;
 
@@ -990,7 +1026,7 @@ void player_draw_ui(struct player * player){
     int help_updated = !player->ui_help;
     player->ui_help = 1;
 
-    int anything_updated = hp_updated || level_updated || xp_updated || help_updated;
+    int anything_updated = hp_updated || actions_updated || level_updated || xp_updated || help_updated;
 
     // set UI color
 
@@ -1023,6 +1059,23 @@ void player_draw_ui(struct player * player){
             char shader_dead_off[]  = SHADER_UI_DEAD_OFF;
             screen_print_single(player->connfd, shader_dead_off, sizeof(shader_dead_off));
         }
+    }
+
+    ui_y += 1;
+
+    // draw actions left
+
+    if(actions_updated){
+        long long limit = ACTION_LIMIT_MAX_STORAGE_MS; // I hate this but gcc refuses to compile if I give this to snprintf right away
+        assert(player->action_storage_ms   < 9999);
+        assert(limit                       < 9999);
+        char msg[21];
+        int written = snprintf(msg, sizeof(msg), "Actions: %4lld / %4lld", player->action_storage_ms, limit);
+        assert(written >= 0);
+        assert((long unsigned int)written < sizeof(msg)); // buffer is too small
+
+        screen_cur_set_single(player->connfd, ui_y, 0);
+        screen_print_single(player->connfd, msg, written);
     }
 
     ui_y += 1;

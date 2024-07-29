@@ -1,7 +1,9 @@
 
 // [new] TODO
 //
-// add action limit
+// v momenta patronite sa entitita, koeto ozna4ava 4e moje da te blokirat ot tova da se premesti6 + vliaqt na pathfinding-a
+//
+// da napravq cost-a za action-ite i possibly max action storage-a (vnimatelno zaradi UI-a) da moje da se promenqt ot geroite
 
 // TODO requested by clients
 //
@@ -32,10 +34,6 @@
 // ?auto attack (but what about auto move)
 //
 // ?da display-va respawn timer
-//
-// da napravq da moje character-a ti da e UTF-8 character (i da proverqvam dali naistna e UTF-8 ili nqkolko ASCII char-a)
-//
-// add cat pic from https://github.com/kuche1/hots3/pull/2 (we can convert the image to ASCII characters and send them to the client)
 //
 // only apply level effect if certain amount of levels above average
 //

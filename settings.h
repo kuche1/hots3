@@ -19,10 +19,16 @@
 
 #define HEALTH_STATES 8 // clarity vs bandwidth (and style)
 
-// anti hacking
+// action limiter
 
-#define ANTICHEAT_BURST_INTERVAL_MS 160
-#define ANTICHEAT_BURST_ACTIONS 4
+#define ACTION_LIMIT_MAX_STORAGE_MS 3e3
+
+// TODO add different multipliers (or costs) for each hero
+#define ACTION_COST_MS_MOVE 200
+#define ACTION_COST_MS_BASIC_ATTACK 200
+#define ACTION_COST_MS_HEAL 200
+#define ACTION_COST_MS_SHOOT 200
+#define ACTION_COST_MS_BULLET_MOVE 200
 
 // levels
 

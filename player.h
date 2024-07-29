@@ -34,9 +34,10 @@ struct player {
     int xp;
     long long died_at_ms;
 
-    // anticheat
-    int actions_since_last_burst;
-    long long last_action_limit_reached_at_ms;
+    // action limit
+    // every "tick" the time passed gets stored, then it can get used by the player to execute a certain action
+    long long action_last_tick_at_ms;
+    long long action_storage_ms;
 
     // UI
     int ui_hp;
@@ -69,11 +70,11 @@ int player_your_schizophrenia_is_trolling_you(struct player * player);
 int player_move_to(struct player * player, int y_desired, int x_desired, struct player players[ENTITIES_MAX]);
 void player_select_action(struct player * player, struct player players[ENTITIES_MAX]);
 void player_basic_attack_an_entity(struct player * player, struct player * target, struct player entities[ENTITIES_MAX]);
-void player_basic_attack(struct player * player, struct player players[ENTITIES_MAX]);
-void player_heal_ability(struct player * player, struct player players[ENTITIES_MAX]);
+int player_basic_attack(struct player * player, struct player players[ENTITIES_MAX]);
+int player_heal_ability(struct player * player, struct player players[ENTITIES_MAX]);
 void player_kill_yourself(struct player * player, struct player players[ENTITIES_MAX]);
 // deal with status
-void player_receive_damage(struct player * player, int amount, struct player players[ENTITIES_MAX]);
+int player_receive_damage(struct player * player, int amount, struct player players[ENTITIES_MAX]);
 void player_recalculate_health_state(struct player * player, struct player players[ENTITIES_MAX]);
 void player_gain_xp(struct player * player, struct player players[ENTITIES_MAX], int xp);
 // drawing
