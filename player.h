@@ -41,6 +41,7 @@ struct player {
 
     // UI
     int ui_hp;
+    long long ui_action;
     int ui_level;
     int ui_xp;
     int ui_help;

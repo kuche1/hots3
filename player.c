@@ -1015,7 +1015,10 @@ void player_draw_ui(struct player * player){
     int hp_updated = player->ui_hp != player->hp;
     player->ui_hp = player->hp;
 
-    int actions_updated = 1; // no need to check, this will pretty much always need updating
+    long long ui_action       = player->action_storage_ms   / 100;
+    long long ui_action_limit = ACTION_LIMIT_MAX_STORAGE_MS / 100;
+    int action_updated = player->ui_action != ui_action;
+    player->ui_action = ui_action;
 
     int level_updated = player->ui_level != player->level;
     player->ui_level = player->level;
@@ -1026,7 +1029,7 @@ void player_draw_ui(struct player * player){
     int help_updated = !player->ui_help;
     player->ui_help = 1;
 
-    int anything_updated = hp_updated || actions_updated || level_updated || xp_updated || help_updated;
+    int anything_updated = hp_updated || action_updated || level_updated || xp_updated || help_updated;
 
     // set UI color
 
@@ -1065,12 +1068,11 @@ void player_draw_ui(struct player * player){
 
     // draw actions left
 
-    if(actions_updated){
-        long long limit = ACTION_LIMIT_MAX_STORAGE_MS; // I hate this but gcc refuses to compile if I give this to snprintf right away
-        assert(player->action_storage_ms   < 9999);
-        assert(limit                       < 9999);
+    if(action_updated){
+        assert(ui_action       < 99);
+        assert(ui_action_limit < 99);
         char msg[21];
-        int written = snprintf(msg, sizeof(msg), "Actions: %4lld / %4lld", player->action_storage_ms, limit);
+        int written = snprintf(msg, sizeof(msg), "Actions: %2lld / %2lld", ui_action, ui_action_limit);
         assert(written >= 0);
         assert((long unsigned int)written < sizeof(msg)); // buffer is too small
 
